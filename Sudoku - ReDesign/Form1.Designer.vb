@@ -25,7 +25,14 @@ Partial Class Form
         Me.Btn_NewGame = New System.Windows.Forms.Button()
         Me.Group_Board = New System.Windows.Forms.Panel()
         Me.Group_Controls = New System.Windows.Forms.Panel()
+        Me.Panel5 = New System.Windows.Forms.Panel()
+        Me.Btn_CheckValidity = New System.Windows.Forms.Button()
+        Me.Btn_ResetBoard = New System.Windows.Forms.Button()
+        Me.Btn_Hint = New System.Windows.Forms.Button()
         Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.Btn_SolveBoard = New System.Windows.Forms.Button()
+        Me.Btn_PartialSolve = New System.Windows.Forms.Button()
+        Me.Btn_SolveSingleCell = New System.Windows.Forms.Button()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Rad_MedusaRed = New System.Windows.Forms.RadioButton()
         Me.Rad_MedusaBlue = New System.Windows.Forms.RadioButton()
@@ -49,19 +56,14 @@ Partial Class Form
         Me.lbl_Difficulty = New System.Windows.Forms.Label()
         Me.DropDown_Difficulty = New System.Windows.Forms.ComboBox()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.Btn_SolveSingleCell = New System.Windows.Forms.Button()
-        Me.Btn_PartialSolve = New System.Windows.Forms.Button()
-        Me.Btn_SolveBoard = New System.Windows.Forms.Button()
-        Me.Panel5 = New System.Windows.Forms.Panel()
-        Me.Btn_CheckValidity = New System.Windows.Forms.Button()
-        Me.Btn_ResetBoard = New System.Windows.Forms.Button()
-        Me.Btn_Hint = New System.Windows.Forms.Button()
+        Me.Check_ShowDebug = New System.Windows.Forms.CheckBox()
+        Me.Lst_Debug = New System.Windows.Forms.ListBox()
         Me.Group_Controls.SuspendLayout()
+        Me.Panel5.SuspendLayout()
         Me.Panel4.SuspendLayout()
         Me.Panel3.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.Panel1.SuspendLayout()
-        Me.Panel5.SuspendLayout()
         Me.SuspendLayout()
         '
         'Btn_NewGame
@@ -94,10 +96,49 @@ Partial Class Form
         Me.Group_Controls.Controls.Add(Me.Panel1)
         Me.Group_Controls.Controls.Add(Me.Button2)
         Me.Group_Controls.Font = New System.Drawing.Font("Roboto", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Group_Controls.Location = New System.Drawing.Point(706, 27)
+        Me.Group_Controls.Location = New System.Drawing.Point(701, 27)
         Me.Group_Controls.Name = "Group_Controls"
         Me.Group_Controls.Size = New System.Drawing.Size(322, 553)
         Me.Group_Controls.TabIndex = 2
+        '
+        'Panel5
+        '
+        Me.Panel5.BackColor = System.Drawing.Color.Silver
+        Me.Panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel5.Controls.Add(Me.Btn_CheckValidity)
+        Me.Panel5.Controls.Add(Me.Btn_ResetBoard)
+        Me.Panel5.Controls.Add(Me.Btn_Hint)
+        Me.Panel5.Location = New System.Drawing.Point(11, 449)
+        Me.Panel5.Name = "Panel5"
+        Me.Panel5.Size = New System.Drawing.Size(301, 93)
+        Me.Panel5.TabIndex = 12
+        '
+        'Btn_CheckValidity
+        '
+        Me.Btn_CheckValidity.Location = New System.Drawing.Point(9, 4)
+        Me.Btn_CheckValidity.Name = "Btn_CheckValidity"
+        Me.Btn_CheckValidity.Size = New System.Drawing.Size(140, 37)
+        Me.Btn_CheckValidity.TabIndex = 11
+        Me.Btn_CheckValidity.Text = "Check Validity"
+        Me.Btn_CheckValidity.UseVisualStyleBackColor = True
+        '
+        'Btn_ResetBoard
+        '
+        Me.Btn_ResetBoard.Location = New System.Drawing.Point(155, 4)
+        Me.Btn_ResetBoard.Name = "Btn_ResetBoard"
+        Me.Btn_ResetBoard.Size = New System.Drawing.Size(136, 37)
+        Me.Btn_ResetBoard.TabIndex = 10
+        Me.Btn_ResetBoard.Text = "Reset Board"
+        Me.Btn_ResetBoard.UseVisualStyleBackColor = True
+        '
+        'Btn_Hint
+        '
+        Me.Btn_Hint.Location = New System.Drawing.Point(79, 47)
+        Me.Btn_Hint.Name = "Btn_Hint"
+        Me.Btn_Hint.Size = New System.Drawing.Size(140, 37)
+        Me.Btn_Hint.TabIndex = 9
+        Me.Btn_Hint.Text = "Hint"
+        Me.Btn_Hint.UseVisualStyleBackColor = True
         '
         'Panel4
         '
@@ -111,6 +152,33 @@ Partial Class Form
         Me.Panel4.Name = "Panel4"
         Me.Panel4.Size = New System.Drawing.Size(301, 102)
         Me.Panel4.TabIndex = 24
+        '
+        'Btn_SolveBoard
+        '
+        Me.Btn_SolveBoard.Location = New System.Drawing.Point(78, 52)
+        Me.Btn_SolveBoard.Name = "Btn_SolveBoard"
+        Me.Btn_SolveBoard.Size = New System.Drawing.Size(140, 37)
+        Me.Btn_SolveBoard.TabIndex = 11
+        Me.Btn_SolveBoard.Text = "Solve Board"
+        Me.Btn_SolveBoard.UseVisualStyleBackColor = True
+        '
+        'Btn_PartialSolve
+        '
+        Me.Btn_PartialSolve.Location = New System.Drawing.Point(152, 9)
+        Me.Btn_PartialSolve.Name = "Btn_PartialSolve"
+        Me.Btn_PartialSolve.Size = New System.Drawing.Size(140, 37)
+        Me.Btn_PartialSolve.TabIndex = 10
+        Me.Btn_PartialSolve.Text = "Partial Solve"
+        Me.Btn_PartialSolve.UseVisualStyleBackColor = True
+        '
+        'Btn_SolveSingleCell
+        '
+        Me.Btn_SolveSingleCell.Location = New System.Drawing.Point(6, 9)
+        Me.Btn_SolveSingleCell.Name = "Btn_SolveSingleCell"
+        Me.Btn_SolveSingleCell.Size = New System.Drawing.Size(140, 37)
+        Me.Btn_SolveSingleCell.TabIndex = 9
+        Me.Btn_SolveSingleCell.Text = "Solve Cell"
+        Me.Btn_SolveSingleCell.UseVisualStyleBackColor = True
         '
         'Panel3
         '
@@ -178,6 +246,7 @@ Partial Class Form
         '
         Me.Panel2.BackColor = System.Drawing.Color.Silver
         Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel2.Controls.Add(Me.Check_ShowDebug)
         Me.Panel2.Controls.Add(Me.Button9)
         Me.Panel2.Controls.Add(Me.Button8)
         Me.Panel2.Controls.Add(Me.Button7)
@@ -198,7 +267,7 @@ Partial Class Form
         'Button9
         '
         Me.Button9.Font = New System.Drawing.Font("Roboto", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button9.Location = New System.Drawing.Point(144, 114)
+        Me.Button9.Location = New System.Drawing.Point(114, 113)
         Me.Button9.Name = "Button9"
         Me.Button9.Size = New System.Drawing.Size(45, 45)
         Me.Button9.TabIndex = 20
@@ -208,7 +277,7 @@ Partial Class Form
         'Button8
         '
         Me.Button8.Font = New System.Drawing.Font("Roboto", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button8.Location = New System.Drawing.Point(93, 114)
+        Me.Button8.Location = New System.Drawing.Point(63, 113)
         Me.Button8.Name = "Button8"
         Me.Button8.Size = New System.Drawing.Size(45, 45)
         Me.Button8.TabIndex = 19
@@ -218,7 +287,7 @@ Partial Class Form
         'Button7
         '
         Me.Button7.Font = New System.Drawing.Font("Roboto", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button7.Location = New System.Drawing.Point(42, 114)
+        Me.Button7.Location = New System.Drawing.Point(12, 113)
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(45, 45)
         Me.Button7.TabIndex = 18
@@ -228,7 +297,7 @@ Partial Class Form
         'Button6
         '
         Me.Button6.Font = New System.Drawing.Font("Roboto", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button6.Location = New System.Drawing.Point(144, 63)
+        Me.Button6.Location = New System.Drawing.Point(114, 62)
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(45, 45)
         Me.Button6.TabIndex = 17
@@ -238,7 +307,7 @@ Partial Class Form
         'Button5
         '
         Me.Button5.Font = New System.Drawing.Font("Roboto", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button5.Location = New System.Drawing.Point(93, 63)
+        Me.Button5.Location = New System.Drawing.Point(63, 62)
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(45, 45)
         Me.Button5.TabIndex = 16
@@ -248,7 +317,7 @@ Partial Class Form
         'Button4
         '
         Me.Button4.Font = New System.Drawing.Font("Roboto", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button4.Location = New System.Drawing.Point(42, 63)
+        Me.Button4.Location = New System.Drawing.Point(12, 62)
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(45, 45)
         Me.Button4.TabIndex = 15
@@ -258,7 +327,7 @@ Partial Class Form
         'Button3
         '
         Me.Button3.Font = New System.Drawing.Font("Roboto", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button3.Location = New System.Drawing.Point(144, 12)
+        Me.Button3.Location = New System.Drawing.Point(114, 11)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(45, 45)
         Me.Button3.TabIndex = 14
@@ -268,7 +337,7 @@ Partial Class Form
         'Button1
         '
         Me.Button1.Font = New System.Drawing.Font("Roboto", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.Location = New System.Drawing.Point(93, 12)
+        Me.Button1.Location = New System.Drawing.Point(63, 11)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(45, 45)
         Me.Button1.TabIndex = 13
@@ -278,7 +347,7 @@ Partial Class Form
         'Button10
         '
         Me.Button10.Font = New System.Drawing.Font("Roboto", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button10.Location = New System.Drawing.Point(42, 12)
+        Me.Button10.Location = New System.Drawing.Point(12, 11)
         Me.Button10.Name = "Button10"
         Me.Button10.Size = New System.Drawing.Size(45, 45)
         Me.Button10.TabIndex = 12
@@ -289,7 +358,7 @@ Partial Class Form
         '
         Me.Rad_Pen.AutoSize = True
         Me.Rad_Pen.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Rad_Pen.Location = New System.Drawing.Point(207, 38)
+        Me.Rad_Pen.Location = New System.Drawing.Point(171, 37)
         Me.Rad_Pen.Name = "Rad_Pen"
         Me.Rad_Pen.Size = New System.Drawing.Size(47, 19)
         Me.Rad_Pen.TabIndex = 4
@@ -301,7 +370,7 @@ Partial Class Form
         Me.Rad_Pencil.AutoSize = True
         Me.Rad_Pencil.Checked = True
         Me.Rad_Pencil.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Rad_Pencil.Location = New System.Drawing.Point(207, 12)
+        Me.Rad_Pencil.Location = New System.Drawing.Point(171, 11)
         Me.Rad_Pencil.Name = "Rad_Pencil"
         Me.Rad_Pencil.Size = New System.Drawing.Size(60, 19)
         Me.Rad_Pencil.TabIndex = 3
@@ -361,7 +430,7 @@ Partial Class Form
         '
         Me.DropDown_Difficulty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.DropDown_Difficulty.FormattingEnabled = True
-        Me.DropDown_Difficulty.Items.AddRange(New Object() {"Easy", "Medium", "Hard", "Impossible"})
+        Me.DropDown_Difficulty.Items.AddRange(New Object() {"Easy", "Medium", "Hard", "Impossible", "Custom"})
         Me.DropDown_Difficulty.Location = New System.Drawing.Point(66, 42)
         Me.DropDown_Difficulty.Name = "DropDown_Difficulty"
         Me.DropDown_Difficulty.Size = New System.Drawing.Size(86, 26)
@@ -376,78 +445,33 @@ Partial Class Form
         Me.Button2.Text = "Button2"
         Me.Button2.UseVisualStyleBackColor = True
         '
-        'Btn_SolveSingleCell
+        'Check_ShowDebug
         '
-        Me.Btn_SolveSingleCell.Location = New System.Drawing.Point(6, 9)
-        Me.Btn_SolveSingleCell.Name = "Btn_SolveSingleCell"
-        Me.Btn_SolveSingleCell.Size = New System.Drawing.Size(140, 37)
-        Me.Btn_SolveSingleCell.TabIndex = 9
-        Me.Btn_SolveSingleCell.Text = "Solve Cell"
-        Me.Btn_SolveSingleCell.UseVisualStyleBackColor = True
+        Me.Check_ShowDebug.AutoSize = True
+        Me.Check_ShowDebug.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Check_ShowDebug.Location = New System.Drawing.Point(171, 139)
+        Me.Check_ShowDebug.Name = "Check_ShowDebug"
+        Me.Check_ShowDebug.Size = New System.Drawing.Size(101, 19)
+        Me.Check_ShowDebug.TabIndex = 3
+        Me.Check_ShowDebug.Text = "Show Debug "
+        Me.Check_ShowDebug.UseVisualStyleBackColor = True
         '
-        'Btn_PartialSolve
+        'Lst_Debug
         '
-        Me.Btn_PartialSolve.Location = New System.Drawing.Point(152, 9)
-        Me.Btn_PartialSolve.Name = "Btn_PartialSolve"
-        Me.Btn_PartialSolve.Size = New System.Drawing.Size(140, 37)
-        Me.Btn_PartialSolve.TabIndex = 10
-        Me.Btn_PartialSolve.Text = "Partial Solve"
-        Me.Btn_PartialSolve.UseVisualStyleBackColor = True
-        '
-        'Btn_SolveBoard
-        '
-        Me.Btn_SolveBoard.Location = New System.Drawing.Point(78, 52)
-        Me.Btn_SolveBoard.Name = "Btn_SolveBoard"
-        Me.Btn_SolveBoard.Size = New System.Drawing.Size(140, 37)
-        Me.Btn_SolveBoard.TabIndex = 11
-        Me.Btn_SolveBoard.Text = "Solve Board"
-        Me.Btn_SolveBoard.UseVisualStyleBackColor = True
-        '
-        'Panel5
-        '
-        Me.Panel5.BackColor = System.Drawing.Color.Silver
-        Me.Panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel5.Controls.Add(Me.Btn_CheckValidity)
-        Me.Panel5.Controls.Add(Me.Btn_ResetBoard)
-        Me.Panel5.Controls.Add(Me.Btn_Hint)
-        Me.Panel5.Location = New System.Drawing.Point(11, 449)
-        Me.Panel5.Name = "Panel5"
-        Me.Panel5.Size = New System.Drawing.Size(301, 93)
-        Me.Panel5.TabIndex = 12
-        '
-        'Btn_CheckValidity
-        '
-        Me.Btn_CheckValidity.Location = New System.Drawing.Point(9, 4)
-        Me.Btn_CheckValidity.Name = "Btn_CheckValidity"
-        Me.Btn_CheckValidity.Size = New System.Drawing.Size(140, 37)
-        Me.Btn_CheckValidity.TabIndex = 11
-        Me.Btn_CheckValidity.Text = "Check Validity"
-        Me.Btn_CheckValidity.UseVisualStyleBackColor = True
-        '
-        'Btn_ResetBoard
-        '
-        Me.Btn_ResetBoard.Location = New System.Drawing.Point(155, 4)
-        Me.Btn_ResetBoard.Name = "Btn_ResetBoard"
-        Me.Btn_ResetBoard.Size = New System.Drawing.Size(136, 37)
-        Me.Btn_ResetBoard.TabIndex = 10
-        Me.Btn_ResetBoard.Text = "Reset Board"
-        Me.Btn_ResetBoard.UseVisualStyleBackColor = True
-        '
-        'Btn_Hint
-        '
-        Me.Btn_Hint.Location = New System.Drawing.Point(79, 47)
-        Me.Btn_Hint.Name = "Btn_Hint"
-        Me.Btn_Hint.Size = New System.Drawing.Size(140, 37)
-        Me.Btn_Hint.TabIndex = 9
-        Me.Btn_Hint.Text = "Hint"
-        Me.Btn_Hint.UseVisualStyleBackColor = True
+        Me.Lst_Debug.FormattingEnabled = True
+        Me.Lst_Debug.ItemHeight = 14
+        Me.Lst_Debug.Location = New System.Drawing.Point(1034, 28)
+        Me.Lst_Debug.Name = "Lst_Debug"
+        Me.Lst_Debug.Size = New System.Drawing.Size(246, 550)
+        Me.Lst_Debug.TabIndex = 3
         '
         'Form
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(11, Byte), Integer), CType(CType(12, Byte), Integer), CType(CType(16, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1054, 607)
+        Me.ClientSize = New System.Drawing.Size(1292, 607)
+        Me.Controls.Add(Me.Lst_Debug)
         Me.Controls.Add(Me.Group_Controls)
         Me.Controls.Add(Me.Group_Board)
         Me.Font = New System.Drawing.Font("Roboto", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -455,6 +479,7 @@ Partial Class Form
         Me.Name = "Form"
         Me.Text = "Form1"
         Me.Group_Controls.ResumeLayout(False)
+        Me.Panel5.ResumeLayout(False)
         Me.Panel4.ResumeLayout(False)
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()
@@ -462,7 +487,6 @@ Partial Class Form
         Me.Panel2.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
-        Me.Panel5.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -501,4 +525,6 @@ Partial Class Form
     Friend WithEvents Btn_SolveBoard As Button
     Friend WithEvents Btn_PartialSolve As Button
     Friend WithEvents Btn_SolveSingleCell As Button
+    Friend WithEvents Check_ShowDebug As CheckBox
+    Friend WithEvents Lst_Debug As ListBox
 End Class
