@@ -1,10 +1,11 @@
 ﻿Imports System.IO
 
-Public Class BoardLandler 'Functions related to the logic side of board handling
+Public Class BoardHandler 'Functions related to the logic side of board handling
 
     Public MainBoard As Board
     Public SolvedBoard As Board
-    Public BoardChosen As String
+    Public BoardChosen_Long As String
+    Public BoardChosen_Short As String
     Public Directories(4) As String
 
     Public Sub New()
@@ -26,24 +27,23 @@ Public Class BoardLandler 'Functions related to the logic side of board handling
                 MainBoard = New Board
             End If
 
-            DirectorySelect = Form.DropDown_Difficulty.SelectedIndex
+            DirectorySelect = Form1.DropDown_Difficulty.SelectedIndex
 
             If DirectorySelect = -1 Then
                 DirectorySelect = 1
             End If
 
-            Dim Dr As New DirectoryInfo(Directories(Form.DropDown_Difficulty.SelectedIndex))
+            Dim Dr As New DirectoryInfo(Directories(DirectorySelect))
             Dim r As New Random
             Dim Filelist As New ArrayList
-            Dim x = r.Next(0, Filelist.Count - 1)
             For Each ele In Dr.GetFiles
                 Filelist.Add(ele)
             Next
+            Dim x = r.Next(0, Filelist.Count)
+            BoardChosen_Short = Convert.ToString(Filelist(x))
+            BoardChosen_Long = Convert.ToString(Filelist(x).Fullname)
 
-
-            Using reader As New StreamReader(Convert.ToString(Filelist(x).Fullname))
-
-
+            Using reader As New StreamReader(BoardChosen_Long)
 
                 Dim Line As String
                 For Rows = 0 To 8
@@ -75,6 +75,9 @@ Public Class BoardLandler 'Functions related to the logic side of board handling
                 Next
             End Using
         Else
+            If IsNothing(MainBoard) Then
+                MainBoard = New Board
+            End If
             For Rows = 0 To 8
                 For Cols = 0 To 8
                     If IsNothing(MainBoard.Cells(Rows, Cols)) Then
@@ -88,21 +91,63 @@ Public Class BoardLandler 'Functions related to the logic side of board handling
                     End With
                 Next
             Next
+            SolvedBoard = Nothing
         End If
 
-        Dim Solved, _Error As Boolean
-        Solved = False
-        _Error = False
+        If Blank = False Then
+            Dim Solved, _Error As Boolean
+            Solved = False
+            _Error = False
+            Form1.Form.Items.Add("Attempting to solve board in the background...")
+            SolvedBoard = New Board(MainBoard)
+            Bruteforce(SolvedBoard, Solved, _Error)
 
-        SolvedBoard = New Board(MainBoard)
-        Bruteforce(SolvedBoard, Solved, _Error)
-
-        If _Error = True Then
-            MsgBox("Error With Current Board apparent during solving. Please load a new board")
+            If _Error = True Then
+                'MsgBox("Error With Current Board apparent during solving. Please load a new board")
+            Else
+                Form1.Form.Items.Add("Solved Board!")
+            End If
         End If
 
     End Sub
 
+    Public Sub ResetLogicBoard(Directory_FullName As String)
+
+        Using reader As New StreamReader(Directory_FullName)
+
+            Dim Line As String
+            For Rows = 0 To 8
+                Line = reader.ReadLine
+                For Cols = 0 To 8
+
+                    If IsNothing(MainBoard.Cells(Rows, Cols)) Then
+                        MainBoard.Cells(Rows, Cols) = New LogicCell
+                    Else
+                        With MainBoard.Cells(Rows, Cols)
+                            .HasValueFromImport = False
+                            .Value = -1
+                            .Candidates.Clear()
+                        End With
+                    End If
+
+                    With MainBoard.Cells(Rows, Cols)
+                        If Line(Cols) = "0" Then
+                            For i = 1 To 9
+                                .Candidates.Add(i)
+                                .Value = -1
+                            Next
+                        Else
+                            .Value = Integer.Parse(Line(Cols))
+                            .HasValueFromImport = True
+                        End If
+                    End With
+                Next
+            Next
+        End Using
+
+    End Sub
+
+    'A function that loops, using the Calc Candidates function and Isolated candidates function to make progress on the board.
     Public Sub PrelimSolve(ByRef Board As Board, ByRef Board_Solved As Boolean, ByRef Error_Detected As Boolean)
 
         Board_Solved = False
@@ -118,7 +163,8 @@ Public Class BoardLandler 'Functions related to the logic side of board handling
             Convert_To_Values(Board)
 
             If Error_Detected = True Then
-                MsgBox("Error Detected with current board. Please Load a new Board")
+                'MsgBox("Error Detected with current board. Please Load a new Board")
+                Exit Sub
             End If
 
             If Board_Solved = False Then
@@ -131,6 +177,33 @@ Public Class BoardLandler 'Functions related to the logic side of board handling
 
     End Sub
 
+    'An overload of the above function that only loops for a given about of times.
+    Public Sub PrelimSolve_Single(ByRef Board As Board, ByRef Board_Solved As Boolean, ByRef Error_Detected As Boolean)
+
+        Board_Solved = False
+        Error_Detected = False
+        Dim loopcount = 1
+
+        Dim _continue As Boolean
+
+        _continue = False
+
+        CalculateCandidates(Board, Error_Detected, _continue)
+        Convert_To_Values(Board)
+        FindIsolatedValues(Board, Error_Detected, _continue)
+        Convert_To_Values(Board)
+
+        If Error_Detected = True Then
+            'MsgBox("Error Detected with current board. Please Load a new Board")
+            Exit Sub
+        End If
+
+        If Board_Solved = False Then
+            Board_Solved = IsBoardSolved(Board)
+        End If
+    End Sub
+
+    'Removes candidates by subtraction
     Public Sub CalculateCandidates(ByRef Board As Board, ByRef Error_Dectected As Boolean, ByRef _Continue As Boolean)
 
         Dim Val As Integer = -1
@@ -149,7 +222,7 @@ Public Class BoardLandler 'Functions related to the logic side of board handling
                             _Continue = True
                         End If
 
-                        If ele.Candidates.Count = 0 Then
+                        If ele.Candidates.Count = 0 And ele.Value = -1 Then
                             Error_Dectected = True
                         End If
                     Next
@@ -165,7 +238,7 @@ Public Class BoardLandler 'Functions related to the logic side of board handling
                             _Continue = True
                         End If
 
-                        If ele.Candidates.Count = 0 Then
+                        If ele.Candidates.Count = 0 And ele.Value = -1 Then
                             Error_Dectected = True
                         End If
                     Next
@@ -181,7 +254,8 @@ Public Class BoardLandler 'Functions related to the logic side of board handling
                             _Continue = True
                         End If
 
-                        If ele.Candidates.Count = 0 Then
+                        If ele.Candidates.Count = 0 And ele.Value = -1 Then
+
                             Error_Dectected = True
                         End If
                     Next
@@ -190,10 +264,9 @@ Public Class BoardLandler 'Functions related to the logic side of board handling
             Next
         Next
 
-        Form.Lst_Debug.Items.Add("Removing candidates by subtraction")
-
     End Sub
 
+    'Finds isolated candidates
     Public Sub FindIsolatedValues(ByRef Board As Board, ByRef Error_Detected As Boolean, ByRef _Continue As Boolean)
 
         For Rowcount = 0 To 8
@@ -255,7 +328,7 @@ SkipNumLine_1:
 
                 Next
 
-                If tempcount = 1 Then
+                If tempcount = 1 And IsNothing(Tempcell) = False Then
                     Tempcell.Candidates.Clear()
                     Tempcell.Candidates.Add(Num)
                     _Continue = True
@@ -300,10 +373,10 @@ SkipNumLine_3:
             Next
         Next
 
-        Form.Lst_Debug.Items.Add("Removing candidates by Isolation")
 
     End Sub
 
+    'Converts cells wih a single candidate to the value of the cell.
     Public Sub Convert_To_Values(ByRef Board As Board)
 
         For Rows = 0 To 8
@@ -316,13 +389,10 @@ SkipNumLine_3:
             Next
         Next
 
-        Form.Lst_Debug.Items.Add("Converting candidates to values...")
-
     End Sub
 
+    'Checks if the board is solved. Checks for empty cells and cells that have conficting values
     Public Function IsBoardSolved(ByRef Board As Board)
-
-        Form.Lst_Debug.Items.Add("Checking is board is solved")
 
         For Rows = 0 To 8
             For Cols = 0 To 8
@@ -362,25 +432,160 @@ SkipNumLine_3:
 
             Next
         Next
-
-        Form.Lst_Debug.Items.Add("")
-        Form.Lst_Debug.Items.Add("Board Solved!")
         Return True
 
     End Function
 
-    Public Sub IsBoardValid()
+    'Does the preliminary checks for if a board is valid or not
+    Public Function Prelim_IsBoardValid(ByRef Board As Board)
+
+        Dim No_OfClues As Integer = 0
+
+        For Rows = 0 To 8
+            For Cols = 0 To 8
+
+                'If the cell has a value, add it to the count of clues
+                If Board.Cells(Rows, Cols).Value <> -1 Then
+                    No_OfClues += 1
+                End If
+
+                'IF the Cell has no value, and no candidates, then there is something wrong. Return False
+                If Board.Cells(Rows, Cols).Candidates.Count = 0 And Board.Cells(Rows, Cols).Value = -1 Then
+                    Return False
+                End If
+
+                'Iderate through the row, column and box that the cell is in. 
+                'If there is any cell that has the same value, then return false
+                For Each ele In Board.Cells(Rows, Cols).Row
+                    If ele.Equals(Board.Cells(Rows, Cols)) = False And ele.Value = Board.Cells(Rows, Cols).Value And Board.Cells(Rows, Cols).Value <> -1 Then
+                        Return False
+                    End If
+                Next
+
+                For Each ele In Board.Cells(Rows, Cols).Column
+                    If ele.Equals(Board.Cells(Rows, Cols)) = False And ele.Value = Board.Cells(Rows, Cols).Value And Board.Cells(Rows, Cols).Value <> -1 Then
+                        Return False
+                    End If
+                Next
+
+                For Each ele In Board.Cells(Rows, Cols).Box
+                    If ele.Equals(Board.Cells(Rows, Cols)) = False And ele.Value = Board.Cells(Rows, Cols).Value And Board.Cells(Rows, Cols).Value <> -1 Then
+                        Return False
+                    End If
+                Next
+            Next
+        Next
+
+        Return True
+    End Function
+
+    'Bruteforce function. Takes a Board, and recursively bruteforce solves it while also using the PrelimSolve method
+    Public Sub Bruteforce(ByRef OrigBoard As Board, ByRef Solved As Boolean, ByRef _Error As Boolean)
+
+        Solved = False
+        _Error = False
+
+        'Checks if the board entered is initally valid
+        If Prelim_IsBoardValid(OrigBoard) = False Then
+            Exit Sub
+        End If
+
+        'Checks if the board is already solved
+        If IsBoardSolved(OrigBoard) Then
+            Solved = True
+            Exit Sub
+        End If
+
+        'Tries to solve the board using subtraction and isolated candidates,
+        'then returns if there is an error or the board is solved
+        PrelimSolve(OrigBoard, Solved, _Error)
+
+        If _Error = True Or Solved = True Then
+            Exit Sub
+        End If
+
+        '______________________________________________'
+        'Beyound this point, the board is assumed to be valid and not solved
+
+        If Not Solved Then
+
+            Dim TempSolved As Boolean = False
+            Dim TempError As Boolean = False
+            Dim SC As New Point(-1, -1) 'SC means Selected Cell
+            Dim Tempboard As Board
+            Dim MaxCandidateIndex As Integer = -1
+            Dim CurrentIndex As Integer = 0
+
+            'Finds a no-value cell and works out how many candidates it has.
+            For Rows = 0 To 8
+                For Cols = 0 To 8
+
+                    If OrigBoard.Cells(Rows, Cols).Value = -1 Then
+                        SC.X = Cols
+                        SC.Y = Rows
+                        GoTo Skip
+                    End If
+
+                Next
+            Next
+Skip:
+            If SC.X = -1 Or SC.Y = -1 Then
+                Solved = False
+                _Error = True
+                Exit Sub
+            End If
+
+            MaxCandidateIndex = OrigBoard.Cells(SC.Y, SC.X).Candidates.Count - 1
+
+            'Loops through the board, and bruteforces different permutations, trying to find a solution that works.
+            Do
+                TempSolved = False
+                TempError = False
+
+                Tempboard = New Board(OrigBoard)
+
+                Tempboard.Cells(SC.Y, SC.X).Value = Tempboard.Cells(SC.Y, SC.X).Candidates(CurrentIndex)
+                Tempboard.Cells(SC.Y, SC.X).Candidates.Clear()
+
+                'Calls bruteforce
+                Bruteforce(Tempboard, TempSolved, TempError)
+
+                If TempError = True Then
+                    CurrentIndex += 1
+                    Continue Do
+                End If
+
+                If TempSolved = True Then
+                    Exit Do
+                End If
+
+                CurrentIndex += 1
+            Loop While CurrentIndex <= MaxCandidateIndex
+
+            OrigBoard = New Board(Tempboard)
+
+            If TempSolved = True Then
+                Solved = True
+                _Error = False
+                Exit Sub
+            End If
+
+            If TempError = False Then
+                Solved = False
+                _Error = False
+                Exit Sub
+            End If
+        End If
+
 
     End Sub
 
-    Public Sub Bruteforce(ByRef mOrigBoard As Board, ByRef Solved As Boolean, ByRef _Error As Boolean)
-
-    End Sub
-
+    'TO DO
     Public Sub SaveCurrentBoard()
 
     End Sub
 
+    'TO DO
     Public Sub DebugCandidates()
 
     End Sub

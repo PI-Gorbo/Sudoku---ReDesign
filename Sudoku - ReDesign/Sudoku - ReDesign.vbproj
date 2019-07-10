@@ -121,5 +121,47 @@
     </None>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\Boards\Custom\21_06_2019__12_31_12.txt" />
+    <Content Include="bin\Debug\Boards\Custom\21_06_2019__31_23_12.txt" />
+    <Content Include="bin\Debug\Boards\Custom\21_06_2019__46_25_12.txt" />
+    <Content Include="bin\Debug\Boards\Custom\21_06_2019__46_35_12.txt" />
+    <Content Include="bin\Debug\Boards\Custom\21_06_2019__55_11_23.txt" />
+    <Content Include="bin\Debug\Boards\Easy\Easy %281%29.txt" />
+    <Content Include="bin\Debug\Boards\Easy\Easy %2810%29.txt" />
+    <Content Include="bin\Debug\Boards\Easy\Easy %2811%29.txt" />
+    <Content Include="bin\Debug\Boards\Easy\Easy %282%29.txt" />
+    <Content Include="bin\Debug\Boards\Easy\Easy %283%29.txt" />
+    <Content Include="bin\Debug\Boards\Easy\Easy %284%29.txt" />
+    <Content Include="bin\Debug\Boards\Easy\Easy %285%29.txt" />
+    <Content Include="bin\Debug\Boards\Easy\Easy %287%29.txt" />
+    <Content Include="bin\Debug\Boards\Easy\Easy %288%29.txt" />
+    <Content Include="bin\Debug\Boards\Easy\Easy %289%29.txt" />
+    <Content Include="bin\Debug\Boards\Evil\Extreme %281%29.txt" />
+    <Content Include="bin\Debug\Boards\Evil\Extreme %2810%29.txt" />
+    <Content Include="bin\Debug\Boards\Evil\Extreme %2811%29.txt" />
+    <Content Include="bin\Debug\Boards\Evil\Extreme %2812%29.txt" />
+    <Content Include="bin\Debug\Boards\Evil\Extreme %2813%29.txt" />
+    <Content Include="bin\Debug\Boards\Evil\Extreme %2814%29.txt" />
+    <Content Include="bin\Debug\Boards\Evil\Extreme %282%29.txt" />
+    <Content Include="bin\Debug\Boards\Evil\Extreme %283%29.txt" />
+    <Content Include="bin\Debug\Boards\Evil\Extreme %284%29.txt" />
+    <Content Include="bin\Debug\Boards\Evil\Extreme %285%29.txt" />
+    <Content Include="bin\Debug\Boards\Evil\Extreme %286%29.txt" />
+    <Content Include="bin\Debug\Boards\Evil\Extreme %287%29.txt" />
+    <Content Include="bin\Debug\Boards\Evil\Extreme %288%29.txt" />
+    <Content Include="bin\Debug\Boards\Evil\Extreme %289%29.txt" />
+    <Content Include="bin\Debug\Boards\Hard\Hard %281%29.txt" />
+    <Content Include="bin\Debug\Boards\Hard\Hard %282%29.txt" />
+    <Content Include="bin\Debug\Boards\Hard\Hard %283%29.txt" />
+    <Content Include="bin\Debug\Boards\Hard\Hard %284%29.txt" />
+    <Content Include="bin\Debug\Boards\Hard\Hard %285%29.txt" />
+    <Content Include="bin\Debug\Boards\Hard\Hard %286%29.txt" />
+    <Content Include="bin\Debug\Boards\Medium\Medium %281%29.txt" />
+    <Content Include="bin\Debug\Boards\Medium\Medium %282%29.txt" />
+    <Content Include="bin\Debug\Boards\Medium\Medium %283%29.txt" />
+    <Content Include="bin\Debug\Boards\Medium\Medium %284%29.txt" />
+    <Content Include="bin\Debug\Boards\Medium\Medium %286%29.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
