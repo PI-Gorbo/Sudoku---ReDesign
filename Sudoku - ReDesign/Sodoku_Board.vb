@@ -558,7 +558,7 @@ Public Class BoardHandler 'Functions related to the logic side of board handling
                     If tempcount > 1 Then
                         Tempcell = Nothing
                         Exit For
-                    Else
+                    ElseIf ele.Candidates.Contains(Num) Then
                         Tempcell = ele
                         tempcount += 1
                     End If
@@ -592,7 +592,7 @@ SkipNumLine_1:
                     If tempcount > 1 Then
                         Tempcell = Nothing
                         Exit For
-                    Else
+                    ElseIf ele.Candidates.Contains(Num) Then
                         Tempcell = ele
                         tempcount += 1
                     End If
@@ -627,7 +627,7 @@ SkipNumLine_2:
                         If tempcount > 1 Then
                             Tempcell = Nothing
                             Exit For
-                        Else
+                        ElseIf ele.Candidates.Contains(Num) Then
                             Tempcell = ele
                             tempcount += 1
                         End If
