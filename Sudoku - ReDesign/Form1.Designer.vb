@@ -30,9 +30,8 @@ Partial Class Form1
         Me.Btn_ResetBoard = New System.Windows.Forms.Button()
         Me.Btn_Hint = New System.Windows.Forms.Button()
         Me.SubGroup_Solving = New System.Windows.Forms.Panel()
-        Me.Btn_PartialSolve = New System.Windows.Forms.Button()
         Me.Btn_SolveBoard = New System.Windows.Forms.Button()
-        Me.Btn_Next = New System.Windows.Forms.Button()
+        Me.Btn_StagedSolving = New System.Windows.Forms.Button()
         Me.Btn_SolveSingleCell = New System.Windows.Forms.Button()
         Me.SubGroup_Highlight = New System.Windows.Forms.Panel()
         Me.Rad_MedusaRed = New System.Windows.Forms.RadioButton()
@@ -43,7 +42,7 @@ Partial Class Form1
         Me.Rad_Pencil = New System.Windows.Forms.RadioButton()
         Me.Rad_Pen = New System.Windows.Forms.RadioButton()
         Me.Check_Can_Removal = New System.Windows.Forms.CheckBox()
-        Me.Check_ShowDebug = New System.Windows.Forms.CheckBox()
+        Me.Check_Options = New System.Windows.Forms.CheckBox()
         Me.Keypad_9 = New System.Windows.Forms.Button()
         Me.Keypad_8 = New System.Windows.Forms.Button()
         Me.Keypad_7 = New System.Windows.Forms.Button()
@@ -58,22 +57,27 @@ Partial Class Form1
         Me.Btn_ManualEntry = New System.Windows.Forms.Button()
         Me.lbl_Difficulty = New System.Windows.Forms.Label()
         Me.DropDown_Difficulty = New System.Windows.Forms.ComboBox()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.Form = New System.Windows.Forms.ListBox()
+        Me.Lst_Debug = New System.Windows.Forms.ListBox()
         Me.lbl_boardname = New System.Windows.Forms.Label()
+        Me.SubGroup_IO = New System.Windows.Forms.Panel()
+        Me.Btn_SaveGame = New System.Windows.Forms.Button()
+        Me.Btn_LoadGame = New System.Windows.Forms.Button()
+        Me.Group_ExtraOptions = New System.Windows.Forms.Panel()
         Me.Group_Controls.SuspendLayout()
         Me.SubGroup_Misc.SuspendLayout()
         Me.SubGroup_Solving.SuspendLayout()
         Me.SubGroup_Highlight.SuspendLayout()
         Me.SubGroup_Keypad.SuspendLayout()
         Me.SubGroup_Menu.SuspendLayout()
+        Me.SubGroup_IO.SuspendLayout()
+        Me.Group_ExtraOptions.SuspendLayout()
         Me.SuspendLayout()
         '
         'Btn_NewGame
         '
         Me.Btn_NewGame.Location = New System.Drawing.Point(5, 3)
         Me.Btn_NewGame.Name = "Btn_NewGame"
-        Me.Btn_NewGame.Size = New System.Drawing.Size(152, 33)
+        Me.Btn_NewGame.Size = New System.Drawing.Size(150, 33)
         Me.Btn_NewGame.TabIndex = 0
         Me.Btn_NewGame.Text = "New Game"
         Me.Btn_NewGame.UseVisualStyleBackColor = True
@@ -83,7 +87,7 @@ Partial Class Form1
         Me.Group_Board.BackColor = System.Drawing.Color.Silver
         Me.Group_Board.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Group_Board.Font = New System.Drawing.Font("Roboto", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Group_Board.Location = New System.Drawing.Point(45, 27)
+        Me.Group_Board.Location = New System.Drawing.Point(12, 25)
         Me.Group_Board.Name = "Group_Board"
         Me.Group_Board.Size = New System.Drawing.Size(559, 553)
         Me.Group_Board.TabIndex = 1
@@ -97,11 +101,10 @@ Partial Class Form1
         Me.Group_Controls.Controls.Add(Me.SubGroup_Highlight)
         Me.Group_Controls.Controls.Add(Me.SubGroup_Keypad)
         Me.Group_Controls.Controls.Add(Me.SubGroup_Menu)
-        Me.Group_Controls.Controls.Add(Me.Button2)
         Me.Group_Controls.Font = New System.Drawing.Font("Roboto", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Group_Controls.Location = New System.Drawing.Point(614, 26)
+        Me.Group_Controls.Location = New System.Drawing.Point(579, 24)
         Me.Group_Controls.Name = "Group_Controls"
-        Me.Group_Controls.Size = New System.Drawing.Size(322, 553)
+        Me.Group_Controls.Size = New System.Drawing.Size(327, 554)
         Me.Group_Controls.TabIndex = 2
         '
         'SubGroup_Misc
@@ -127,7 +130,7 @@ Partial Class Form1
         '
         'Btn_ResetBoard
         '
-        Me.Btn_ResetBoard.Location = New System.Drawing.Point(155, 4)
+        Me.Btn_ResetBoard.Location = New System.Drawing.Point(156, 28)
         Me.Btn_ResetBoard.Name = "Btn_ResetBoard"
         Me.Btn_ResetBoard.Size = New System.Drawing.Size(136, 37)
         Me.Btn_ResetBoard.TabIndex = 10
@@ -137,7 +140,7 @@ Partial Class Form1
         'Btn_Hint
         '
         Me.Btn_Hint.Enabled = False
-        Me.Btn_Hint.Location = New System.Drawing.Point(79, 47)
+        Me.Btn_Hint.Location = New System.Drawing.Point(9, 47)
         Me.Btn_Hint.Name = "Btn_Hint"
         Me.Btn_Hint.Size = New System.Drawing.Size(140, 37)
         Me.Btn_Hint.TabIndex = 9
@@ -148,24 +151,14 @@ Partial Class Form1
         '
         Me.SubGroup_Solving.BackColor = System.Drawing.Color.WhiteSmoke
         Me.SubGroup_Solving.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.SubGroup_Solving.Controls.Add(Me.Btn_PartialSolve)
         Me.SubGroup_Solving.Controls.Add(Me.Btn_SolveBoard)
-        Me.SubGroup_Solving.Controls.Add(Me.Btn_Next)
+        Me.SubGroup_Solving.Controls.Add(Me.Btn_StagedSolving)
         Me.SubGroup_Solving.Controls.Add(Me.Btn_SolveSingleCell)
         Me.SubGroup_Solving.Font = New System.Drawing.Font("Roboto", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SubGroup_Solving.Location = New System.Drawing.Point(11, 341)
         Me.SubGroup_Solving.Name = "SubGroup_Solving"
         Me.SubGroup_Solving.Size = New System.Drawing.Size(301, 102)
         Me.SubGroup_Solving.TabIndex = 24
-        '
-        'Btn_PartialSolve
-        '
-        Me.Btn_PartialSolve.Location = New System.Drawing.Point(152, 52)
-        Me.Btn_PartialSolve.Name = "Btn_PartialSolve"
-        Me.Btn_PartialSolve.Size = New System.Drawing.Size(140, 37)
-        Me.Btn_PartialSolve.TabIndex = 12
-        Me.Btn_PartialSolve.Text = "Partial Solve"
-        Me.Btn_PartialSolve.UseVisualStyleBackColor = True
         '
         'Btn_SolveBoard
         '
@@ -176,14 +169,14 @@ Partial Class Form1
         Me.Btn_SolveBoard.Text = "Solve Board"
         Me.Btn_SolveBoard.UseVisualStyleBackColor = True
         '
-        'Btn_Next
+        'Btn_StagedSolving
         '
-        Me.Btn_Next.Location = New System.Drawing.Point(152, 9)
-        Me.Btn_Next.Name = "Btn_Next"
-        Me.Btn_Next.Size = New System.Drawing.Size(140, 37)
-        Me.Btn_Next.TabIndex = 10
-        Me.Btn_Next.Text = "Next Step"
-        Me.Btn_Next.UseVisualStyleBackColor = True
+        Me.Btn_StagedSolving.Location = New System.Drawing.Point(152, 28)
+        Me.Btn_StagedSolving.Name = "Btn_StagedSolving"
+        Me.Btn_StagedSolving.Size = New System.Drawing.Size(140, 37)
+        Me.Btn_StagedSolving.TabIndex = 10
+        Me.Btn_StagedSolving.Text = "Calc Candidates"
+        Me.Btn_StagedSolving.UseVisualStyleBackColor = True
         '
         'Btn_SolveSingleCell
         '
@@ -215,9 +208,9 @@ Partial Class Form1
         Me.Rad_MedusaRed.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Rad_MedusaRed.Location = New System.Drawing.Point(171, 37)
         Me.Rad_MedusaRed.Name = "Rad_MedusaRed"
-        Me.Rad_MedusaRed.Size = New System.Drawing.Size(124, 24)
+        Me.Rad_MedusaRed.Size = New System.Drawing.Size(120, 19)
         Me.Rad_MedusaRed.TabIndex = 23
-        Me.Rad_MedusaRed.Text = "Medusa Red"
+        Me.Rad_MedusaRed.Text = "Medusa Colour 2"
         Me.Rad_MedusaRed.UseVisualStyleBackColor = True
         '
         'Rad_MedusaBlue
@@ -228,10 +221,10 @@ Partial Class Form1
         Me.Rad_MedusaBlue.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Rad_MedusaBlue.Location = New System.Drawing.Point(171, 12)
         Me.Rad_MedusaBlue.Name = "Rad_MedusaBlue"
-        Me.Rad_MedusaBlue.Size = New System.Drawing.Size(128, 24)
+        Me.Rad_MedusaBlue.Size = New System.Drawing.Size(120, 19)
         Me.Rad_MedusaBlue.TabIndex = 22
         Me.Rad_MedusaBlue.TabStop = True
-        Me.Rad_MedusaBlue.Text = "Medusa Blue"
+        Me.Rad_MedusaBlue.Text = "Medusa Colour 1"
         Me.Rad_MedusaBlue.UseVisualStyleBackColor = True
         '
         'Check_Medusa
@@ -240,7 +233,7 @@ Partial Class Form1
         Me.Check_Medusa.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Check_Medusa.Location = New System.Drawing.Point(6, 37)
         Me.Check_Medusa.Name = "Check_Medusa"
-        Me.Check_Medusa.Size = New System.Drawing.Size(92, 24)
+        Me.Check_Medusa.Size = New System.Drawing.Size(72, 19)
         Me.Check_Medusa.TabIndex = 1
         Me.Check_Medusa.Text = "Medusa"
         Me.Check_Medusa.UseVisualStyleBackColor = True
@@ -251,7 +244,7 @@ Partial Class Form1
         Me.Check_Highlighting.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Check_Highlighting.Location = New System.Drawing.Point(6, 12)
         Me.Check_Highlighting.Name = "Check_Highlighting"
-        Me.Check_Highlighting.Size = New System.Drawing.Size(203, 24)
+        Me.Check_Highlighting.Size = New System.Drawing.Size(153, 19)
         Me.Check_Highlighting.TabIndex = 0
         Me.Check_Highlighting.Text = "Candidate Highlighting"
         Me.Check_Highlighting.UseVisualStyleBackColor = True
@@ -263,7 +256,7 @@ Partial Class Form1
         Me.SubGroup_Keypad.Controls.Add(Me.Rad_Pencil)
         Me.SubGroup_Keypad.Controls.Add(Me.Rad_Pen)
         Me.SubGroup_Keypad.Controls.Add(Me.Check_Can_Removal)
-        Me.SubGroup_Keypad.Controls.Add(Me.Check_ShowDebug)
+        Me.SubGroup_Keypad.Controls.Add(Me.Check_Options)
         Me.SubGroup_Keypad.Controls.Add(Me.Keypad_9)
         Me.SubGroup_Keypad.Controls.Add(Me.Keypad_8)
         Me.SubGroup_Keypad.Controls.Add(Me.Keypad_7)
@@ -285,7 +278,7 @@ Partial Class Form1
         Me.Rad_Pencil.Font = New System.Drawing.Font("Roboto", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Rad_Pencil.Location = New System.Drawing.Point(171, 44)
         Me.Rad_Pencil.Name = "Rad_Pencil"
-        Me.Rad_Pencil.Size = New System.Drawing.Size(76, 24)
+        Me.Rad_Pencil.Size = New System.Drawing.Size(63, 21)
         Me.Rad_Pencil.TabIndex = 24
         Me.Rad_Pencil.TabStop = True
         Me.Rad_Pencil.Text = "Pencil"
@@ -298,7 +291,7 @@ Partial Class Form1
         Me.Rad_Pen.Font = New System.Drawing.Font("Roboto", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Rad_Pen.Location = New System.Drawing.Point(171, 11)
         Me.Rad_Pen.Name = "Rad_Pen"
-        Me.Rad_Pen.Size = New System.Drawing.Size(59, 24)
+        Me.Rad_Pen.Size = New System.Drawing.Size(50, 21)
         Me.Rad_Pen.TabIndex = 23
         Me.Rad_Pen.TabStop = True
         Me.Rad_Pen.Text = "Pen"
@@ -312,21 +305,21 @@ Partial Class Form1
         Me.Check_Can_Removal.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Check_Can_Removal.Location = New System.Drawing.Point(171, 109)
         Me.Check_Can_Removal.Name = "Check_Can_Removal"
-        Me.Check_Can_Removal.Size = New System.Drawing.Size(146, 24)
+        Me.Check_Can_Removal.Size = New System.Drawing.Size(178, 19)
         Me.Check_Can_Removal.TabIndex = 22
-        Me.Check_Can_Removal.Text = "Can Remv Alert"
+        Me.Check_Can_Removal.Text = "Removal and Conflict Altert"
         Me.Check_Can_Removal.UseVisualStyleBackColor = True
         '
-        'Check_ShowDebug
+        'Check_Options
         '
-        Me.Check_ShowDebug.AutoSize = True
-        Me.Check_ShowDebug.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Check_ShowDebug.Location = New System.Drawing.Point(171, 139)
-        Me.Check_ShowDebug.Name = "Check_ShowDebug"
-        Me.Check_ShowDebug.Size = New System.Drawing.Size(130, 24)
-        Me.Check_ShowDebug.TabIndex = 3
-        Me.Check_ShowDebug.Text = "Show Debug "
-        Me.Check_ShowDebug.UseVisualStyleBackColor = True
+        Me.Check_Options.AutoSize = True
+        Me.Check_Options.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Check_Options.Location = New System.Drawing.Point(171, 139)
+        Me.Check_Options.Name = "Check_Options"
+        Me.Check_Options.Size = New System.Drawing.Size(132, 19)
+        Me.Check_Options.TabIndex = 3
+        Me.Check_Options.Text = "Show Exta Options"
+        Me.Check_Options.UseVisualStyleBackColor = True
         '
         'Keypad_9
         '
@@ -451,7 +444,7 @@ Partial Class Form1
         Me.lbl_ManualEntryAlert.ForeColor = System.Drawing.Color.Black
         Me.lbl_ManualEntryAlert.Location = New System.Drawing.Point(171, 46)
         Me.lbl_ManualEntryAlert.Name = "lbl_ManualEntryAlert"
-        Me.lbl_ManualEntryAlert.Size = New System.Drawing.Size(157, 22)
+        Me.lbl_ManualEntryAlert.Size = New System.Drawing.Size(117, 17)
         Me.lbl_ManualEntryAlert.TabIndex = 5
         Me.lbl_ManualEntryAlert.Text = "Manual Entry Mode"
         Me.lbl_ManualEntryAlert.Visible = False
@@ -471,7 +464,7 @@ Partial Class Form1
         Me.lbl_Difficulty.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_Difficulty.Location = New System.Drawing.Point(3, 48)
         Me.lbl_Difficulty.Name = "lbl_Difficulty"
-        Me.lbl_Difficulty.Size = New System.Drawing.Size(79, 20)
+        Me.lbl_Difficulty.Size = New System.Drawing.Size(60, 15)
         Me.lbl_Difficulty.TabIndex = 4
         Me.lbl_Difficulty.Text = "Difficulty:"
         '
@@ -482,48 +475,79 @@ Partial Class Form1
         Me.DropDown_Difficulty.Items.AddRange(New Object() {"Easy", "Medium", "Hard", "Expert", "Custom"})
         Me.DropDown_Difficulty.Location = New System.Drawing.Point(67, 42)
         Me.DropDown_Difficulty.Name = "DropDown_Difficulty"
-        Me.DropDown_Difficulty.Size = New System.Drawing.Size(88, 31)
+        Me.DropDown_Difficulty.Size = New System.Drawing.Size(88, 26)
         Me.DropDown_Difficulty.TabIndex = 3
         '
-        'Button2
+        'Lst_Debug
         '
-        Me.Button2.Location = New System.Drawing.Point(444, 65)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(75, 23)
-        Me.Button2.TabIndex = 0
-        Me.Button2.Text = "Button2"
-        Me.Button2.UseVisualStyleBackColor = True
-        '
-        'Form
-        '
-        Me.Form.BackColor = System.Drawing.Color.Silver
-        Me.Form.Font = New System.Drawing.Font("Roboto", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Form.FormattingEnabled = True
-        Me.Form.ItemHeight = 15
-        Me.Form.Location = New System.Drawing.Point(947, 27)
-        Me.Form.Name = "Form"
-        Me.Form.Size = New System.Drawing.Size(246, 544)
-        Me.Form.TabIndex = 3
+        Me.Lst_Debug.BackColor = System.Drawing.Color.Silver
+        Me.Lst_Debug.Font = New System.Drawing.Font("Roboto", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Lst_Debug.FormattingEnabled = True
+        Me.Lst_Debug.Location = New System.Drawing.Point(5, 70)
+        Me.Lst_Debug.Name = "Lst_Debug"
+        Me.Lst_Debug.Size = New System.Drawing.Size(246, 485)
+        Me.Lst_Debug.TabIndex = 3
         '
         'lbl_boardname
         '
         Me.lbl_boardname.AutoSize = True
         Me.lbl_boardname.Font = New System.Drawing.Font("Roboto", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_boardname.ForeColor = System.Drawing.Color.White
-        Me.lbl_boardname.Location = New System.Drawing.Point(298, 4)
+        Me.lbl_boardname.Location = New System.Drawing.Point(263, 4)
         Me.lbl_boardname.Name = "lbl_boardname"
-        Me.lbl_boardname.Size = New System.Drawing.Size(0, 20)
+        Me.lbl_boardname.Size = New System.Drawing.Size(0, 17)
         Me.lbl_boardname.TabIndex = 4
         Me.lbl_boardname.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'SubGroup_IO
+        '
+        Me.SubGroup_IO.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.SubGroup_IO.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.SubGroup_IO.Controls.Add(Me.Btn_SaveGame)
+        Me.SubGroup_IO.Controls.Add(Me.Btn_LoadGame)
+        Me.SubGroup_IO.Font = New System.Drawing.Font("Roboto", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SubGroup_IO.Location = New System.Drawing.Point(5, 9)
+        Me.SubGroup_IO.Name = "SubGroup_IO"
+        Me.SubGroup_IO.Size = New System.Drawing.Size(246, 49)
+        Me.SubGroup_IO.TabIndex = 6
+        '
+        'Btn_SaveGame
+        '
+        Me.Btn_SaveGame.Location = New System.Drawing.Point(125, 6)
+        Me.Btn_SaveGame.Name = "Btn_SaveGame"
+        Me.Btn_SaveGame.Size = New System.Drawing.Size(113, 33)
+        Me.Btn_SaveGame.TabIndex = 5
+        Me.Btn_SaveGame.Text = "Save Game State"
+        Me.Btn_SaveGame.UseVisualStyleBackColor = True
+        '
+        'Btn_LoadGame
+        '
+        Me.Btn_LoadGame.Location = New System.Drawing.Point(7, 6)
+        Me.Btn_LoadGame.Name = "Btn_LoadGame"
+        Me.Btn_LoadGame.Size = New System.Drawing.Size(112, 33)
+        Me.Btn_LoadGame.TabIndex = 0
+        Me.Btn_LoadGame.Text = "Load Game"
+        Me.Btn_LoadGame.UseVisualStyleBackColor = True
+        '
+        'Group_ExtraOptions
+        '
+        Me.Group_ExtraOptions.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.Group_ExtraOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Group_ExtraOptions.Controls.Add(Me.SubGroup_IO)
+        Me.Group_ExtraOptions.Controls.Add(Me.Lst_Debug)
+        Me.Group_ExtraOptions.Location = New System.Drawing.Point(914, 24)
+        Me.Group_ExtraOptions.Name = "Group_ExtraOptions"
+        Me.Group_ExtraOptions.Size = New System.Drawing.Size(258, 554)
+        Me.Group_ExtraOptions.TabIndex = 5
+        '
         'Form1
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 18.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(11, Byte), Integer), CType(CType(12, Byte), Integer), CType(CType(16, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1246, 607)
+        Me.ClientSize = New System.Drawing.Size(1191, 596)
+        Me.Controls.Add(Me.Group_ExtraOptions)
         Me.Controls.Add(Me.lbl_boardname)
-        Me.Controls.Add(Me.Form)
         Me.Controls.Add(Me.Group_Controls)
         Me.Controls.Add(Me.Group_Board)
         Me.Font = New System.Drawing.Font("Roboto", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -539,6 +563,8 @@ Partial Class Form1
         Me.SubGroup_Keypad.PerformLayout()
         Me.SubGroup_Menu.ResumeLayout(False)
         Me.SubGroup_Menu.PerformLayout()
+        Me.SubGroup_IO.ResumeLayout(False)
+        Me.Group_ExtraOptions.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -552,7 +578,6 @@ Partial Class Form1
     Friend WithEvents Btn_ManualEntry As Button
     Friend WithEvents lbl_Difficulty As Label
     Friend WithEvents DropDown_Difficulty As ComboBox
-    Friend WithEvents Button2 As Button
     Friend WithEvents SubGroup_Keypad As Panel
     Friend WithEvents SubGroup_Solving As Panel
     Friend WithEvents SubGroup_Highlight As Panel
@@ -574,13 +599,16 @@ Partial Class Form1
     Friend WithEvents Btn_ResetBoard As Button
     Friend WithEvents Btn_Hint As Button
     Friend WithEvents Btn_SolveBoard As Button
-    Friend WithEvents Btn_Next As Button
+    Friend WithEvents Btn_StagedSolving As Button
     Friend WithEvents Btn_SolveSingleCell As Button
-    Friend WithEvents Check_ShowDebug As CheckBox
-    Friend WithEvents Form As ListBox
+    Friend WithEvents Check_Options As CheckBox
+    Friend WithEvents Lst_Debug As ListBox
     Friend WithEvents Check_Can_Removal As CheckBox
     Friend WithEvents Rad_Pencil As RadioButton
     Friend WithEvents Rad_Pen As RadioButton
-    Friend WithEvents Btn_PartialSolve As Button
     Friend WithEvents lbl_boardname As Label
+    Friend WithEvents SubGroup_IO As Panel
+    Friend WithEvents Btn_SaveGame As Button
+    Friend WithEvents Btn_LoadGame As Button
+    Friend WithEvents Group_ExtraOptions As Panel
 End Class

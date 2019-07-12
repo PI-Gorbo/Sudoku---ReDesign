@@ -44,9 +44,10 @@ Public Class BoardHandler 'Functions related to the logic side of board handling
             BoardChosen_Long = Convert.ToString(Filelist(x).Fullname)
 
             Using reader As New StreamReader(BoardChosen_Long)
-
+                Dim CurrentIndex As Integer = 0
                 Dim Line As String
                 For Rows = 0 To 8
+                    CurrentIndex = 0
                     Line = reader.ReadLine
                     For Cols = 0 To 8
 
@@ -60,17 +61,56 @@ Public Class BoardHandler 'Functions related to the logic side of board handling
                             End With
                         End If
 
-                        With MainBoard.Cells(Rows, Cols)
-                            If Line(Cols) = "0" Then
+                        'Clues
+                        If Line(CurrentIndex) = "[" Then
+                            If Line(CurrentIndex + 1) = "0" Then
                                 For i = 1 To 9
-                                    .Candidates.Add(i)
-                                    .Value = -1
+                                    MainBoard.Cells(Rows, Cols).Candidates.Add(i)
                                 Next
                             Else
-                                .Value = Integer.Parse(Line(Cols))
-                                .HasValueFromImport = True
+                                MainBoard.Cells(Rows, Cols).HasValueFromImport = True
+                                MainBoard.Cells(Rows, Cols).Value = Integer.Parse(Line(CurrentIndex + 1))
                             End If
-                        End With
+
+
+                            If Line.Length <= CurrentIndex + 3 Then
+                                Exit For
+                            Else
+                                CurrentIndex += 3
+                                Continue For
+                            End If
+                        End If
+
+                        'Solutions
+                        If Line(CurrentIndex) = "(" Then
+                            MainBoard.Cells(Rows, Cols).Value = Integer.Parse(Line(CurrentIndex + 1))
+
+                            If Line.Length <= CurrentIndex + 3 Then
+                                Exit For
+                            Else
+                                CurrentIndex += 3
+                                Continue For
+                            End If
+                        End If
+
+                        'Candidates
+                        If Line(CurrentIndex) = "{" Then
+                            For i = CurrentIndex + 1 To FindIndexOfNext(Line, "}", CurrentIndex) - 1
+                                If IsNumeric(Line(i)) Then
+                                    MainBoard.Cells(Rows, Cols).Candidates.Add(Integer.Parse(Line(i)))
+                                End If
+                            Next
+
+                            If Line.Length <= CurrentIndex = FindIndexOfNext(Line, "}", CurrentIndex) + 1 Then
+                                Exit For
+                            Else
+                                CurrentIndex = FindIndexOfNext(Line, "}", CurrentIndex) + 1
+                                Continue For
+                            End If
+                        End If
+
+                        MsgBox("Error in Loading Board. If the board was written manually, then make sure the formatting is correct.")
+                        Exit Sub
                     Next
                 Next
             End Using
@@ -98,26 +138,41 @@ Public Class BoardHandler 'Functions related to the logic side of board handling
             Dim Solved, _Error As Boolean
             Solved = False
             _Error = False
-            Form1.Form.Items.Add("Attempting to solve board in the background...")
+            Form1.Lst_Debug.Items.Add("Attempting to solve board in the background...")
             SolvedBoard = New Board(MainBoard)
             Bruteforce(SolvedBoard, Solved, _Error)
 
             If _Error = True Then
                 'MsgBox("Error With Current Board apparent during solving. Please load a new board")
             Else
-                Form1.Form.Items.Add("Solved Board!")
+                Form1.Lst_Debug.Items.Add("Solved Board!")
             End If
         End If
 
     End Sub
 
-    Public Sub ResetLogicBoard(Directory_FullName As String)
+    'Loads a new Game according to a opened file.
+    Public Sub NewGame(Filepath As String, ShortFilePath As String, _Error As Boolean)
 
-        Using reader As New StreamReader(Directory_FullName)
+        'KEY --> [*] * can be the values 0 - 9. 0 being no value 1-9 being a clue for the cell
+        '(*) can be 1 - 9. These values are solutions
+        '{*} is a list of numbers with no spaces or separation is the candidates for a cell.
+
+        If IsNothing(MainBoard) Then
+            MainBoard = New Board
+        End If
+
+        BoardChosen_Short = ShortFilePath
+        BoardChosen_Long = Filepath
+
+        Using reader As New StreamReader(Filepath)
 
             Dim Line As String
+            Dim CurrentIndex As Integer
+
             For Rows = 0 To 8
                 Line = reader.ReadLine
+                CurrentIndex = 0
                 For Cols = 0 To 8
 
                     If IsNothing(MainBoard.Cells(Rows, Cols)) Then
@@ -130,22 +185,238 @@ Public Class BoardHandler 'Functions related to the logic side of board handling
                         End With
                     End If
 
-                    With MainBoard.Cells(Rows, Cols)
-                        If Line(Cols) = "0" Then
+                    'Clues
+                    If Line(CurrentIndex) = "[" Then
+                        If Line(CurrentIndex + 1) = "0" Then
                             For i = 1 To 9
-                                .Candidates.Add(i)
-                                .Value = -1
+                                MainBoard.Cells(Rows, Cols).Candidates.Add(i)
                             Next
                         Else
-                            .Value = Integer.Parse(Line(Cols))
-                            .HasValueFromImport = True
+                            MainBoard.Cells(Rows, Cols).HasValueFromImport = True
+                            MainBoard.Cells(Rows, Cols).Value = Integer.Parse(Line(CurrentIndex + 1))
                         End If
-                    End With
+
+
+                        If Line.Length <= CurrentIndex + 3 Then
+                            Exit For
+                        Else
+                            CurrentIndex += 3
+                            Continue For
+                        End If
+                    End If
+
+                    'Solutions
+                    If Line(CurrentIndex) = "(" Then
+                        MainBoard.Cells(Rows, Cols).Value = Integer.Parse(Line(CurrentIndex + 1))
+
+                        If Line.Length <= CurrentIndex + 3 Then
+                            Exit For
+                        Else
+                            CurrentIndex += 3
+                            Continue For
+                        End If
+                    End If
+
+                    'Candidates
+                    If Line(CurrentIndex) = "{" Then
+                        For i = CurrentIndex + 1 To FindIndexOfNext(Line, "}", CurrentIndex) - 1
+                            If IsNumeric(Line(i)) Then
+                                MainBoard.Cells(Rows, Cols).Candidates.Add(Integer.Parse(Line(i)))
+                            End If
+                        Next
+
+                        If Line.Length <= CurrentIndex = FindIndexOfNext(Line, "}", CurrentIndex) + 1 Then
+                            Exit For
+                        Else
+                            CurrentIndex = FindIndexOfNext(Line, "}", CurrentIndex) + 1
+                            Continue For
+                        End If
+                    End If
+
+                    _Error = True
+                    MsgBox("Error in Loading Board. If the board was written manually, then make sure the formatting is correct.")
+                    Exit Sub
+                Next
+            Next
+
+            Dim Solved, _TError As Boolean
+            Solved = False
+            _Error = False
+            Form1.Lst_Debug.Items.Add("Attempting to solve board in the background...")
+            SolvedBoard = New Board(MainBoard)
+            Bruteforce(SolvedBoard, Solved, _TError)
+
+            If _Error = True Then
+                'MsgBox("Error With Current Board apparent during solving. Please load a new board")
+            Else
+                Form1.Lst_Debug.Items.Add("Solved Board!")
+            End If
+
+        End Using
+
+    End Sub
+
+    'Resets the board without solving it again
+    Public Sub ResetGame(Filepath As String)
+
+        Using reader As New StreamReader(Filepath)
+
+            Dim Line As String
+            Dim CurrentIndex As Integer
+
+            For Rows = 0 To 8
+                Line = reader.ReadLine
+                CurrentIndex = 0
+                For Cols = 0 To 8
+
+                    If IsNothing(MainBoard.Cells(Rows, Cols)) Then
+                        MainBoard.Cells(Rows, Cols) = New LogicCell
+                    Else
+                        With MainBoard.Cells(Rows, Cols)
+                            .HasValueFromImport = False
+                            .Value = -1
+                            .Candidates.Clear()
+                        End With
+                    End If
+
+                    'Clues
+                    If Line(CurrentIndex) = "[" Then
+                        If Line(CurrentIndex + 1) = "0" Then
+                            For i = 1 To 9
+                                MainBoard.Cells(Rows, Cols).Candidates.Add(i)
+                            Next
+                        Else
+                            MainBoard.Cells(Rows, Cols).HasValueFromImport = True
+                            MainBoard.Cells(Rows, Cols).Value = Integer.Parse(Line(CurrentIndex + 1))
+                        End If
+
+
+                        If Line.Length <= CurrentIndex + 3 Then
+                            Exit For
+                        Else
+                            CurrentIndex += 3
+                            Continue For
+                        End If
+                    End If
+
+                    'Solutions
+                    If Line(CurrentIndex) = "(" Then
+                        MainBoard.Cells(Rows, Cols).Value = Integer.Parse(Line(CurrentIndex + 1))
+
+                        If Line.Length <= CurrentIndex + 3 Then
+                            Exit For
+                        Else
+                            CurrentIndex += 3
+                            Continue For
+                        End If
+                    End If
+
+                    'Candidates
+                    If Line(CurrentIndex) = "{" Then
+                        For i = CurrentIndex + 1 To FindIndexOfNext(Line, "}", CurrentIndex) - 1
+                            If IsNumeric(Line(i)) Then
+                                MainBoard.Cells(Rows, Cols).Candidates.Add(Integer.Parse(Line(i)))
+                            End If
+                        Next
+
+                        If Line.Length <= CurrentIndex = FindIndexOfNext(Line, "}", CurrentIndex) + 1 Then
+                            Exit For
+                        Else
+                            CurrentIndex = FindIndexOfNext(Line, "}", CurrentIndex) + 1
+                            Continue For
+                        End If
+                    End If
                 Next
             Next
         End Using
 
     End Sub
+
+    'Hanldes the Dialogue for loading a new game.
+    Public Sub LoadNewGame_Dialogue(ByRef _Error As Boolean, ByRef Cancel As Boolean)
+
+        Dim OFD As New OpenFileDialog
+
+        OFD.Filter = "Text Files (*.txt)|*.txt"
+        Cancel = False
+        If OFD.ShowDialog() = DialogResult.OK Then
+            NewGame(OFD.FileName, OFD.SafeFileName, _Error)
+            If _Error = True Then
+                MsgBox("Error with selected board. Please Choose a new One.")
+            End If
+        Else
+            Cancel = True
+        End If
+
+    End Sub
+
+    Public Sub SaveGame()
+
+        Dim SFD As New SaveFileDialog
+
+        SFD.RestoreDirectory = True
+        SFD.FileName = "CustomBoard.txt"
+        SFD.DefaultExt = "txt"
+        SFD.Filter = "Text Files (*.txt)|*.txt"
+
+        If SFD.ShowDialog = DialogResult.OK Then
+
+            Dim line As String
+            Dim templine As String
+            Using file As New StreamWriter(SFD.OpenFile)
+
+                For i = 0 To 8
+                    line = ""
+                    For Each ele In MainBoard.Board_Rows(i)
+
+                        If ele.HasValueFromImport = True And ele.Value <> -1 And ele.Candidates.Count = 0 Then
+                            line += "[" + CStr(ele.Value) + "]"
+
+                        ElseIf ele.HasValueFromImport = False And ele.Value <> -1 And ele.Candidates.Count = 0 Then
+
+                            line += "(" + CStr(ele.Value) + ")"
+
+                        ElseIf ele.HasValueFromImport = False And ele.Value = -1 And ele.Candidates.Count > 0 Then
+
+                            templine = ""
+                            For Each num In ele.Candidates
+                                templine += CStr(num)
+                            Next
+                            line += "{" + templine + "}"
+
+                        Else
+                            line += "[0]"
+                        End If
+
+                    Next
+                    file.WriteLine(line)
+                Next
+            End Using
+
+        End If
+
+    End Sub
+
+    'Finds the next occurance of a character in a string
+    Function FindIndexOfNext(s As String, c As String, StartIndex As Integer)
+
+        If s.Length = 1 Then
+            Return -1
+        ElseIf s.Contains(c) = False Then
+            Return -1
+        ElseIf StartIndex > s.Length - 1 Then
+            Return -1
+        Else
+            For i = StartIndex To s.Length - 1
+                If s(i) = c Then
+                    Return i
+                End If
+            Next
+        End If
+
+        Return -1
+
+    End Function
 
     'A function that loops, using the Calc Candidates function and Isolated candidates function to make progress on the board.
     Public Sub PrelimSolve(ByRef Board As Board, ByRef Board_Solved As Boolean, ByRef Error_Detected As Boolean)
@@ -476,6 +747,10 @@ SkipNumLine_3:
             Next
         Next
 
+        If No_OfClues <= 16 Then
+            Return False
+        End If
+
         Return True
     End Function
 
@@ -581,7 +856,7 @@ Skip:
     End Sub
 
     'TO DO
-    Public Sub SaveCurrentBoard()
+    Public Sub SaveCurrentBoard(ByRef Successful)
 
     End Sub
 

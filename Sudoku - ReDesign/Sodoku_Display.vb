@@ -6,8 +6,9 @@
     Public Const TOTAL_CELL_SIZEpx As Integer = 3 * CANDIDATE_SIZEpx + 2 * CANDIDATE_PADDINGpx
     Public Const CELL_PADDINGpx As Integer = 3
     Public Const TOTAL_BOX_SIZEpx = 3 * TOTAL_CELL_SIZEpx + 2 * CELL_PADDINGpx
-    Public Const BOX_PADDINGpx As Integer = 8
+    Public Const BOX_PADDINGpx As Integer = 6
 
+    'Creates the visual appearance of the board. Labels
     Public Sub CreateBoard()
 
         For Rows = 0 To 8
@@ -85,8 +86,10 @@
 
     End Sub
 
+    'Changes the text on the labes appropirate to a select board
     Public Sub PrimeBoard(Board As Board)
 
+        Dim SaveState As Boolean = False
         ClearDisplay()
 
         For Rows = 0 To 8
@@ -96,6 +99,13 @@
                     UpdateToValueLabel(Cells(Rows, Cols), Board.Cells(Rows, Cols).Value)
                 End If
 
+                If Board.Cells(Rows, Cols).Candidates.Count < 9 And Board.Cells(Rows, Cols).Candidates.Count >= 1 Then
+                    For Each ele In Board.Cells(Rows, Cols).Candidates
+                        Cells(Rows, Cols).Candidates.Add(ele)
+                    Next
+                End If
+                UpdateCandidates(Cells(Rows, Cols))
+
             Next
         Next
         If Not IsNothing(BoardHandler.BoardChosen_Short) Then
@@ -104,10 +114,10 @@
         UpdateKeypads()
     End Sub
 
+    'Makes the large label that displays the value of the cell visible, with a specific value
     Public Sub UpdateToValueLabel(Cell As DisplayCell, Val As Integer)
 
         Cell.HasValueLabel = True
-        Cell.Candidates.Clear()
 
         With Cell.ValueLabel
             .Text = CStr(Val)
@@ -136,6 +146,7 @@
 
     End Sub
 
+    'Undos above function
     Public Sub RemoveValueLabel(Cell As DisplayCell)
 
         Cell.HasValueLabel = False
@@ -155,6 +166,7 @@
 
     End Sub
 
+    'Updates the visual appearance of the candidates of a cell according to the cell's candidates
     Public Sub UpdateCandidates(Cell As DisplayCell)
 
         If Cell.HasValueLabel = False Then
@@ -170,7 +182,8 @@
 
     End Sub
 
-    Public Sub UpdateBoardFromDisplay()
+    'Updates the logic side board from the display of the cells. Essentially bridges the display and logic sides
+    Public Sub UpdateBoardFromDisplay(TrustDisplayCandidates As Boolean)
 
         'Iderate through the board.
         For Rows = 0 To 8
@@ -189,17 +202,24 @@
                 If Cells(Rows, Cols).HasValueLabel = True Then
                     BoardHandler.MainBoard.Cells(Rows, Cols).Value = Integer.Parse(Cells(Rows, Cols).ValueLabel.Text)
                 Else 'Else, add the candidates that the cell has
+                    If TrustDisplayCandidates = False Or Cells(Rows, Cols).Candidates.Count = 0 Then
 
-                    For i = 1 To 9
-                        BoardHandler.MainBoard.Cells(Rows, Cols).Candidates.Add(i)
-                    Next
+                        For i = 1 To 9
+                            BoardHandler.MainBoard.Cells(Rows, Cols).Candidates.Add(i)
+                        Next
 
+                    Else
+                        For Each ele In Cells(Rows, Cols).Candidates
+                            BoardHandler.MainBoard.Cells(Rows, Cols).Candidates.Add(ele)
+                        Next
+                    End If
                 End If
             Next
         Next
 
     End Sub
 
+    'Clears the diplay with default values.
     Public Sub ClearDisplay()
 
         For Rows = 0 To 8
