@@ -28,14 +28,13 @@ Partial Class Form1
         Me.SubGroup_Misc = New System.Windows.Forms.Panel()
         Me.Btn_CheckValidity = New System.Windows.Forms.Button()
         Me.Btn_ResetBoard = New System.Windows.Forms.Button()
-        Me.Btn_Hint = New System.Windows.Forms.Button()
         Me.SubGroup_Solving = New System.Windows.Forms.Panel()
         Me.Btn_SolveBoard = New System.Windows.Forms.Button()
         Me.Btn_StagedSolving = New System.Windows.Forms.Button()
         Me.Btn_SolveSingleCell = New System.Windows.Forms.Button()
         Me.SubGroup_Highlight = New System.Windows.Forms.Panel()
-        Me.Rad_MedusaRed = New System.Windows.Forms.RadioButton()
-        Me.Rad_MedusaBlue = New System.Windows.Forms.RadioButton()
+        Me.Rad_MedusaC2 = New System.Windows.Forms.RadioButton()
+        Me.Rad_MedusaC1 = New System.Windows.Forms.RadioButton()
         Me.Check_Medusa = New System.Windows.Forms.CheckBox()
         Me.Check_Highlighting = New System.Windows.Forms.CheckBox()
         Me.SubGroup_Keypad = New System.Windows.Forms.Panel()
@@ -63,6 +62,9 @@ Partial Class Form1
         Me.Btn_SaveGame = New System.Windows.Forms.Button()
         Me.Btn_LoadGame = New System.Windows.Forms.Button()
         Me.Group_ExtraOptions = New System.Windows.Forms.Panel()
+        Me.DropDown_Medusa = New System.Windows.Forms.ComboBox()
+        Me.Btn_ClearHighlight = New System.Windows.Forms.Button()
+        Me.Btn_PrelimSolve = New System.Windows.Forms.Button()
         Me.Group_Controls.SuspendLayout()
         Me.SubGroup_Misc.SuspendLayout()
         Me.SubGroup_Solving.SuspendLayout()
@@ -96,7 +98,6 @@ Partial Class Form1
         '
         Me.Group_Controls.BackColor = System.Drawing.Color.Silver
         Me.Group_Controls.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Group_Controls.Controls.Add(Me.SubGroup_Misc)
         Me.Group_Controls.Controls.Add(Me.SubGroup_Solving)
         Me.Group_Controls.Controls.Add(Me.SubGroup_Highlight)
         Me.Group_Controls.Controls.Add(Me.SubGroup_Keypad)
@@ -113,49 +114,41 @@ Partial Class Form1
         Me.SubGroup_Misc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.SubGroup_Misc.Controls.Add(Me.Btn_CheckValidity)
         Me.SubGroup_Misc.Controls.Add(Me.Btn_ResetBoard)
-        Me.SubGroup_Misc.Controls.Add(Me.Btn_Hint)
-        Me.SubGroup_Misc.Location = New System.Drawing.Point(11, 449)
+        Me.SubGroup_Misc.Location = New System.Drawing.Point(5, 6)
         Me.SubGroup_Misc.Name = "SubGroup_Misc"
-        Me.SubGroup_Misc.Size = New System.Drawing.Size(301, 93)
+        Me.SubGroup_Misc.Size = New System.Drawing.Size(246, 50)
         Me.SubGroup_Misc.TabIndex = 12
         '
         'Btn_CheckValidity
         '
-        Me.Btn_CheckValidity.Location = New System.Drawing.Point(9, 4)
+        Me.Btn_CheckValidity.Font = New System.Drawing.Font("Roboto", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Btn_CheckValidity.Location = New System.Drawing.Point(7, 4)
         Me.Btn_CheckValidity.Name = "Btn_CheckValidity"
-        Me.Btn_CheckValidity.Size = New System.Drawing.Size(140, 37)
+        Me.Btn_CheckValidity.Size = New System.Drawing.Size(112, 37)
         Me.Btn_CheckValidity.TabIndex = 11
         Me.Btn_CheckValidity.Text = "Check Validity"
         Me.Btn_CheckValidity.UseVisualStyleBackColor = True
         '
         'Btn_ResetBoard
         '
-        Me.Btn_ResetBoard.Location = New System.Drawing.Point(156, 28)
+        Me.Btn_ResetBoard.Font = New System.Drawing.Font("Roboto", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Btn_ResetBoard.Location = New System.Drawing.Point(126, 4)
         Me.Btn_ResetBoard.Name = "Btn_ResetBoard"
-        Me.Btn_ResetBoard.Size = New System.Drawing.Size(136, 37)
+        Me.Btn_ResetBoard.Size = New System.Drawing.Size(112, 37)
         Me.Btn_ResetBoard.TabIndex = 10
         Me.Btn_ResetBoard.Text = "Reset Board"
         Me.Btn_ResetBoard.UseVisualStyleBackColor = True
-        '
-        'Btn_Hint
-        '
-        Me.Btn_Hint.Enabled = False
-        Me.Btn_Hint.Location = New System.Drawing.Point(9, 47)
-        Me.Btn_Hint.Name = "Btn_Hint"
-        Me.Btn_Hint.Size = New System.Drawing.Size(140, 37)
-        Me.Btn_Hint.TabIndex = 9
-        Me.Btn_Hint.Text = "Hint"
-        Me.Btn_Hint.UseVisualStyleBackColor = True
         '
         'SubGroup_Solving
         '
         Me.SubGroup_Solving.BackColor = System.Drawing.Color.WhiteSmoke
         Me.SubGroup_Solving.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.SubGroup_Solving.Controls.Add(Me.Btn_PrelimSolve)
         Me.SubGroup_Solving.Controls.Add(Me.Btn_SolveBoard)
         Me.SubGroup_Solving.Controls.Add(Me.Btn_StagedSolving)
         Me.SubGroup_Solving.Controls.Add(Me.Btn_SolveSingleCell)
         Me.SubGroup_Solving.Font = New System.Drawing.Font("Roboto", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SubGroup_Solving.Location = New System.Drawing.Point(11, 341)
+        Me.SubGroup_Solving.Location = New System.Drawing.Point(11, 402)
         Me.SubGroup_Solving.Name = "SubGroup_Solving"
         Me.SubGroup_Solving.Size = New System.Drawing.Size(301, 102)
         Me.SubGroup_Solving.TabIndex = 24
@@ -171,7 +164,7 @@ Partial Class Form1
         '
         'Btn_StagedSolving
         '
-        Me.Btn_StagedSolving.Location = New System.Drawing.Point(152, 28)
+        Me.Btn_StagedSolving.Location = New System.Drawing.Point(152, 9)
         Me.Btn_StagedSolving.Name = "Btn_StagedSolving"
         Me.Btn_StagedSolving.Size = New System.Drawing.Size(140, 37)
         Me.Btn_StagedSolving.TabIndex = 10
@@ -191,41 +184,43 @@ Partial Class Form1
         '
         Me.SubGroup_Highlight.BackColor = System.Drawing.Color.WhiteSmoke
         Me.SubGroup_Highlight.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.SubGroup_Highlight.Controls.Add(Me.Rad_MedusaRed)
-        Me.SubGroup_Highlight.Controls.Add(Me.Rad_MedusaBlue)
+        Me.SubGroup_Highlight.Controls.Add(Me.Btn_ClearHighlight)
+        Me.SubGroup_Highlight.Controls.Add(Me.DropDown_Medusa)
+        Me.SubGroup_Highlight.Controls.Add(Me.Rad_MedusaC2)
+        Me.SubGroup_Highlight.Controls.Add(Me.Rad_MedusaC1)
         Me.SubGroup_Highlight.Controls.Add(Me.Check_Medusa)
         Me.SubGroup_Highlight.Controls.Add(Me.Check_Highlighting)
         Me.SubGroup_Highlight.Font = New System.Drawing.Font("Roboto", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SubGroup_Highlight.Location = New System.Drawing.Point(11, 266)
         Me.SubGroup_Highlight.Name = "SubGroup_Highlight"
-        Me.SubGroup_Highlight.Size = New System.Drawing.Size(301, 69)
+        Me.SubGroup_Highlight.Size = New System.Drawing.Size(301, 130)
         Me.SubGroup_Highlight.TabIndex = 21
         '
-        'Rad_MedusaRed
+        'Rad_MedusaC2
         '
-        Me.Rad_MedusaRed.AutoSize = True
-        Me.Rad_MedusaRed.Enabled = False
-        Me.Rad_MedusaRed.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Rad_MedusaRed.Location = New System.Drawing.Point(171, 37)
-        Me.Rad_MedusaRed.Name = "Rad_MedusaRed"
-        Me.Rad_MedusaRed.Size = New System.Drawing.Size(120, 19)
-        Me.Rad_MedusaRed.TabIndex = 23
-        Me.Rad_MedusaRed.Text = "Medusa Colour 2"
-        Me.Rad_MedusaRed.UseVisualStyleBackColor = True
+        Me.Rad_MedusaC2.AutoSize = True
+        Me.Rad_MedusaC2.Enabled = False
+        Me.Rad_MedusaC2.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Rad_MedusaC2.Location = New System.Drawing.Point(162, 92)
+        Me.Rad_MedusaC2.Name = "Rad_MedusaC2"
+        Me.Rad_MedusaC2.Size = New System.Drawing.Size(120, 19)
+        Me.Rad_MedusaC2.TabIndex = 23
+        Me.Rad_MedusaC2.Text = "Medusa Colour 2"
+        Me.Rad_MedusaC2.UseVisualStyleBackColor = True
         '
-        'Rad_MedusaBlue
+        'Rad_MedusaC1
         '
-        Me.Rad_MedusaBlue.AutoSize = True
-        Me.Rad_MedusaBlue.Checked = True
-        Me.Rad_MedusaBlue.Enabled = False
-        Me.Rad_MedusaBlue.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Rad_MedusaBlue.Location = New System.Drawing.Point(171, 12)
-        Me.Rad_MedusaBlue.Name = "Rad_MedusaBlue"
-        Me.Rad_MedusaBlue.Size = New System.Drawing.Size(120, 19)
-        Me.Rad_MedusaBlue.TabIndex = 22
-        Me.Rad_MedusaBlue.TabStop = True
-        Me.Rad_MedusaBlue.Text = "Medusa Colour 1"
-        Me.Rad_MedusaBlue.UseVisualStyleBackColor = True
+        Me.Rad_MedusaC1.AutoSize = True
+        Me.Rad_MedusaC1.Checked = True
+        Me.Rad_MedusaC1.Enabled = False
+        Me.Rad_MedusaC1.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Rad_MedusaC1.Location = New System.Drawing.Point(162, 67)
+        Me.Rad_MedusaC1.Name = "Rad_MedusaC1"
+        Me.Rad_MedusaC1.Size = New System.Drawing.Size(120, 19)
+        Me.Rad_MedusaC1.TabIndex = 22
+        Me.Rad_MedusaC1.TabStop = True
+        Me.Rad_MedusaC1.Text = "Medusa Colour 1"
+        Me.Rad_MedusaC1.UseVisualStyleBackColor = True
         '
         'Check_Medusa
         '
@@ -470,6 +465,7 @@ Partial Class Form1
         '
         'DropDown_Difficulty
         '
+        Me.DropDown_Difficulty.AccessibleRole = System.Windows.Forms.AccessibleRole.None
         Me.DropDown_Difficulty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.DropDown_Difficulty.FormattingEnabled = True
         Me.DropDown_Difficulty.Items.AddRange(New Object() {"Easy", "Medium", "Hard", "Expert", "Custom"})
@@ -483,9 +479,9 @@ Partial Class Form1
         Me.Lst_Debug.BackColor = System.Drawing.Color.Silver
         Me.Lst_Debug.Font = New System.Drawing.Font("Roboto", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Lst_Debug.FormattingEnabled = True
-        Me.Lst_Debug.Location = New System.Drawing.Point(5, 70)
+        Me.Lst_Debug.Location = New System.Drawing.Point(5, 120)
         Me.Lst_Debug.Name = "Lst_Debug"
-        Me.Lst_Debug.Size = New System.Drawing.Size(246, 485)
+        Me.Lst_Debug.Size = New System.Drawing.Size(246, 420)
         Me.Lst_Debug.TabIndex = 3
         '
         'lbl_boardname
@@ -506,7 +502,7 @@ Partial Class Form1
         Me.SubGroup_IO.Controls.Add(Me.Btn_SaveGame)
         Me.SubGroup_IO.Controls.Add(Me.Btn_LoadGame)
         Me.SubGroup_IO.Font = New System.Drawing.Font("Roboto", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SubGroup_IO.Location = New System.Drawing.Point(5, 9)
+        Me.SubGroup_IO.Location = New System.Drawing.Point(5, 62)
         Me.SubGroup_IO.Name = "SubGroup_IO"
         Me.SubGroup_IO.Size = New System.Drawing.Size(246, 49)
         Me.SubGroup_IO.TabIndex = 6
@@ -533,12 +529,41 @@ Partial Class Form1
         '
         Me.Group_ExtraOptions.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.Group_ExtraOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Group_ExtraOptions.Controls.Add(Me.SubGroup_Misc)
         Me.Group_ExtraOptions.Controls.Add(Me.SubGroup_IO)
         Me.Group_ExtraOptions.Controls.Add(Me.Lst_Debug)
         Me.Group_ExtraOptions.Location = New System.Drawing.Point(914, 24)
         Me.Group_ExtraOptions.Name = "Group_ExtraOptions"
         Me.Group_ExtraOptions.Size = New System.Drawing.Size(258, 554)
         Me.Group_ExtraOptions.TabIndex = 5
+        '
+        'DropDown_Medusa
+        '
+        Me.DropDown_Medusa.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.DropDown_Medusa.FormattingEnabled = True
+        Me.DropDown_Medusa.Items.AddRange(New Object() {"Red + Blue", "Green + Purple", "Yellow + Pink"})
+        Me.DropDown_Medusa.Location = New System.Drawing.Point(5, 67)
+        Me.DropDown_Medusa.Name = "DropDown_Medusa"
+        Me.DropDown_Medusa.Size = New System.Drawing.Size(141, 26)
+        Me.DropDown_Medusa.TabIndex = 0
+        '
+        'Btn_ClearHighlight
+        '
+        Me.Btn_ClearHighlight.Location = New System.Drawing.Point(165, 12)
+        Me.Btn_ClearHighlight.Name = "Btn_ClearHighlight"
+        Me.Btn_ClearHighlight.Size = New System.Drawing.Size(120, 28)
+        Me.Btn_ClearHighlight.TabIndex = 12
+        Me.Btn_ClearHighlight.Text = "Clear Highlight"
+        Me.Btn_ClearHighlight.UseVisualStyleBackColor = True
+        '
+        'Btn_PrelimSolve
+        '
+        Me.Btn_PrelimSolve.Location = New System.Drawing.Point(152, 52)
+        Me.Btn_PrelimSolve.Name = "Btn_PrelimSolve"
+        Me.Btn_PrelimSolve.Size = New System.Drawing.Size(140, 37)
+        Me.Btn_PrelimSolve.TabIndex = 12
+        Me.Btn_PrelimSolve.Text = "PreLim Solve"
+        Me.Btn_PrelimSolve.UseVisualStyleBackColor = True
         '
         'Form1
         '
@@ -581,8 +606,8 @@ Partial Class Form1
     Friend WithEvents SubGroup_Keypad As Panel
     Friend WithEvents SubGroup_Solving As Panel
     Friend WithEvents SubGroup_Highlight As Panel
-    Friend WithEvents Rad_MedusaRed As RadioButton
-    Friend WithEvents Rad_MedusaBlue As RadioButton
+    Friend WithEvents Rad_MedusaC2 As RadioButton
+    Friend WithEvents Rad_MedusaC1 As RadioButton
     Friend WithEvents Check_Medusa As CheckBox
     Friend WithEvents Check_Highlighting As CheckBox
     Friend WithEvents Keypad_9 As Button
@@ -597,7 +622,6 @@ Partial Class Form1
     Friend WithEvents SubGroup_Misc As Panel
     Friend WithEvents Btn_CheckValidity As Button
     Friend WithEvents Btn_ResetBoard As Button
-    Friend WithEvents Btn_Hint As Button
     Friend WithEvents Btn_SolveBoard As Button
     Friend WithEvents Btn_StagedSolving As Button
     Friend WithEvents Btn_SolveSingleCell As Button
@@ -611,4 +635,7 @@ Partial Class Form1
     Friend WithEvents Btn_SaveGame As Button
     Friend WithEvents Btn_LoadGame As Button
     Friend WithEvents Group_ExtraOptions As Panel
+    Friend WithEvents Btn_ClearHighlight As Button
+    Friend WithEvents DropDown_Medusa As ComboBox
+    Friend WithEvents Btn_PrelimSolve As Button
 End Class

@@ -26,12 +26,14 @@ Public Class Form1
         LastClicked = Nothing
         Form_BeginningState()
         KeyPreview = True
+        DropDown_Medusa.SelectedIndex = 0
     End Sub
 
     'Drop Down changes
     Private Sub DropDown_Difficulty_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDown_Difficulty.SelectedIndexChanged
         Game.NewGame()
         Form_NormalPlayState()
+        Me.ActiveControl = Nothing
     End Sub
 
     'Check button that reveals the saving stuff and dialogue box
@@ -63,7 +65,7 @@ Public Class Form1
         Game.UpdateKeypads()
     End Sub
 
-    'Next button click
+    'Next button click / Staged Solve
     Private Sub Btn_Next_Click(sender As Object, e As EventArgs) Handles Btn_StagedSolving.Click
 
         If Btn_StagedSolving.Text = "Calc Candidates" Then
@@ -73,6 +75,7 @@ Public Class Form1
             Game.PrimeBoard(Game.BoardHandler.MainBoard)
             Game.ShowCandidates()
             Btn_StagedSolving.Text = "Next Step"
+            Btn_PrelimSolve.Enabled = True
 
         ElseIf Btn_StagedSolving.Text = "Next Step" Then
             'Stage 2 of solving board. A loop 
@@ -122,13 +125,15 @@ Public Class Form1
         Check_Highlighting.Checked = False
         Check_Medusa.Enabled = False
         Check_Medusa.Checked = False
-        Rad_MedusaBlue.Checked = True
-        Rad_MedusaBlue.Enabled = False
-        Rad_MedusaRed.Enabled = False
+        Rad_MedusaC1.Checked = True
+        Rad_MedusaC1.Enabled = False
+        Rad_MedusaC2.Enabled = False
         SubGroup_Solving.Enabled = False
         SubGroup_Misc.Enabled = False
         Btn_LoadGame.Enabled = True
         Btn_SaveGame.Enabled = False
+        Btn_PrelimSolve.Enabled = False
+        DropDown_Medusa.Enabled = False
     End Sub
 
     Public Sub Form_NormalPlayState()
@@ -145,14 +150,17 @@ Public Class Form1
         Check_Highlighting.Checked = False
         Check_Medusa.Enabled = True
         Check_Medusa.Checked = False
-        Rad_MedusaBlue.Checked = True
-        Rad_MedusaBlue.Enabled = False
-        Rad_MedusaRed.Enabled = False
+        Rad_MedusaC1.Checked = True
+        Rad_MedusaC1.Enabled = False
+        Rad_MedusaC2.Enabled = False
         SubGroup_Solving.Enabled = True
         SubGroup_Misc.Enabled = True
         Btn_StagedSolving.Text = "Calc Candidates"
         Btn_LoadGame.Enabled = True
         Btn_SaveGame.Enabled = True
+        Btn_PrelimSolve.Enabled = False
+        DropDown_Medusa.Enabled = False
+
     End Sub
 
     Public Sub Form_ManualEntryState()
@@ -168,13 +176,15 @@ Public Class Form1
         Check_Highlighting.Checked = False
         Check_Medusa.Enabled = False
         Check_Medusa.Checked = False
-        Rad_MedusaBlue.Checked = True
-        Rad_MedusaBlue.Enabled = False
-        Rad_MedusaRed.Enabled = False
+        Rad_MedusaC1.Checked = True
+        Rad_MedusaC1.Enabled = False
+        Rad_MedusaC2.Enabled = False
         SubGroup_Solving.Enabled = False
         SubGroup_Misc.Enabled = False
         Btn_LoadGame.Enabled = False
         Btn_SaveGame.Enabled = False
+        DropDown_Medusa.Enabled = False
+
 
     End Sub
 
@@ -192,6 +202,7 @@ Public Class Form1
 
     'Handles Keypresses
     Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        Me.ActiveControl = Nothing
 
         If IsNothing(Game.CurrentCell) = False Then
 
@@ -220,10 +231,45 @@ Public Class Form1
                 End If
 
                 Game.HandleKeypadInput(val)
-
+                Exit Sub
             End If
         End If
 
+        If IsNothing(Game.CurrentCell) = False Then
+            If e.KeyCode = Keys.Right Then
+
+                If Game.CurrentCell.Location.X + 1 > 8 Then
+                    Game.HandleLabelInput(Game.Cells(Game.CurrentCell.Location.Y, 0))
+                Else
+                    Game.HandleLabelInput(Game.Cells(Game.CurrentCell.Location.Y, Game.CurrentCell.Location.X + 1))
+                End If
+
+            ElseIf e.KeyCode = Keys.Left Then
+
+                If Game.CurrentCell.Location.X - 1 < 0 Then
+                    Game.HandleLabelInput(Game.Cells(Game.CurrentCell.Location.Y, 8))
+                Else
+                    Game.HandleLabelInput(Game.Cells(Game.CurrentCell.Location.Y, Game.CurrentCell.Location.X - 1))
+                End If
+
+            ElseIf e.KeyCode = Keys.Up Then
+
+                If Game.CurrentCell.Location.Y - 1 < 0 Then
+                    Game.HandleLabelInput(Game.Cells(8, Game.CurrentCell.Location.X))
+                Else
+                    Game.HandleLabelInput(Game.Cells(Game.CurrentCell.Location.Y - 1, Game.CurrentCell.Location.X))
+                End If
+
+            ElseIf e.KeyCode = Keys.Down Then
+
+                If Game.CurrentCell.Location.Y + 1 > 8 Then
+                    Game.HandleLabelInput(Game.Cells(0, Game.CurrentCell.Location.X))
+                Else
+                    Game.HandleLabelInput(Game.Cells(Game.CurrentCell.Location.Y + 1, Game.CurrentCell.Location.X))
+                End If
+
+            End If
+        End If
     End Sub
 
     'Handles highlighting changes
@@ -247,31 +293,40 @@ Public Class Form1
             Game.CurrentCell = Nothing
         End If
 
+        Game.RefreshHighlight(False)
         Game.UpdateKeypads()
 
     End Sub
 
-    'handles medusa changes
+    'Handles medusa changes
     Private Sub Check_Medusa_CheckedChanged(sender As Object, e As EventArgs) Handles Check_Medusa.CheckedChanged
 
+        'Last Clicked represents which control was last clicked out of highlighting and medusa
         If IsNothing(LastClicked) = False Then
 
+            'If last clicked is not the same as the one that was last clicked, then refresh highlighting.
             If LastClicked.Equals(sender) = False Then
                 Game.RefreshHighlight(True)
             End If
         End If
+
         LastClicked = sender
 
+        'Untick candidate highlighting
         If Check_Highlighting.Checked = True Then
             Check_Highlighting.Checked = False
         End If
 
-        If Rad_MedusaBlue.Enabled = False Then
-            Rad_MedusaBlue.Enabled = True
-            Rad_MedusaRed.Enabled = True
+        'If the rad bttns were previosuly disabled, then enable then. All controls below are req'd to use medusa
+        If Rad_MedusaC1.Enabled = False Then
+            DropDown_Medusa.Enabled = True
+            Rad_MedusaC1.Enabled = True
+            Rad_MedusaC2.Enabled = True
+            Game.MedusaChanged()
         Else
-            Rad_MedusaBlue.Enabled = False
-            Rad_MedusaRed.Enabled = False
+            DropDown_Medusa.Enabled = False
+            Rad_MedusaC1.Enabled = False
+            Rad_MedusaC2.Enabled = False
         End If
 
         Game.UpdateKeypads()
@@ -299,5 +354,77 @@ Public Class Form1
         Game.UpdateBoardFromDisplay(True)
         Game.BoardHandler.SaveGame()
 
+    End Sub
+
+    Private Sub Btn_ClearHighlight_Click(sender As Object, e As EventArgs) Handles Btn_ClearHighlight.Click
+
+        If Check_Highlighting.Checked = True Then
+            Game.HighlightedCandidates.Clear()
+        End If
+        Game.RefreshHighlight(True)
+        Game.UpdateKeypads()
+        If Check_Medusa.Checked = True Then
+            If DropDown_Medusa.SelectedIndex = 0 Then
+                If IsNothing(Game.Medusa0(0)) = False Then
+                    Game.Medusa0(0).Clear()
+                End If
+                If IsNothing(Game.Medusa0(1)) = False Then
+                    Game.Medusa0(1).Clear()
+                End If
+
+            ElseIf DropDown_Medusa.SelectedIndex = 1 Then
+                If IsNothing(Game.Medusa1(0)) = False Then
+                    Game.Medusa0(0).Clear()
+                End If
+                If IsNothing(Game.Medusa1(1)) = False Then
+                    Game.Medusa0(1).Clear()
+                End If
+            Else
+                If IsNothing(Game.Medusa2(0)) = False Then
+                    Game.Medusa0(0).Clear()
+                End If
+                If IsNothing(Game.Medusa2(1)) = False Then
+                    Game.Medusa0(1).Clear()
+                End If
+            End If
+        End If
+
+
+
+    End Sub
+
+    Private Sub Btn_PrelimSolve_Click(sender As Object, e As EventArgs) Handles Btn_PrelimSolve.Click
+
+        Game.UpdateBoardFromDisplay(True)
+        Game.BoardHandler.PrelimSolve(Game.BoardHandler.MainBoard, vbNull, vbNull)
+        Game.PrimeBoard(Game.BoardHandler.MainBoard)
+        Game.ShowCandidates()
+
+    End Sub
+
+    'Handles when the dropdown medusa changes
+    Private Sub DropDown_Medusa_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DropDown_Medusa.SelectedIndexChanged
+
+        'Red + Blue = Index 0
+        'Green +Purple = Index 1
+        'Yellow +Pink = Index 2
+
+        If DropDown_Medusa.SelectedIndex = 0 Then
+
+            Rad_MedusaC1.Text = "Medusa Blue"
+            Rad_MedusaC2.Text = "Medusa Red"
+
+        ElseIf DropDown_Medusa.SelectedIndex = 1 Then
+
+            Rad_MedusaC1.Text = "Medusa Green"
+            Rad_MedusaC2.Text = "Medusa Purple"
+
+        ElseIf DropDown_Medusa.SelectedIndex = 2 Then
+
+            Rad_MedusaC1.Text = "Yellow"
+            Rad_MedusaC2.Text = "Pink"
+
+        End If
+        Game.MedusaChanged()
     End Sub
 End Class
