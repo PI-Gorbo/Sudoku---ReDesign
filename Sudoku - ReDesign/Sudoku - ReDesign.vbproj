@@ -133,6 +133,7 @@
     <Content Include="bin\Debug\Boards\Easy\Easy %286%29.txt" />
     <Content Include="bin\Debug\Boards\Easy\Easy %287%29.txt" />
     <Content Include="bin\Debug\Boards\Easy\Easy %288%29.txt" />
+    <Content Include="bin\Debug\Boards\Evil\Extreme %281%29.txt" />
     <Content Include="bin\Debug\Boards\Evil\Extreme %2810%29.txt" />
     <Content Include="bin\Debug\Boards\Evil\Extreme %2811%29.txt" />
     <Content Include="bin\Debug\Boards\Evil\Extreme %2812%29.txt" />
@@ -152,6 +153,7 @@
     <Content Include="bin\Debug\Boards\Hard\Hard %284%29.txt" />
     <Content Include="bin\Debug\Boards\Hard\Hard %285%29.txt" />
     <Content Include="bin\Debug\Boards\Hard\Hard %286%29.txt" />
+    <Content Include="bin\Debug\Boards\Hard\Hard %287%29.txt" />
     <Content Include="bin\Debug\Boards\Medium\Medium %281%29.txt" />
     <Content Include="bin\Debug\Boards\Medium\Medium %282%29.txt" />
     <Content Include="bin\Debug\Boards\Medium\Medium %283%29.txt" />

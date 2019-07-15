@@ -25,18 +25,20 @@ Partial Class Form1
         Me.Btn_NewGame = New System.Windows.Forms.Button()
         Me.Group_Board = New System.Windows.Forms.Panel()
         Me.Group_Controls = New System.Windows.Forms.Panel()
-        Me.SubGroup_Misc = New System.Windows.Forms.Panel()
-        Me.Btn_CheckValidity = New System.Windows.Forms.Button()
-        Me.Btn_ResetBoard = New System.Windows.Forms.Button()
         Me.SubGroup_Solving = New System.Windows.Forms.Panel()
+        Me.Btn_PrelimSolve = New System.Windows.Forms.Button()
         Me.Btn_SolveBoard = New System.Windows.Forms.Button()
         Me.Btn_StagedSolving = New System.Windows.Forms.Button()
         Me.Btn_SolveSingleCell = New System.Windows.Forms.Button()
         Me.SubGroup_Highlight = New System.Windows.Forms.Panel()
+        Me.Check_Overlay2 = New System.Windows.Forms.CheckBox()
+        Me.Check_Overlay1 = New System.Windows.Forms.CheckBox()
+        Me.Check_EnableHighlighting = New System.Windows.Forms.CheckBox()
+        Me.Drop_HighlightSelect = New System.Windows.Forms.ComboBox()
+        Me.DropDown_Medusa = New System.Windows.Forms.ComboBox()
+        Me.Btn_ClearHighlight = New System.Windows.Forms.Button()
         Me.Rad_MedusaC2 = New System.Windows.Forms.RadioButton()
         Me.Rad_MedusaC1 = New System.Windows.Forms.RadioButton()
-        Me.Check_Medusa = New System.Windows.Forms.CheckBox()
-        Me.Check_Highlighting = New System.Windows.Forms.CheckBox()
         Me.SubGroup_Keypad = New System.Windows.Forms.Panel()
         Me.Rad_Pencil = New System.Windows.Forms.RadioButton()
         Me.Rad_Pen = New System.Windows.Forms.RadioButton()
@@ -56,21 +58,21 @@ Partial Class Form1
         Me.Btn_ManualEntry = New System.Windows.Forms.Button()
         Me.lbl_Difficulty = New System.Windows.Forms.Label()
         Me.DropDown_Difficulty = New System.Windows.Forms.ComboBox()
+        Me.SubGroup_Misc = New System.Windows.Forms.Panel()
+        Me.Btn_CheckValidity = New System.Windows.Forms.Button()
+        Me.Btn_ResetBoard = New System.Windows.Forms.Button()
         Me.Lst_Debug = New System.Windows.Forms.ListBox()
         Me.lbl_boardname = New System.Windows.Forms.Label()
         Me.SubGroup_IO = New System.Windows.Forms.Panel()
         Me.Btn_SaveGame = New System.Windows.Forms.Button()
         Me.Btn_LoadGame = New System.Windows.Forms.Button()
         Me.Group_ExtraOptions = New System.Windows.Forms.Panel()
-        Me.DropDown_Medusa = New System.Windows.Forms.ComboBox()
-        Me.Btn_ClearHighlight = New System.Windows.Forms.Button()
-        Me.Btn_PrelimSolve = New System.Windows.Forms.Button()
         Me.Group_Controls.SuspendLayout()
-        Me.SubGroup_Misc.SuspendLayout()
         Me.SubGroup_Solving.SuspendLayout()
         Me.SubGroup_Highlight.SuspendLayout()
         Me.SubGroup_Keypad.SuspendLayout()
         Me.SubGroup_Menu.SuspendLayout()
+        Me.SubGroup_Misc.SuspendLayout()
         Me.SubGroup_IO.SuspendLayout()
         Me.Group_ExtraOptions.SuspendLayout()
         Me.SuspendLayout()
@@ -108,37 +110,6 @@ Partial Class Form1
         Me.Group_Controls.Size = New System.Drawing.Size(327, 554)
         Me.Group_Controls.TabIndex = 2
         '
-        'SubGroup_Misc
-        '
-        Me.SubGroup_Misc.BackColor = System.Drawing.Color.WhiteSmoke
-        Me.SubGroup_Misc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.SubGroup_Misc.Controls.Add(Me.Btn_CheckValidity)
-        Me.SubGroup_Misc.Controls.Add(Me.Btn_ResetBoard)
-        Me.SubGroup_Misc.Location = New System.Drawing.Point(5, 6)
-        Me.SubGroup_Misc.Name = "SubGroup_Misc"
-        Me.SubGroup_Misc.Size = New System.Drawing.Size(246, 50)
-        Me.SubGroup_Misc.TabIndex = 12
-        '
-        'Btn_CheckValidity
-        '
-        Me.Btn_CheckValidity.Font = New System.Drawing.Font("Roboto", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Btn_CheckValidity.Location = New System.Drawing.Point(7, 4)
-        Me.Btn_CheckValidity.Name = "Btn_CheckValidity"
-        Me.Btn_CheckValidity.Size = New System.Drawing.Size(112, 37)
-        Me.Btn_CheckValidity.TabIndex = 11
-        Me.Btn_CheckValidity.Text = "Check Validity"
-        Me.Btn_CheckValidity.UseVisualStyleBackColor = True
-        '
-        'Btn_ResetBoard
-        '
-        Me.Btn_ResetBoard.Font = New System.Drawing.Font("Roboto", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Btn_ResetBoard.Location = New System.Drawing.Point(126, 4)
-        Me.Btn_ResetBoard.Name = "Btn_ResetBoard"
-        Me.Btn_ResetBoard.Size = New System.Drawing.Size(112, 37)
-        Me.Btn_ResetBoard.TabIndex = 10
-        Me.Btn_ResetBoard.Text = "Reset Board"
-        Me.Btn_ResetBoard.UseVisualStyleBackColor = True
-        '
         'SubGroup_Solving
         '
         Me.SubGroup_Solving.BackColor = System.Drawing.Color.WhiteSmoke
@@ -148,10 +119,19 @@ Partial Class Form1
         Me.SubGroup_Solving.Controls.Add(Me.Btn_StagedSolving)
         Me.SubGroup_Solving.Controls.Add(Me.Btn_SolveSingleCell)
         Me.SubGroup_Solving.Font = New System.Drawing.Font("Roboto", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SubGroup_Solving.Location = New System.Drawing.Point(11, 402)
+        Me.SubGroup_Solving.Location = New System.Drawing.Point(11, 438)
         Me.SubGroup_Solving.Name = "SubGroup_Solving"
         Me.SubGroup_Solving.Size = New System.Drawing.Size(301, 102)
         Me.SubGroup_Solving.TabIndex = 24
+        '
+        'Btn_PrelimSolve
+        '
+        Me.Btn_PrelimSolve.Location = New System.Drawing.Point(152, 52)
+        Me.Btn_PrelimSolve.Name = "Btn_PrelimSolve"
+        Me.Btn_PrelimSolve.Size = New System.Drawing.Size(140, 37)
+        Me.Btn_PrelimSolve.TabIndex = 12
+        Me.Btn_PrelimSolve.Text = "PreLim Solve"
+        Me.Btn_PrelimSolve.UseVisualStyleBackColor = True
         '
         'Btn_SolveBoard
         '
@@ -184,24 +164,88 @@ Partial Class Form1
         '
         Me.SubGroup_Highlight.BackColor = System.Drawing.Color.WhiteSmoke
         Me.SubGroup_Highlight.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.SubGroup_Highlight.Controls.Add(Me.Btn_ClearHighlight)
+        Me.SubGroup_Highlight.Controls.Add(Me.Check_Overlay2)
+        Me.SubGroup_Highlight.Controls.Add(Me.Check_Overlay1)
+        Me.SubGroup_Highlight.Controls.Add(Me.Check_EnableHighlighting)
+        Me.SubGroup_Highlight.Controls.Add(Me.Drop_HighlightSelect)
         Me.SubGroup_Highlight.Controls.Add(Me.DropDown_Medusa)
+        Me.SubGroup_Highlight.Controls.Add(Me.Btn_ClearHighlight)
         Me.SubGroup_Highlight.Controls.Add(Me.Rad_MedusaC2)
         Me.SubGroup_Highlight.Controls.Add(Me.Rad_MedusaC1)
-        Me.SubGroup_Highlight.Controls.Add(Me.Check_Medusa)
-        Me.SubGroup_Highlight.Controls.Add(Me.Check_Highlighting)
         Me.SubGroup_Highlight.Font = New System.Drawing.Font("Roboto", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SubGroup_Highlight.Location = New System.Drawing.Point(11, 266)
         Me.SubGroup_Highlight.Name = "SubGroup_Highlight"
-        Me.SubGroup_Highlight.Size = New System.Drawing.Size(301, 130)
+        Me.SubGroup_Highlight.Size = New System.Drawing.Size(301, 166)
         Me.SubGroup_Highlight.TabIndex = 21
+        '
+        'Check_Overlay2
+        '
+        Me.Check_Overlay2.AutoSize = True
+        Me.Check_Overlay2.Font = New System.Drawing.Font("Roboto", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Check_Overlay2.Location = New System.Drawing.Point(7, 132)
+        Me.Check_Overlay2.Name = "Check_Overlay2"
+        Me.Check_Overlay2.Size = New System.Drawing.Size(162, 18)
+        Me.Check_Overlay2.TabIndex = 27
+        Me.Check_Overlay2.Text = "Overlay Green and Purple"
+        Me.Check_Overlay2.UseVisualStyleBackColor = True
+        '
+        'Check_Overlay1
+        '
+        Me.Check_Overlay1.AutoSize = True
+        Me.Check_Overlay1.Font = New System.Drawing.Font("Roboto", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Check_Overlay1.Location = New System.Drawing.Point(7, 108)
+        Me.Check_Overlay1.Name = "Check_Overlay1"
+        Me.Check_Overlay1.Size = New System.Drawing.Size(139, 18)
+        Me.Check_Overlay1.TabIndex = 26
+        Me.Check_Overlay1.Text = "Overlay Red and Blue"
+        Me.Check_Overlay1.UseVisualStyleBackColor = True
+        '
+        'Check_EnableHighlighting
+        '
+        Me.Check_EnableHighlighting.AutoSize = True
+        Me.Check_EnableHighlighting.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Check_EnableHighlighting.Location = New System.Drawing.Point(6, 10)
+        Me.Check_EnableHighlighting.Name = "Check_EnableHighlighting"
+        Me.Check_EnableHighlighting.Size = New System.Drawing.Size(134, 19)
+        Me.Check_EnableHighlighting.TabIndex = 25
+        Me.Check_EnableHighlighting.Text = "Enable Highlighting"
+        Me.Check_EnableHighlighting.UseVisualStyleBackColor = True
+        '
+        'Drop_HighlightSelect
+        '
+        Me.Drop_HighlightSelect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.Drop_HighlightSelect.FormattingEnabled = True
+        Me.Drop_HighlightSelect.Items.AddRange(New Object() {"Can Highlighting", "Medusa", "Linking", "Locked Sets"})
+        Me.Drop_HighlightSelect.Location = New System.Drawing.Point(151, 6)
+        Me.Drop_HighlightSelect.Name = "Drop_HighlightSelect"
+        Me.Drop_HighlightSelect.Size = New System.Drawing.Size(141, 26)
+        Me.Drop_HighlightSelect.TabIndex = 24
+        '
+        'DropDown_Medusa
+        '
+        Me.DropDown_Medusa.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.DropDown_Medusa.FormattingEnabled = True
+        Me.DropDown_Medusa.Items.AddRange(New Object() {"Red + Blue", "Green + Purple", "Yellow + Pink"})
+        Me.DropDown_Medusa.Location = New System.Drawing.Point(7, 76)
+        Me.DropDown_Medusa.Name = "DropDown_Medusa"
+        Me.DropDown_Medusa.Size = New System.Drawing.Size(141, 26)
+        Me.DropDown_Medusa.TabIndex = 0
+        '
+        'Btn_ClearHighlight
+        '
+        Me.Btn_ClearHighlight.Location = New System.Drawing.Point(5, 35)
+        Me.Btn_ClearHighlight.Name = "Btn_ClearHighlight"
+        Me.Btn_ClearHighlight.Size = New System.Drawing.Size(124, 28)
+        Me.Btn_ClearHighlight.TabIndex = 12
+        Me.Btn_ClearHighlight.Text = "Clear Highlight"
+        Me.Btn_ClearHighlight.UseVisualStyleBackColor = True
         '
         'Rad_MedusaC2
         '
         Me.Rad_MedusaC2.AutoSize = True
         Me.Rad_MedusaC2.Enabled = False
         Me.Rad_MedusaC2.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Rad_MedusaC2.Location = New System.Drawing.Point(162, 92)
+        Me.Rad_MedusaC2.Location = New System.Drawing.Point(168, 110)
         Me.Rad_MedusaC2.Name = "Rad_MedusaC2"
         Me.Rad_MedusaC2.Size = New System.Drawing.Size(120, 19)
         Me.Rad_MedusaC2.TabIndex = 23
@@ -214,35 +258,13 @@ Partial Class Form1
         Me.Rad_MedusaC1.Checked = True
         Me.Rad_MedusaC1.Enabled = False
         Me.Rad_MedusaC1.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Rad_MedusaC1.Location = New System.Drawing.Point(162, 67)
+        Me.Rad_MedusaC1.Location = New System.Drawing.Point(168, 81)
         Me.Rad_MedusaC1.Name = "Rad_MedusaC1"
         Me.Rad_MedusaC1.Size = New System.Drawing.Size(120, 19)
         Me.Rad_MedusaC1.TabIndex = 22
         Me.Rad_MedusaC1.TabStop = True
         Me.Rad_MedusaC1.Text = "Medusa Colour 1"
         Me.Rad_MedusaC1.UseVisualStyleBackColor = True
-        '
-        'Check_Medusa
-        '
-        Me.Check_Medusa.AutoSize = True
-        Me.Check_Medusa.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Check_Medusa.Location = New System.Drawing.Point(6, 37)
-        Me.Check_Medusa.Name = "Check_Medusa"
-        Me.Check_Medusa.Size = New System.Drawing.Size(72, 19)
-        Me.Check_Medusa.TabIndex = 1
-        Me.Check_Medusa.Text = "Medusa"
-        Me.Check_Medusa.UseVisualStyleBackColor = True
-        '
-        'Check_Highlighting
-        '
-        Me.Check_Highlighting.AutoSize = True
-        Me.Check_Highlighting.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Check_Highlighting.Location = New System.Drawing.Point(6, 12)
-        Me.Check_Highlighting.Name = "Check_Highlighting"
-        Me.Check_Highlighting.Size = New System.Drawing.Size(153, 19)
-        Me.Check_Highlighting.TabIndex = 0
-        Me.Check_Highlighting.Text = "Candidate Highlighting"
-        Me.Check_Highlighting.UseVisualStyleBackColor = True
         '
         'SubGroup_Keypad
         '
@@ -474,12 +496,43 @@ Partial Class Form1
         Me.DropDown_Difficulty.Size = New System.Drawing.Size(88, 26)
         Me.DropDown_Difficulty.TabIndex = 3
         '
+        'SubGroup_Misc
+        '
+        Me.SubGroup_Misc.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.SubGroup_Misc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.SubGroup_Misc.Controls.Add(Me.Btn_CheckValidity)
+        Me.SubGroup_Misc.Controls.Add(Me.Btn_ResetBoard)
+        Me.SubGroup_Misc.Location = New System.Drawing.Point(5, 6)
+        Me.SubGroup_Misc.Name = "SubGroup_Misc"
+        Me.SubGroup_Misc.Size = New System.Drawing.Size(246, 50)
+        Me.SubGroup_Misc.TabIndex = 12
+        '
+        'Btn_CheckValidity
+        '
+        Me.Btn_CheckValidity.Font = New System.Drawing.Font("Roboto", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Btn_CheckValidity.Location = New System.Drawing.Point(7, 4)
+        Me.Btn_CheckValidity.Name = "Btn_CheckValidity"
+        Me.Btn_CheckValidity.Size = New System.Drawing.Size(112, 37)
+        Me.Btn_CheckValidity.TabIndex = 11
+        Me.Btn_CheckValidity.Text = "Check Validity"
+        Me.Btn_CheckValidity.UseVisualStyleBackColor = True
+        '
+        'Btn_ResetBoard
+        '
+        Me.Btn_ResetBoard.Font = New System.Drawing.Font("Roboto", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Btn_ResetBoard.Location = New System.Drawing.Point(126, 4)
+        Me.Btn_ResetBoard.Name = "Btn_ResetBoard"
+        Me.Btn_ResetBoard.Size = New System.Drawing.Size(112, 37)
+        Me.Btn_ResetBoard.TabIndex = 10
+        Me.Btn_ResetBoard.Text = "Reset Board"
+        Me.Btn_ResetBoard.UseVisualStyleBackColor = True
+        '
         'Lst_Debug
         '
         Me.Lst_Debug.BackColor = System.Drawing.Color.Silver
         Me.Lst_Debug.Font = New System.Drawing.Font("Roboto", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Lst_Debug.FormattingEnabled = True
-        Me.Lst_Debug.Location = New System.Drawing.Point(5, 120)
+        Me.Lst_Debug.Location = New System.Drawing.Point(3, 117)
         Me.Lst_Debug.Name = "Lst_Debug"
         Me.Lst_Debug.Size = New System.Drawing.Size(246, 420)
         Me.Lst_Debug.TabIndex = 3
@@ -537,40 +590,12 @@ Partial Class Form1
         Me.Group_ExtraOptions.Size = New System.Drawing.Size(258, 554)
         Me.Group_ExtraOptions.TabIndex = 5
         '
-        'DropDown_Medusa
-        '
-        Me.DropDown_Medusa.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.DropDown_Medusa.FormattingEnabled = True
-        Me.DropDown_Medusa.Items.AddRange(New Object() {"Red + Blue", "Green + Purple", "Yellow + Pink"})
-        Me.DropDown_Medusa.Location = New System.Drawing.Point(5, 67)
-        Me.DropDown_Medusa.Name = "DropDown_Medusa"
-        Me.DropDown_Medusa.Size = New System.Drawing.Size(141, 26)
-        Me.DropDown_Medusa.TabIndex = 0
-        '
-        'Btn_ClearHighlight
-        '
-        Me.Btn_ClearHighlight.Location = New System.Drawing.Point(165, 12)
-        Me.Btn_ClearHighlight.Name = "Btn_ClearHighlight"
-        Me.Btn_ClearHighlight.Size = New System.Drawing.Size(120, 28)
-        Me.Btn_ClearHighlight.TabIndex = 12
-        Me.Btn_ClearHighlight.Text = "Clear Highlight"
-        Me.Btn_ClearHighlight.UseVisualStyleBackColor = True
-        '
-        'Btn_PrelimSolve
-        '
-        Me.Btn_PrelimSolve.Location = New System.Drawing.Point(152, 52)
-        Me.Btn_PrelimSolve.Name = "Btn_PrelimSolve"
-        Me.Btn_PrelimSolve.Size = New System.Drawing.Size(140, 37)
-        Me.Btn_PrelimSolve.TabIndex = 12
-        Me.Btn_PrelimSolve.Text = "PreLim Solve"
-        Me.Btn_PrelimSolve.UseVisualStyleBackColor = True
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(11, Byte), Integer), CType(CType(12, Byte), Integer), CType(CType(16, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1191, 596)
+        Me.ClientSize = New System.Drawing.Size(1344, 597)
         Me.Controls.Add(Me.Group_ExtraOptions)
         Me.Controls.Add(Me.lbl_boardname)
         Me.Controls.Add(Me.Group_Controls)
@@ -578,9 +603,8 @@ Partial Class Form1
         Me.Font = New System.Drawing.Font("Roboto", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.Name = "Form1"
-        Me.Text = "Form1"
+        Me.Text = "Sudoku"
         Me.Group_Controls.ResumeLayout(False)
-        Me.SubGroup_Misc.ResumeLayout(False)
         Me.SubGroup_Solving.ResumeLayout(False)
         Me.SubGroup_Highlight.ResumeLayout(False)
         Me.SubGroup_Highlight.PerformLayout()
@@ -588,6 +612,7 @@ Partial Class Form1
         Me.SubGroup_Keypad.PerformLayout()
         Me.SubGroup_Menu.ResumeLayout(False)
         Me.SubGroup_Menu.PerformLayout()
+        Me.SubGroup_Misc.ResumeLayout(False)
         Me.SubGroup_IO.ResumeLayout(False)
         Me.Group_ExtraOptions.ResumeLayout(False)
         Me.ResumeLayout(False)
@@ -608,8 +633,6 @@ Partial Class Form1
     Friend WithEvents SubGroup_Highlight As Panel
     Friend WithEvents Rad_MedusaC2 As RadioButton
     Friend WithEvents Rad_MedusaC1 As RadioButton
-    Friend WithEvents Check_Medusa As CheckBox
-    Friend WithEvents Check_Highlighting As CheckBox
     Friend WithEvents Keypad_9 As Button
     Friend WithEvents Keypad_8 As Button
     Friend WithEvents Keypad_7 As Button
@@ -638,4 +661,8 @@ Partial Class Form1
     Friend WithEvents Btn_ClearHighlight As Button
     Friend WithEvents DropDown_Medusa As ComboBox
     Friend WithEvents Btn_PrelimSolve As Button
+    Friend WithEvents Drop_HighlightSelect As ComboBox
+    Friend WithEvents Check_EnableHighlighting As CheckBox
+    Friend WithEvents Check_Overlay2 As CheckBox
+    Friend WithEvents Check_Overlay1 As CheckBox
 End Class

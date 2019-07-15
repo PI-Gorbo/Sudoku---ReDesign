@@ -24,6 +24,8 @@
                 Cells(Rows, Cols).Candidates = New List(Of Integer)
 
                 'This section creates the labels
+                Dim TempTuple As Tuple(Of DisplayCell, Integer)
+                Dim TempVal As Integer
                 For lbl_Rows = 0 To 2
                     For lbl_Cols = 0 To 2
 
@@ -32,8 +34,16 @@
                             Cells(Rows, Cols).Labels_Array.Add(Cells(Rows, Cols).Labels_Grid(lbl_Rows, lbl_Cols))
                         End If
 
+                        TempVal = (lbl_Rows * 3 + lbl_Cols + 1)
+
+                        If IsNothing(TempTuple) Then
+                            TempTuple = New Tuple(Of DisplayCell, Integer)(Cells(Rows, Cols), TempVal)
+                        Else
+                            TempTuple = Tuple.Create(Cells(Rows, Cols), TempVal)
+                        End If
+
                         With Cells(Rows, Cols).Labels_Grid(lbl_Rows, lbl_Cols)
-                            .Tag = Cells(Rows, Cols)
+                            .Tag = TempTuple
                             .Text = ""
                             .BackColor = Color.GhostWhite
                             .Size = New Size(CANDIDATE_SIZEpx, CANDIDATE_SIZEpx)
@@ -153,6 +163,7 @@
 
         With Cell.ValueLabel
             .Text = ""
+            .Font = StandardFont
             .Enabled = False
             .Visible = False
             .ForeColor = Color.Black

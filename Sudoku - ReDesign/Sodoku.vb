@@ -169,14 +169,17 @@
 
     'takes events from label clicks
     Public Sub LabelClick(ByVal sender As Label, e As System.EventArgs)
-        HandleLabelInput(sender.Tag)
+
+        HandleLabelClick(sender.Tag.Item1)
+        SC_SimKeypadInput(sender.Tag)
+
     End Sub
 
     'Handles information from label clicks
-    Public Sub HandleLabelInput(Cell As DisplayCell)
+    Public Sub HandleLabelClick(Cell As DisplayCell)
 
         Form1.ActiveControl = Nothing
-        If Form1.Check_Highlighting.Checked = True Then 'Stops any input when doing highlighted candidiates
+        If Form1.Drop_HighlightSelect.SelectedIndex = 0 And Form1.Check_EnableHighlighting.Checked = True Then 'Stops any input when doing highlighted candidiates
             CurrentCell = Nothing
             Exit Sub
         Else
@@ -201,194 +204,256 @@
             UpdateKeypads()
             CheckForSolutionConflicts()
         End If
+
     End Sub
 
     'Takes event calls from keypad clicks
     Public Sub KeypadButtonClick(ByVal sender As Button, e As System.EventArgs)
-        HandleKeypadInput(Integer.Parse(sender.Tag))
+        If Form1.Drop_HighlightSelect.SelectedIndex = 0 And Form1.Check_EnableHighlighting.Checked = True Then 'When highlighting is checked
+
+            HandleHighlighting(Integer.Parse(sender.Tag))
+
+        ElseIf Form1.Drop_HighlightSelect.SelectedIndex = 1 And Form1.Check_EnableHighlighting.Checked = True Then 'When Medusa is checked
+
+            HandleMedusa(Integer.Parse(sender.Tag))
+
+        Else
+
+            HandleNormalKeypadInput(Integer.Parse(sender.Tag)) 'Handles normal keybard input
+        End If
     End Sub
 
-    'Handles informatuion from keypad clicks
-    Public Sub HandleKeypadInput(ClickedVal As Integer)
+    'Allows for a value to be passed in as if there was a keypad input
+    Public Sub SimulateKeypadInput(ClickedVal As Integer)
+        If Form1.Drop_HighlightSelect.SelectedIndex = 0 And Form1.Check_EnableHighlighting.Checked = True Then 'When highlighting is checked
 
-        If Form1.Check_Highlighting.Checked = True Then 'When highlighting is checked
+            HandleHighlighting(ClickedVal)
 
-            'If it is in the highlighted list, then remove else add it
-            If HighlightedCandidates.Contains(ClickedVal) Then
-                HighlightedCandidates.Remove(ClickedVal)
+        ElseIf Form1.Drop_HighlightSelect.SelectedIndex = 1 And Form1.Check_EnableHighlighting.Checked = True = True Then 'When Medusa is checked
+
+            HandleMedusa(ClickedVal)
+
+        Else
+
+            HandleNormalKeypadInput(ClickedVal) 'Handles normal keybard input
+        End If
+    End Sub
+
+    Public Sub SC_SimKeypadInput(Cell_Val As Tuple(Of DisplayCell, Integer))
+
+        If Form1.Drop_HighlightSelect.SelectedIndex = 0 And Form1.Check_EnableHighlighting.Checked = True Then '0 = Candidate Highlighting. EG: When CHing is chosen
+            Exit Sub
+        ElseIf Form1.Drop_HighlightSelect.SelectedIndex = 1 And Form1.Check_EnableHighlighting.Checked = True = True Then
+            HandleMedusa(Cell_Val.Item2)
+
+        ElseIf Form1.Rad_Pen.Checked = True Then
+
+            If Cell_Val.Item2 = BoardHandler.SolvedBoard.Cells(CurrentCell.Location.Y, CurrentCell.Location.X).Value And Form1.Check_Can_Removal.Checked = True Then
+                CurrentCell.Labels_Array(Cell_Val.Item2 - 1).ForeColor = Color.Red
             Else
-                HighlightedCandidates.Add(ClickedVal)
+                CurrentCell.Labels_Array(Cell_Val.Item2 - 1).BackColor = Color.GhostWhite
+                CurrentCell.Candidates.Remove(Cell_Val.Item2)
+                UpdateCandidates(CurrentCell)
             End If
 
-            RefreshHighlight(False) 'Redo the highlighting with the updated list
-            UpdateKeypads()
+        End If
 
+    End Sub
+
+    'Handles normal keypad input when any highlighting options are not checked 
+    Public Sub HandleNormalKeypadInput(ClickedVal As Integer)
+
+        If IsNothing(CurrentCell) Then
             Exit Sub
-        ElseIf Form1.Check_Medusa.Checked = True Then 'When Medusa is checked
+        End If
 
-            'If somehow there is no selected index, then set it to 1
-            If Form1.DropDown_Medusa.SelectedIndex = -1 Then
-                Form1.DropDown_Medusa.SelectedIndex = 0
-            End If
-            'Find the correct colours to use.
-            Dim State As Integer = Form1.DropDown_Medusa.SelectedIndex
-
-            If Form1.Rad_MedusaC1.Checked = True Then 'When colour 1 is checked
-
-                If CurrentCell.Candidates.Contains(ClickedVal) = False Then
-                    Exit Sub
-                End If
-
-                If State = 0 Then 'Allocates the correct colours according to what state the dropdown is in
-
-                    If IsNothing(Medusa0(0)) Then
-                        Medusa0(0) = New List(Of Tuple(Of DisplayCell, Integer))
-                    End If
-
-                    If CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(10) Then
-                        CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Color.GhostWhite
-                        Medusa0(0).Remove(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
-                    Else
-                        CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(10)
-                        Medusa0(0).Add(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
-                    End If
-
-                ElseIf State = 1 Then
-
-                    If IsNothing(Medusa1(0)) Then
-                        Medusa1(0) = New List(Of Tuple(Of DisplayCell, Integer))
-                    End If
-
-                    If CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(12) Then
-                        CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Color.GhostWhite
-                        Medusa1(0).Remove(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
-
-                    Else
-                        CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(12)
-                        Medusa1(0).Add(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
-
-                    End If
-
-                Else State = 2
-
-                    If IsNothing(Medusa2(0)) Then
-                        Medusa2(0) = New List(Of Tuple(Of DisplayCell, Integer))
-                    End If
-
-                    If CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(14) Then
-                        CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Color.GhostWhite
-                        Medusa2(0).Remove(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
-                    Else
-                        CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(14)
-                        Medusa2(0).Add(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
-                    End If
-
-                End If
-
-            Else 'When colour 2 is checked
-
-                If CurrentCell.Candidates.Contains(ClickedVal) = False Then
-                    Exit Sub
-                End If
-
-                If State = 0 Then 'Allocates the correct colours according to what state the dropdown is in
-
-                    If IsNothing(Medusa0(1)) Then
-                        Medusa0(1) = New List(Of Tuple(Of DisplayCell, Integer))
-                    End If
-
-                    If CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(11) Then
-                        CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Color.GhostWhite
-                        Medusa0(1).Remove(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
-                    Else
-                        CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(11)
-                        Medusa0(1).Add(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
-                    End If
-
-                ElseIf State = 1 Then
-
-                    If IsNothing(Medusa1(1)) Then
-                        Medusa1(1) = New List(Of Tuple(Of DisplayCell, Integer))
-                    End If
-
-                    If CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(13) Then
-                        CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Color.GhostWhite
-                        Medusa1(1).Remove(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
-                    Else
-                        CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(13)
-                        Medusa1(1).Add(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
-                    End If
-
-                Else State = 2
-
-                    If IsNothing(Medusa2(1)) Then
-                        Medusa2(1) = New List(Of Tuple(Of DisplayCell, Integer))
-                    End If
-
-                    If CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(15) Then
-                        CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Color.GhostWhite
-                        Medusa2(1).Remove(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
-                    Else
-                        CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(15)
-                        Medusa2(1).Add(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
-                    End If
-
-                End If
-
-            End If
-
-            UpdateKeypads()
+        If IsNothing(BoardHandler.MainBoard) Then
             Exit Sub
-        Else 'Handles normal keybard input
-            If IsNothing(CurrentCell) Then
+        End If
+
+        'If the cell has a value from import, then that value cannot change
+        If BoardHandler.MainBoard.Cells(CurrentCell.Location.Y, CurrentCell.Location.X).HasValueFromImport = False Then
+
+            If Form1.Rad_Pen.Checked = True And CurrentCell.HasValueLabel Then 'Pen
+
+                If ClickedVal.ToString <> CurrentCell.ValueLabel.Text Then
+                    'If the value inputted is not the same as the value of the label, then simply change the value or the label to the inputted val
+                    CurrentCell.ValueLabel.Text = ClickedVal.ToString
+                Else
+                    'Else remove that value and show the candidates instead.
+                    RemoveValueLabel(CurrentCell)
+                    UpdateCandidates(CurrentCell)
+                End If
+                CheckForSolutionConflicts()
+
+            ElseIf Form1.Rad_Pen.Checked = True And CurrentCell.HasValueLabel = False Then 'Pen
+
+                UpdateToValueLabel(CurrentCell, ClickedVal)
+                CheckForSolutionConflicts()
+
+            ElseIf Form1.Rad_Pencil.Checked = True And CurrentCell.Candidates.Contains(ClickedVal) Then 'Pencil
+
+                If ClickedVal = BoardHandler.SolvedBoard.Cells(CurrentCell.Location.Y, CurrentCell.Location.X).Value And Form1.Check_Can_Removal.Checked = True Then
+                    CurrentCell.Labels_Array(ClickedVal - 1).ForeColor = Color.Red
+                Else
+                    CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Color.GhostWhite
+                    CurrentCell.Candidates.Remove(ClickedVal)
+                    UpdateCandidates(CurrentCell)
+                End If
+
+            ElseIf Form1.Rad_Pencil.Checked = True And CurrentCell.Candidates.Contains(ClickedVal) = False Then 'Pencil
+
+                CurrentCell.Candidates.Add(ClickedVal)
+                UpdateCandidates(CurrentCell)
+
+            End If
+            UpdateKeypads()
+        End If
+
+
+    End Sub
+
+    'handles the highlighting for general candidate highlighting
+    Public Sub HandleHighlighting(ClickedVal As Integer)
+        'If it is in the highlighted list, then remove else add it
+        If HighlightedCandidates.Contains(ClickedVal) Then
+            HighlightedCandidates.Remove(ClickedVal)
+        Else
+            HighlightedCandidates.Add(ClickedVal)
+        End If
+
+        RefreshHighlight(False) 'Redo the highlighting with the updated list
+        UpdateKeypads()
+
+    End Sub
+
+    Public Sub OverlayMedusa()
+
+    End Sub
+
+    'handles the highlighting for medusas.
+    Public Sub HandleMedusa(ClickedVal As Integer)
+
+        'If somehow there is no selected index, then set it to 1
+        If Form1.DropDown_Medusa.SelectedIndex = -1 Then
+            Form1.DropDown_Medusa.SelectedIndex = 0
+        End If
+        'Find the correct colours to use.
+        Dim State As Integer = Form1.DropDown_Medusa.SelectedIndex
+
+        If Form1.Rad_MedusaC1.Checked = True Then 'When colour 1 is checked
+
+            If CurrentCell.Candidates.Contains(ClickedVal) = False Then
                 Exit Sub
             End If
 
-            If IsNothing(BoardHandler.MainBoard) Then
+            If State = 0 Then 'Allocates the correct colours according to what state the dropdown is in
+
+                If IsNothing(Medusa0(0)) Then
+                    Medusa0(0) = New List(Of Tuple(Of DisplayCell, Integer))
+                End If
+
+                If CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(10) Then
+                    CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Color.GhostWhite
+                    Medusa0(0).Remove(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
+                Else
+                    CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(10)
+                    Medusa0(0).Add(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
+                End If
+
+            ElseIf State = 1 Then
+
+                If IsNothing(Medusa1(0)) Then
+                    Medusa1(0) = New List(Of Tuple(Of DisplayCell, Integer))
+                End If
+
+                If CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(12) Then
+                    CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Color.GhostWhite
+                    Medusa1(0).Remove(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
+
+                Else
+                    CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(12)
+                    Medusa1(0).Add(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
+
+                End If
+
+            Else State = 2
+
+                If IsNothing(Medusa2(0)) Then
+                    Medusa2(0) = New List(Of Tuple(Of DisplayCell, Integer))
+                End If
+
+                If CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(14) Then
+                    CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Color.GhostWhite
+                    Medusa2(0).Remove(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
+                Else
+                    CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(14)
+                    Medusa2(0).Add(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
+                End If
+
+            End If
+
+        Else 'When colour 2 is checked
+
+            If CurrentCell.Candidates.Contains(ClickedVal) = False Then
                 Exit Sub
             End If
 
-            If BoardHandler.MainBoard.Cells(CurrentCell.Location.Y, CurrentCell.Location.X).HasValueFromImport = False Then
+            If State = 0 Then 'Allocates the correct colours according to what state the dropdown is in
 
-
-                    If Form1.Rad_Pen.Checked = True And CurrentCell.HasValueLabel Then 'Pen
-
-                        RemoveValueLabel(CurrentCell)
-                        UpdateCandidates(CurrentCell)
-                        CheckForSolutionConflicts()
-
-                    ElseIf Form1.Rad_Pen.Checked = True And CurrentCell.HasValueLabel = False Then 'Pen
-
-                        UpdateToValueLabel(CurrentCell, ClickedVal)
-                        CheckForSolutionConflicts()
-
-                    ElseIf Form1.Rad_Pencil.Checked = True And CurrentCell.Candidates.Contains(ClickedVal) Then 'Pencil
-
-                        If ClickedVal = BoardHandler.SolvedBoard.Cells(CurrentCell.Location.Y, CurrentCell.Location.X).Value And Form1.Check_Can_Removal.Checked = True Then
-                            CurrentCell.Labels_Array(ClickedVal - 1).ForeColor = Color.Red
-                        Else
-                            CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Color.GhostWhite
-                            CurrentCell.Candidates.Remove(ClickedVal)
-                            UpdateCandidates(CurrentCell)
-                        End If
-
-
-
-                    ElseIf Form1.Rad_Pencil.Checked = True And CurrentCell.Candidates.Contains(ClickedVal) = False Then 'Pencil
-
-                        CurrentCell.Candidates.Add(ClickedVal)
-                        UpdateCandidates(CurrentCell)
-
-                    End If
-                    UpdateKeypads()
+                If IsNothing(Medusa0(1)) Then
+                    Medusa0(1) = New List(Of Tuple(Of DisplayCell, Integer))
                 End If
+
+                If CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(11) Then
+                    CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Color.GhostWhite
+                    Medusa0(1).Remove(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
+                Else
+                    CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(11)
+                    Medusa0(1).Add(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
+                End If
+
+            ElseIf State = 1 Then
+
+                If IsNothing(Medusa1(1)) Then
+                    Medusa1(1) = New List(Of Tuple(Of DisplayCell, Integer))
+                End If
+
+                If CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(13) Then
+                    CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Color.GhostWhite
+                    Medusa1(1).Remove(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
+                Else
+                    CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(13)
+                    Medusa1(1).Add(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
+                End If
+
+            Else State = 2
+
+                If IsNothing(Medusa2(1)) Then
+                    Medusa2(1) = New List(Of Tuple(Of DisplayCell, Integer))
+                End If
+
+                If CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(15) Then
+                    CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Color.GhostWhite
+                    Medusa2(1).Remove(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
+                Else
+                    CurrentCell.Labels_Array(ClickedVal - 1).BackColor = Colours(15)
+                    Medusa2(1).Add(Tuple.Create(CurrentCell, ClickedVal)) 'Remove that value from the list of tuples
+                End If
+
             End If
+
+        End If
+
+        UpdateKeypads()
+        Exit Sub
 
     End Sub
 
     'Checks for obvious conflicts between cells and then if the check button is ticked, checks for a value conflcit with the solutions
     Public Sub CheckForSolutionConflicts()
 
+        'Change every cell's color to white that has a value label
         For Rows = 0 To 8
             For Cols = 0 To 8
                 If Cells(Rows, Cols).HasValueLabel = True Then
@@ -399,13 +464,14 @@
 
         Dim TempRowMin, TempRowMax, TempColMin, TempColMax As Integer
 
+        'Check through each row, col and box for conflicts in value. 
         For Rows = 0 To 8
             For Cols = 0 To 8
 
                 If Cells(Rows, Cols).HasValueLabel = True Then
 
                     For TempRows = 0 To 8
-                        If Cells(TempRows, Cols).HasValueLabel = True Then
+                        If Cells(TempRows, Cols).HasValueLabel = True Then 'Col
 
                             If Cells(TempRows, Cols).ValueLabel.Text = Cells(Rows, Cols).ValueLabel.Text And Cells(TempRows, Cols).Equals(Cells(Rows, Cols)) = False Then
                                 Cells(TempRows, Cols).ValueLabel.BackColor = Color.IndianRed
@@ -414,7 +480,7 @@
                     Next
 
                     For TempCols = 0 To 8
-                        If Cells(Rows, TempCols).HasValueLabel = True Then
+                        If Cells(Rows, TempCols).HasValueLabel = True Then 'Row
 
                             If Cells(Rows, TempCols).ValueLabel.Text = Cells(Rows, Cols).ValueLabel.Text And Cells(Rows, TempCols).Equals(Cells(Rows, Cols)) = False Then
                                 Cells(Rows, TempCols).ValueLabel.BackColor = Color.IndianRed
@@ -447,7 +513,7 @@
                     For TempRows = TempRowMin To TempRowMax
                         For TempCols = TempColMin To TempColMax
 
-                            If Cells(TempRows, TempCols).HasValueLabel = True Then
+                            If Cells(TempRows, TempCols).HasValueLabel = True Then 'Box
 
                                 If Cells(TempRows, TempCols).ValueLabel.Text = Cells(Rows, Cols).ValueLabel.Text And Cells(TempRows, TempCols).Equals(Cells(Rows, Cols)) = False Then
                                     Cells(TempRows, TempCols).ValueLabel.BackColor = Color.IndianRed
@@ -461,8 +527,9 @@
                         Cells(Rows, Cols).ValueLabel.Font = StandardFont
                     End If
 
-                    If Form1.Check_Can_Removal.Checked = True Then
+                    If Form1.Check_Can_Removal.Checked = True Then 'If the "Altert to incorrect values function is ticked"
 
+                        'If the cell conflcits with the solved board, then underline it.
                         If Integer.Parse(Cells(Rows, Cols).ValueLabel.Text) <> BoardHandler.SolvedBoard.Cells(Rows, Cols).Value Then
                             Cells(Rows, Cols).ValueLabel.Font = UnderlineFont
                         End If
@@ -478,15 +545,13 @@
             End If
         End If
 
-
-
     End Sub
 
     'Called when medusa changed, in order to update for the current selection
     Public Sub MedusaChanged()
 
         'If the medusa button is unchecked, then do nothing
-        If Form1.Check_Medusa.Checked = False Then
+        If Form1.Check_EnableHighlighting.Checked = False Then
             Exit Sub
 
         ElseIf Form1.DropDown_Medusa.SelectedIndex = 0 Then 'If in state 0, then display the cells that have been previosuly shown in state 0
@@ -546,13 +611,101 @@
                 Next
             End If
         End If
+
+        'If overlay 1 is checked, then display the other medusa set selected on display
+        If Form1.Check_Overlay1.Checked = True Then
+
+            If Form1.DropDown_Medusa.SelectedIndex = 1 Or Form1.DropDown_Medusa.SelectedIndex = 2 Then
+
+                If IsNothing(Medusa0(0)) = False Then
+                    For Each ele In Medusa0(0)
+                        If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
+                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(10)
+                        End If
+                    Next
+                End If
+
+                If IsNothing(Medusa0(1)) = False Then
+                    For Each ele In Medusa0(1)
+                        If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
+                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(11)
+                        End If
+                    Next
+                End If
+            Else
+
+                If IsNothing(Medusa1(0)) = False Then
+                    For Each ele In Medusa1(0)
+                        If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
+                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(12)
+                        End If
+                    Next
+                End If
+
+                If IsNothing(Medusa1(1)) = False Then
+                    For Each ele In Medusa1(1)
+                        If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
+                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(13)
+                        End If
+                    Next
+                End If
+
+            End If
+
+        Else
+
+            If Form1.DropDown_Medusa.SelectedIndex = 0 Or Form1.DropDown_Medusa.SelectedIndex = 1 Then
+
+                If IsNothing(Medusa2(0)) = False Then
+                    For Each ele In Medusa2(0)
+                        If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
+                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(14)
+                        End If
+                    Next
+                End If
+
+                If IsNothing(Medusa2(1)) = False Then
+
+                    For Each ele In Medusa2(1)
+                        If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
+                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(15)
+                        End If
+                    Next
+                End If
+
+            Else
+
+                If IsNothing(Medusa1(0)) = False Then
+                    For Each ele In Medusa1(0)
+                        If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
+                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(12)
+                        End If
+                    Next
+                End If
+
+                If IsNothing(Medusa1(1)) = False Then
+                    For Each ele In Medusa1(1)
+                        If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
+                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(13)
+                        End If
+                    Next
+                End If
+
+            End If
+
+        End If
+
+            If Form1.Check_Overlay2.Checked = True Then
+
+        End If
+
         UpdateKeypads()
     End Sub
 
     'Updates the colouring of the keypads to reflect the current mode or selection
     Public Sub UpdateKeypads()
 
-        If Form1.Check_Highlighting.Checked = True Then
+        If Form1.Drop_HighlightSelect.SelectedIndex = 0 And Form1.Check_EnableHighlighting.Checked = True Then
             'Do Something
 
             For Each ele In Keypads
@@ -563,7 +716,7 @@
             Next
 
             Exit Sub
-        ElseIf Form1.Check_Medusa.Checked = True Then
+        ElseIf Form1.Drop_HighlightSelect.SelectedIndex = 1 And Form1.Check_EnableHighlighting.Checked = True = True Then
             'Do Something
 
             If Not IsNothing(CurrentCell) Then
