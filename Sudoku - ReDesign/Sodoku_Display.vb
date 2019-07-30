@@ -63,7 +63,7 @@
                 Cells(Rows, Cols).ValueLabel = New Label
 
                 With Cells(Rows, Cols).ValueLabel
-                    .Tag = Cells(Rows, Cols)
+                    .Tag = Tuple.Create(Cells(Rows, Cols), 0)
                     .Location = New Point(Cells(Rows, Cols).Labels_Grid(0, 0).Location.X, Cells(Rows, Cols).Labels_Grid(0, 0).Location.Y)
                     .Size = New Size(TOTAL_CELL_SIZEpx, TOTAL_CELL_SIZEpx)
                     .BackColor = Color.GhostWhite
@@ -92,6 +92,11 @@
                 Form1.Group_Board.Controls.Add(Cells(Rows, Cols).BorderLabel)
 
             Next
+        Next
+
+        'Change the paint event to the paint event of group_board.
+        For Each ele As Control In Form1.Group_Board.Controls
+            AddHandler ele.Paint, AddressOf Form1.PaintLinks
         Next
 
     End Sub

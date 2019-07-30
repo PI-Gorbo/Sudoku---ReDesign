@@ -5,7 +5,6 @@ Public Class Form1
     Dim Game As Sudoku
     Public LastClicked As CheckBox
 
-
     'Most functions below handle the events called by the controls on the form. 
     Private Sub Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Game = New Sudoku
@@ -347,8 +346,16 @@ Public Class Form1
 
         End If
 
-
-
+        If IsNothing(Game.LinkedCells) Then
+            Game.LinkedCells = New List(Of Tuple(Of Label, Label, Boolean))
+            Game.LinkedCells.Add(Tuple.Create(Game.Cells(1, 1).Labels_Array(4), Game.Cells(4, 8).Labels_Array(4), False))
+            Game.LinkedCells.Add(Tuple.Create(Game.Cells(4, 5).Labels_Array(8), Game.Cells(8, 2).Labels_Array(8), True))
+            Game.LinkedCells.Add(Tuple.Create(Game.Cells(3, 0).Labels_Array(5), Game.Cells(3, 8).Labels_Array(5), False))
+        End If
+        For Each ele As Control In Group_Board.Controls
+            ele.Invalidate()
+        Next
+        Group_Board.Invalidate()
     End Sub
 
     Private Sub Btn_PrelimSolve_Click(sender As Object, e As EventArgs) Handles Btn_PrelimSolve.Click
@@ -470,5 +477,71 @@ Public Class Form1
     Private Sub Check_Overlay2_CheckedChanged(sender As Object, e As EventArgs) Handles Check_Overlay2.CheckedChanged
         Game.MedusaChanged()
     End Sub
+
+    'Handles the Painting of the links in the sudoku as according to the list of links. 
+    Public Sub PaintLinks(sender As Object, e As PaintEventArgs) Handles Group_Board.Paint
+
+        'If the list is empty or does not exit, do nothing
+        If IsNothing(Game.LinkedCells) Then
+            Exit Sub
+        End If
+
+        If Game.LinkedCells.Count = 0 Then
+            Exit Sub
+        End If
+        Dim pen As New Pen(Color.Red, 3)
+        Dim localpointstart, localpointend, localMidPoint, localQuartile1, LocalQuartile3 As Point
+        Dim Points(4) As Point
+        e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+        For Each ele In Game.LinkedCells
+
+            'Test if the link is horizontal or veritcal. 
+            If ele.Item3 = False Then
+                pen.DashStyle = Drawing2D.DashStyle.Solid
+            Else
+                pen.DashStyle = Drawing2D.DashStyle.Dash
+            End If
+
+            If ele.Item1.Location.X = ele.Item2.Location.X Or ele.Item1.Location.Y = ele.Item2.Location.Y Then
+
+                'Draw a curve instead of a line. 
+                'Find the midpoint between the two lines, and the quarters 1 and 3.
+                localpointstart = DirectCast(sender, Control).PointToClient(Group_Board.PointToScreen(ele.Item1.Location))
+                localpointend = DirectCast(sender, Control).PointToClient(Group_Board.PointToScreen(ele.Item2.Location))
+                localMidPoint = FindMidpoint(localpointstart, localpointend, 0, 0)
+                localQuartile1 = FindMidpoint(localpointstart, localMidPoint, 0, 0)
+                LocalQuartile3 = FindMidpoint(localMidPoint, localpointend, 0, 0)
+
+                'Raise the height of the midpoint, quarter 1 and 3
+
+                localQuartile1.Y += -4
+                localMidPoint.Y += -4
+                LocalQuartile3.Y += -4
+
+                Points(0) = localpointstart
+                Points(1) = localQuartile1
+                Points(2) = localMidPoint
+                Points(3) = LocalQuartile3
+                Points(4) = localpointend
+                e.Graphics.DrawCurve(pen, Points)
+            Else
+                localpointstart = DirectCast(sender, Control).PointToClient(Group_Board.PointToScreen(ele.Item1.Location))
+                localpointend = DirectCast(sender, Control).PointToClient(Group_Board.PointToScreen(ele.Item2.Location))
+
+                e.Graphics.DrawLine(pen, localpointstart, localpointend)
+            End If
+
+
+
+
+        Next
+
+    End Sub
+
+    Public Function FindMidpoint(P1 As Point, P2 As Point, xOffset As Integer, yOffset As Integer) As Point
+
+        Dim MidPoint As New Point((P1.X + P2.X) / 2 + xOffset, (P1.Y + P2.Y) / 2 + yOffset)
+        Return MidPoint
+    End Function
 
 End Class

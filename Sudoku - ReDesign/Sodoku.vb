@@ -10,6 +10,8 @@
     Public Medusa1(1) As List(Of Tuple(Of DisplayCell, Integer))
     Public Medusa2(1) As List(Of Tuple(Of DisplayCell, Integer))
 
+    Public LinkedCells As List(Of Tuple(Of Label, Label, Boolean))
+
     Public Colours(15) As Color
     Public StandardFont, UnderlineFont As Font
 
@@ -36,7 +38,7 @@
         Colours(10) = Color.LightBlue 'Medusa Blue
         Colours(11) = Color.LightCoral 'Medusa Red
         Colours(12) = Color.LightGreen 'Medusa Green
-        Colours(13) = Color.MediumPurple 'Medusa Purple
+        Colours(13) = Color.Plum 'Medusa Purple
         Colours(14) = Color.Yellow 'Medusa Yellow
         Colours(15) = Color.LightPink 'Medusa Pink
 
@@ -76,6 +78,7 @@
         CurrentCell = Nothing
         BoardHandler.NewGame(False)
         PrimeBoard(BoardHandler.MainBoard)
+        LinkedCells = Nothing
     End Sub
 
     Public Sub InitiateManualEntry()
@@ -170,6 +173,8 @@
     'takes events from label clicks
     Public Sub LabelClick(ByVal sender As Label, e As System.EventArgs)
 
+
+        'If 
         HandleLabelClick(sender.Tag.Item1)
         SC_SimKeypadInput(sender.Tag)
 
@@ -241,12 +246,20 @@
 
     Public Sub SC_SimKeypadInput(Cell_Val As Tuple(Of DisplayCell, Integer))
 
+        If IsNothing(BoardHandler.SolvedBoard) Then
+            Exit Sub
+        End If
+
         If Form1.Drop_HighlightSelect.SelectedIndex = 0 And Form1.Check_EnableHighlighting.Checked = True Then '0 = Candidate Highlighting. EG: When CHing is chosen
             Exit Sub
         ElseIf Form1.Drop_HighlightSelect.SelectedIndex = 1 And Form1.Check_EnableHighlighting.Checked = True = True Then
             HandleMedusa(Cell_Val.Item2)
 
         ElseIf Form1.Rad_Pen.Checked = True Then
+
+            If Cell_Val.Item1.HasValueLabel = True Then
+                Exit Sub
+            End If
 
             If Cell_Val.Item2 = BoardHandler.SolvedBoard.Cells(CurrentCell.Location.Y, CurrentCell.Location.X).Value And Form1.Check_Can_Removal.Checked = True Then
                 CurrentCell.Labels_Array(Cell_Val.Item2 - 1).ForeColor = Color.Red
@@ -843,6 +856,8 @@
     Public Sub Hint()
 
     End Sub
+
+
 
 End Class
 
