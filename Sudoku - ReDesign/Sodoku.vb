@@ -3,6 +3,10 @@
     Public Cells(8, 8) As DisplayCell
     Public BoardHandler As New BoardHandler
     Public CurrentCell As DisplayCell
+
+    Public LastCellClicked As DisplayCell
+    Public LastValClicked As Integer
+
     Public Keypads As List(Of Button)
     Public HighlightedCandidates As New List(Of Integer)
 
@@ -10,7 +14,7 @@
     Public Medusa1(1) As List(Of Tuple(Of DisplayCell, Integer))
     Public Medusa2(1) As List(Of Tuple(Of DisplayCell, Integer))
 
-    Public LinkedCells As List(Of Tuple(Of Label, Label, Boolean))
+    Public LinkedCells As List(Of Tuple(Of Label, Label, Boolean, Boolean)) 'Start Label, End Label, Dashed(T for dashed), Enabled(T for enabled)
 
     Public Colours(15) As Color
     Public StandardFont, UnderlineFont As Font
@@ -74,11 +78,19 @@
 
         Form1.LastClicked = Nothing
         Form1.Lst_Debug.Items.Clear()
-        RefreshHighlight(True)
-        CurrentCell = Nothing
-        BoardHandler.NewGame(False)
-        PrimeBoard(BoardHandler.MainBoard)
-        LinkedCells = Nothing
+        RefreshHighlight(True) 'Clear All Highlighting
+        CurrentCell = Nothing 'Make the CurrentCell Nothing
+        BoardHandler.NewGame(False) 'Create a New Game with the selected difficulty
+        PrimeBoard(BoardHandler.MainBoard) 'Load that new board
+        LinkedCells = Nothing 'Clear linked Cells
+        LastCellClicked = Nothing
+        LastValClicked = -1
+        For Each ele As Control In Form1.Group_Board.Controls 'Re Paint all cells.
+            ele.Invalidate()
+        Next
+        Form1.Group_Board.Invalidate()
+        UpdateLinkList()
+
     End Sub
 
     Public Sub InitiateManualEntry()
@@ -173,14 +185,13 @@
     'takes events from label clicks
     Public Sub LabelClick(ByVal sender As Label, e As System.EventArgs)
 
-
-        'If 
+        'Passes the information of the clicked label to the apporpirate functions
         HandleLabelClick(sender.Tag.Item1)
-        SC_SimKeypadInput(sender.Tag)
+        SimulateKeypadInput(sender.Tag)
 
     End Sub
 
-    'Handles information from label clicks
+    'Handles information from label clicks EG: Showing which cell was last clicked.
     Public Sub HandleLabelClick(Cell As DisplayCell)
 
         Form1.ActiveControl = Nothing
@@ -228,15 +239,21 @@
         End If
     End Sub
 
-    'Allows for a value to be passed in as if there was a keypad input
+    'Used for keyboard input. Acts like a keypad was pressed. 
     Public Sub SimulateKeypadInput(ClickedVal As Integer)
+
         If Form1.Drop_HighlightSelect.SelectedIndex = 0 And Form1.Check_EnableHighlighting.Checked = True Then 'When highlighting is checked
 
             HandleHighlighting(ClickedVal)
 
-        ElseIf Form1.Drop_HighlightSelect.SelectedIndex = 1 And Form1.Check_EnableHighlighting.Checked = True = True Then 'When Medusa is checked
+        ElseIf Form1.Drop_HighlightSelect.SelectedIndex = 1 And Form1.Check_EnableHighlighting.Checked = True Then 'When Medusa is checked
 
             HandleMedusa(ClickedVal)
+
+        ElseIf Form1.Drop_HighlightSelect.SelectedIndex = 2 And Form1.Check_EnableHighlighting.Checked = True Then
+
+            Form1.Lst_Debug.Items.Add("Got to here")
+            HandleLinking(CurrentCell, ClickedVal)
 
         Else
 
@@ -244,7 +261,8 @@
         End If
     End Sub
 
-    Public Sub SC_SimKeypadInput(Cell_Val As Tuple(Of DisplayCell, Integer))
+    'Used for simulating keypad input form when a cell's candidate is clicked by the user. 
+    Public Sub SimulateKeypadInput(Cell_Val As Tuple(Of DisplayCell, Integer))
 
         If IsNothing(BoardHandler.SolvedBoard) Then
             Exit Sub
@@ -254,6 +272,11 @@
             Exit Sub
         ElseIf Form1.Drop_HighlightSelect.SelectedIndex = 1 And Form1.Check_EnableHighlighting.Checked = True = True Then
             HandleMedusa(Cell_Val.Item2)
+
+        ElseIf Form1.Drop_HighlightSelect.SelectedIndex = 2 And Form1.Check_EnableHighlighting.Checked = True Then
+
+            Form1.Lst_Debug.Items.Add("Got to here")
+            HandleLinking(Cell_Val.Item1, Cell_Val.Item2)
 
         ElseIf Form1.Rad_Pen.Checked = True Then
 
@@ -272,6 +295,7 @@
         End If
 
     End Sub
+
 
     'Handles normal keypad input when any highlighting options are not checked 
     Public Sub HandleNormalKeypadInput(ClickedVal As Integer)
@@ -326,6 +350,72 @@
 
     End Sub
 
+    'Handles the linking controls from input. Remembers the last two cells clicked after enabling linking. SOMETHING NEEDS CHANGING
+    Public Sub HandleLinking(CellClicked As DisplayCell, ValueClicked As Integer)
+
+        'If the Last Clicked cell does not exist
+        If IsNothing(LastCellClicked) Then
+            If CellClicked.Candidates.Contains(ValueClicked) = False Then 'Checks for if the cell clicked actually has a candidate
+                Exit Sub
+            End If
+            LastCellClicked = CellClicked 'if the cell does have a candidate, then make it the last clicked cell.
+            LastValClicked = ValueClicked
+            LastCellClicked.Labels_Array(ValueClicked - 1).BackColor = Color.DarkSalmon '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CHANGE!!!!!!!!!!!!!!!!!
+        Else 'If there is a last clicked cell...
+
+            If LastCellClicked.Equals(CellClicked) And LastValClicked = ValueClicked Then
+                LastCellClicked.Labels_Array(LastValClicked - 1).BackColor = Color.GhostWhite
+                Exit Sub
+            End If
+
+            If IsNothing(LinkedCells) Then
+                LinkedCells = New List(Of Tuple(Of Label, Label, Boolean, Boolean)) 'Start Label, End Label, Dashed(T for dashed), Enabled(T for enabled)
+            End If
+
+            'if the Link already exists, then remove it.
+            For Each ele In LinkedCells
+
+                If ele.Item1.Equals(LastCellClicked.Labels_Array(LastValClicked - 1)) And ele.Item2.Equals(CellClicked.Labels_Array(LastValClicked - 1)) Then
+                    LinkedCells.Remove(ele)
+                    LastCellClicked.Labels_Array(LastValClicked - 1).BackColor = Color.GhostWhite
+                    LastCellClicked = Nothing
+                    LastValClicked = -1
+                    Form1.CalculatedInvalidate(False)
+                    UpdateLinkList()
+                    Exit Sub
+                End If
+
+                If ele.Item1.Equals(LastCellClicked.Labels_Array(LastValClicked - 1)) And ele.Item2.Equals(CellClicked.Labels_Array(ValueClicked - 1)) Then
+                    LinkedCells.Remove(ele)
+                    LastCellClicked.Labels_Array(LastValClicked - 1).BackColor = Color.GhostWhite
+                    LastCellClicked = Nothing
+                    LastValClicked = -1
+                    Form1.CalculatedInvalidate(False)
+                    UpdateLinkList()
+                    Exit Sub
+                End If
+            Next
+
+
+            If LastCellClicked.Equals(CellClicked) Then 'If two candidates are in the same cell, then you are allowed to chose any candidate in that cell
+                If CellClicked.Candidates.Contains(ValueClicked) = False Then
+                    Exit Sub
+                End If
+                LinkedCells.Add(Tuple.Create(LastCellClicked.Labels_Array(LastValClicked - 1), CellClicked.Labels_Array(ValueClicked - 1), Convert.ToBoolean(IIf(Form1.Check_StrongLink.Checked, False, True)), True))
+            Else 'Else chose the candidate that is equal to that last candidate chosen.
+                If CellClicked.Candidates.Contains(LastValClicked) = False Then
+                    Exit Sub
+                End If
+                LinkedCells.Add(Tuple.Create(LastCellClicked.Labels_Array(LastValClicked - 1), CellClicked.Labels_Array(LastValClicked - 1), Convert.ToBoolean(IIf(Form1.Check_StrongLink.Checked, False, True)), True))
+            End If
+            LastCellClicked.Labels_Array(LastValClicked - 1).BackColor = Color.GhostWhite
+            LastCellClicked = Nothing
+            LastValClicked = -1
+            Form1.CalculatedInvalidate(False)
+            UpdateLinkList()
+        End If
+
+    End Sub
     'handles the highlighting for general candidate highlighting
     Public Sub HandleHighlighting(ClickedVal As Integer)
         'If it is in the highlighted list, then remove else add it
@@ -708,7 +798,7 @@
 
         End If
 
-            If Form1.Check_Overlay2.Checked = True Then
+        If Form1.Check_Overlay2.Checked = True Then
 
         End If
 
@@ -852,12 +942,25 @@
 
     End Sub
 
-    'To Do
-    Public Sub Hint()
+    Public Sub UpdateLinkList()
 
+        If IsNothing(LinkedCells) Then
+            Form1.Lst_Links.Items.Clear()
+
+            Exit Sub
+        End If
+
+        Dim CellLocation1 As String
+        Dim CellLocation2 As String
+
+        Form1.Lst_Links.Items.Clear()
+        For Each ele In LinkedCells
+            CellLocation1 = "(" + CStr(DirectCast(ele.Item1.Tag.Item1, DisplayCell).Location.X + 1) + "," + CStr(DirectCast(ele.Item1.Tag.Item1, DisplayCell).Location.Y + 1) + ")(" + CStr(ele.Item1.Tag.Item2) + ")"
+            CellLocation2 = "(" + CStr(DirectCast(ele.Item2.Tag.Item1, DisplayCell).Location.X + 1) + ", " + CStr(DirectCast(ele.Item2.Tag.Item1, DisplayCell).Location.Y + 1) + ")(" + CStr(ele.Item2.Tag.Item2) + ")"
+            Form1.Lst_Links.Items.Add(CellLocation1 + " - " + CellLocation2)
+
+        Next
     End Sub
-
-
 
 End Class
 

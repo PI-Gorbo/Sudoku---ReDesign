@@ -307,55 +307,57 @@ Public Class Form1
     Private Sub Btn_ClearHighlight_Click(sender As Object, e As EventArgs) Handles Btn_ClearHighlight.Click
 
 
-        If Check_EnableHighlighting.Checked = False Then 'If highlighting is not selected
+        If Check_EnableHighlighting.Checked = False Then 'If highlighting is not selected then just clear the board without getting rid of info
             Game.RefreshHighlight(False)
             Game.UpdateKeypads()
-        ElseIf Drop_HighlightSelect.SelectedIndex = 0 Then 'If highlighted candidates selected
-            Game.RefreshHighlight(True)
-            Game.UpdateKeypads()
-        ElseIf Drop_HighlightSelect.SelectedIndex = 1 Then 'If medusa selected
-
-            If DropDown_Medusa.SelectedIndex = 0 Then
-                If IsNothing(Game.Medusa0(0)) = False Then
-                    Game.Medusa0(0).Clear()
-                End If
-                If IsNothing(Game.Medusa0(1)) = False Then
-                    Game.Medusa0(1).Clear()
-                End If
-                Game.RefreshHighlight(False)
-
-            ElseIf DropDown_Medusa.SelectedIndex = 1 Then
-                If IsNothing(Game.Medusa1(0)) = False Then
-                    Game.Medusa1(0).Clear()
-                End If
-                If IsNothing(Game.Medusa1(1)) = False Then
-                    Game.Medusa1(1).Clear()
-                End If
-                Game.RefreshHighlight(False)
-
-            Else
-                If IsNothing(Game.Medusa2(0)) = False Then
-                    Game.Medusa2(0).Clear()
-                End If
-                If IsNothing(Game.Medusa2(1)) = False Then
-                    Game.Medusa2(1).Clear()
-                End If
-                Game.RefreshHighlight(False)
-
+            If Not IsNothing(Game.LinkedCells) Then
+                Game.LinkedCells.Clear()
+                CalculatedInvalidate(True)
             End If
 
+        ElseIf Drop_HighlightSelect.SelectedIndex = 0 Then 'If highlighted candidates selected
+                Game.RefreshHighlight(True)
+                Game.UpdateKeypads()
+            ElseIf Drop_HighlightSelect.SelectedIndex = 1 Then 'If medusa selected
+
+                If DropDown_Medusa.SelectedIndex = 0 Then
+                    If IsNothing(Game.Medusa0(0)) = False Then
+                        Game.Medusa0(0).Clear()
+                    End If
+                    If IsNothing(Game.Medusa0(1)) = False Then
+                        Game.Medusa0(1).Clear()
+                    End If
+                    Game.RefreshHighlight(False)
+
+                ElseIf DropDown_Medusa.SelectedIndex = 1 Then
+                    If IsNothing(Game.Medusa1(0)) = False Then
+                        Game.Medusa1(0).Clear()
+                    End If
+                    If IsNothing(Game.Medusa1(1)) = False Then
+                        Game.Medusa1(1).Clear()
+                    End If
+                    Game.RefreshHighlight(False)
+
+                Else
+                    If IsNothing(Game.Medusa2(0)) = False Then
+                        Game.Medusa2(0).Clear()
+                    End If
+                    If IsNothing(Game.Medusa2(1)) = False Then
+                        Game.Medusa2(1).Clear()
+                    End If
+                    Game.RefreshHighlight(False)
+
+                End If
+
+            ElseIf Drop_HighlightSelect.SelectedIndex = 2 Then 'If Linking is selected
+            Game.LinkedCells.Clear()
+            Game.UpdateLinkList()
+            Game.LinkedCells = Nothing
+            CalculatedInvalidate(True)
         End If
 
-        If IsNothing(Game.LinkedCells) Then
-            Game.LinkedCells = New List(Of Tuple(Of Label, Label, Boolean))
-            Game.LinkedCells.Add(Tuple.Create(Game.Cells(1, 1).Labels_Array(4), Game.Cells(4, 8).Labels_Array(4), False))
-            Game.LinkedCells.Add(Tuple.Create(Game.Cells(4, 5).Labels_Array(8), Game.Cells(8, 2).Labels_Array(8), True))
-            Game.LinkedCells.Add(Tuple.Create(Game.Cells(3, 0).Labels_Array(5), Game.Cells(3, 8).Labels_Array(5), False))
-        End If
-        For Each ele As Control In Group_Board.Controls
-            ele.Invalidate()
-        Next
-        Group_Board.Invalidate()
+
+
     End Sub
 
     Private Sub Btn_PrelimSolve_Click(sender As Object, e As EventArgs) Handles Btn_PrelimSolve.Click
@@ -433,6 +435,19 @@ Public Class Form1
         Check_Overlay1.Enabled = False
         Check_Overlay1.Visible = False
 
+        Lst_Links.Enabled = False
+        Lst_Links.Visible = False
+        Btn_DelChosenLink.Enabled = False
+        Btn_DelChosenLink.Visible = False
+        Check_StrongLink.Enabled = False
+        Check_StrongLink.Visible = False
+        Check_StrongLink.Checked = True
+
+        If Not IsNothing(Game.LinkedCells) Then
+            Game.LinkedCells.Clear()
+            Game.LinkedCells = Nothing
+            CalculatedInvalidate(True)
+        End If
 
         If sender.SelectedIndex = 0 Then 'Highlighting
 
@@ -459,6 +474,13 @@ Public Class Form1
 
         ElseIf sender.SelectedIndex = 2 Then 'Linking
 
+            Lst_Links.Enabled = True
+            Lst_Links.Visible = True
+            Btn_DelChosenLink.Enabled = True
+            Btn_DelChosenLink.Visible = True
+            Check_StrongLink.Enabled = True
+            Check_StrongLink.Visible = True
+            Check_StrongLink.Checked = True
 
         ElseIf sender.SelectedIndex = 3 Then 'Locked Sets
 
@@ -489,12 +511,15 @@ Public Class Form1
         If Game.LinkedCells.Count = 0 Then
             Exit Sub
         End If
-        Dim pen As New Pen(Color.Red, 3)
+        Dim pen As New Pen(Color.Red, 2)
         Dim localpointstart, localpointend, localMidPoint, localQuartile1, LocalQuartile3 As Point
         Dim Points(4) As Point
         e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
         For Each ele In Game.LinkedCells
 
+            If ele.Item4 = False Then 'if the linking is not enabled, then dont display it.
+                Exit Sub
+            End If
             'Test if the link is horizontal or veritcal. 
             If ele.Item3 = False Then
                 pen.DashStyle = Drawing2D.DashStyle.Solid
@@ -506,17 +531,17 @@ Public Class Form1
 
                 'Draw a curve instead of a line. 
                 'Find the midpoint between the two lines, and the quarters 1 and 3.
-                localpointstart = DirectCast(sender, Control).PointToClient(Group_Board.PointToScreen(ele.Item1.Location))
-                localpointend = DirectCast(sender, Control).PointToClient(Group_Board.PointToScreen(ele.Item2.Location))
+                localpointstart = DirectCast(sender, Control).PointToClient(Group_Board.PointToScreen(GetCentreOfControl(ele.Item1)))
+                localpointend = DirectCast(sender, Control).PointToClient(Group_Board.PointToScreen(GetCentreOfControl(ele.Item2)))
                 localMidPoint = FindMidpoint(localpointstart, localpointend, 0, 0)
                 localQuartile1 = FindMidpoint(localpointstart, localMidPoint, 0, 0)
                 LocalQuartile3 = FindMidpoint(localMidPoint, localpointend, 0, 0)
 
                 'Raise the height of the midpoint, quarter 1 and 3
 
-                localQuartile1.Y += -4
-                localMidPoint.Y += -4
-                LocalQuartile3.Y += -4
+                localQuartile1.Y += -7
+                localMidPoint.Y += -7
+                LocalQuartile3.Y += -7
 
                 Points(0) = localpointstart
                 Points(1) = localQuartile1
@@ -525,23 +550,63 @@ Public Class Form1
                 Points(4) = localpointend
                 e.Graphics.DrawCurve(pen, Points)
             Else
-                localpointstart = DirectCast(sender, Control).PointToClient(Group_Board.PointToScreen(ele.Item1.Location))
-                localpointend = DirectCast(sender, Control).PointToClient(Group_Board.PointToScreen(ele.Item2.Location))
+                localpointstart = DirectCast(sender, Control).PointToClient(Group_Board.PointToScreen(GetCentreOfControl(ele.Item1)))
+                localpointend = DirectCast(sender, Control).PointToClient(Group_Board.PointToScreen(GetCentreOfControl(ele.Item2)))
 
                 e.Graphics.DrawLine(pen, localpointstart, localpointend)
             End If
-
-
-
-
         Next
 
     End Sub
 
+    'Strategically chooses which cells need to be invalidated so that painting is faster
+    Public Sub CalculatedInvalidate(All As Boolean)
+
+        If All = False Then
+
+            For Rows = 0 To 8
+                For Cols = 0 To 8
+
+                    If Game.BoardHandler.MainBoard.Cells(Rows, Cols).HasValueFromImport = True Then
+                        Game.Cells(Rows, Cols).ValueLabel.Invalidate()
+                        Continue For
+                    Else
+                        For Each ele In Game.Cells(Rows, Cols).Labels_Array
+                            ele.Invalidate()
+                        Next
+                        Game.Cells(Rows, Cols).BorderLabel.Invalidate()
+                        Game.Cells(Rows, Cols).ValueLabel.Invalidate()
+                    End If
+
+                Next
+            Next
+            Group_Board.Invalidate()
+        Else
+            For Each ele As Control In Group_Board.Controls
+                ele.Invalidate()
+            Next
+            Group_Board.Invalidate()
+        End If
+    End Sub
+
+    'Finds the midpoint of two given poits
     Public Function FindMidpoint(P1 As Point, P2 As Point, xOffset As Integer, yOffset As Integer) As Point
 
         Dim MidPoint As New Point((P1.X + P2.X) / 2 + xOffset, (P1.Y + P2.Y) / 2 + yOffset)
         Return MidPoint
     End Function
 
+    Public Function GetCentreOfControl(Control As Control) As Point
+        Dim Centre As New Point(Control.Location.X + (Control.Width / 2), Control.Location.Y + (Control.Height / 2))
+        Return Centre
+    End Function
+
+    Private Sub Btn_DelChosenLink_Click(sender As Object, e As EventArgs) Handles Btn_DelChosenLink.Click
+
+        If Lst_Links.SelectedIndex <> -1 Then
+            Game.LinkedCells.RemoveAt(Lst_Links.SelectedIndex)
+        End If
+        CalculatedInvalidate(False)
+        Game.UpdateLinkList()
+    End Sub
 End Class

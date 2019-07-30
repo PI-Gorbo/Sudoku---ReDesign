@@ -67,6 +67,9 @@ Partial Class Form1
         Me.Btn_SaveGame = New System.Windows.Forms.Button()
         Me.Btn_LoadGame = New System.Windows.Forms.Button()
         Me.Group_ExtraOptions = New System.Windows.Forms.Panel()
+        Me.Check_StrongLink = New System.Windows.Forms.CheckBox()
+        Me.Btn_DelChosenLink = New System.Windows.Forms.Button()
+        Me.Lst_Links = New System.Windows.Forms.ListBox()
         Me.Group_Controls.SuspendLayout()
         Me.SubGroup_Solving.SuspendLayout()
         Me.SubGroup_Highlight.SuspendLayout()
@@ -165,13 +168,16 @@ Partial Class Form1
         Me.SubGroup_Highlight.BackColor = System.Drawing.Color.WhiteSmoke
         Me.SubGroup_Highlight.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.SubGroup_Highlight.Controls.Add(Me.Check_Overlay2)
-        Me.SubGroup_Highlight.Controls.Add(Me.Check_Overlay1)
-        Me.SubGroup_Highlight.Controls.Add(Me.Check_EnableHighlighting)
-        Me.SubGroup_Highlight.Controls.Add(Me.Drop_HighlightSelect)
-        Me.SubGroup_Highlight.Controls.Add(Me.DropDown_Medusa)
-        Me.SubGroup_Highlight.Controls.Add(Me.Btn_ClearHighlight)
-        Me.SubGroup_Highlight.Controls.Add(Me.Rad_MedusaC2)
+        Me.SubGroup_Highlight.Controls.Add(Me.Lst_Links)
         Me.SubGroup_Highlight.Controls.Add(Me.Rad_MedusaC1)
+        Me.SubGroup_Highlight.Controls.Add(Me.Btn_DelChosenLink)
+        Me.SubGroup_Highlight.Controls.Add(Me.DropDown_Medusa)
+        Me.SubGroup_Highlight.Controls.Add(Me.Check_Overlay1)
+        Me.SubGroup_Highlight.Controls.Add(Me.Check_StrongLink)
+        Me.SubGroup_Highlight.Controls.Add(Me.Rad_MedusaC2)
+        Me.SubGroup_Highlight.Controls.Add(Me.Check_EnableHighlighting)
+        Me.SubGroup_Highlight.Controls.Add(Me.Btn_ClearHighlight)
+        Me.SubGroup_Highlight.Controls.Add(Me.Drop_HighlightSelect)
         Me.SubGroup_Highlight.Font = New System.Drawing.Font("Roboto", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SubGroup_Highlight.Location = New System.Drawing.Point(11, 266)
         Me.SubGroup_Highlight.Name = "SubGroup_Highlight"
@@ -182,7 +188,7 @@ Partial Class Form1
         '
         Me.Check_Overlay2.AutoSize = True
         Me.Check_Overlay2.Font = New System.Drawing.Font("Roboto", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Check_Overlay2.Location = New System.Drawing.Point(7, 132)
+        Me.Check_Overlay2.Location = New System.Drawing.Point(2, 122)
         Me.Check_Overlay2.Name = "Check_Overlay2"
         Me.Check_Overlay2.Size = New System.Drawing.Size(162, 18)
         Me.Check_Overlay2.TabIndex = 27
@@ -193,7 +199,7 @@ Partial Class Form1
         '
         Me.Check_Overlay1.AutoSize = True
         Me.Check_Overlay1.Font = New System.Drawing.Font("Roboto", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Check_Overlay1.Location = New System.Drawing.Point(7, 108)
+        Me.Check_Overlay1.Location = New System.Drawing.Point(2, 98)
         Me.Check_Overlay1.Name = "Check_Overlay1"
         Me.Check_Overlay1.Size = New System.Drawing.Size(139, 18)
         Me.Check_Overlay1.TabIndex = 26
@@ -215,7 +221,7 @@ Partial Class Form1
         '
         Me.Drop_HighlightSelect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.Drop_HighlightSelect.FormattingEnabled = True
-        Me.Drop_HighlightSelect.Items.AddRange(New Object() {"Can Highlighting", "Medusa", "Linking", "Locked Sets"})
+        Me.Drop_HighlightSelect.Items.AddRange(New Object() {"Can Highlighting", "Medusa", "Linking"})
         Me.Drop_HighlightSelect.Location = New System.Drawing.Point(151, 6)
         Me.Drop_HighlightSelect.Name = "Drop_HighlightSelect"
         Me.Drop_HighlightSelect.Size = New System.Drawing.Size(141, 26)
@@ -226,14 +232,14 @@ Partial Class Form1
         Me.DropDown_Medusa.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.DropDown_Medusa.FormattingEnabled = True
         Me.DropDown_Medusa.Items.AddRange(New Object() {"Red + Blue", "Green + Purple", "Yellow + Pink"})
-        Me.DropDown_Medusa.Location = New System.Drawing.Point(7, 76)
+        Me.DropDown_Medusa.Location = New System.Drawing.Point(3, 66)
         Me.DropDown_Medusa.Name = "DropDown_Medusa"
         Me.DropDown_Medusa.Size = New System.Drawing.Size(141, 26)
         Me.DropDown_Medusa.TabIndex = 0
         '
         'Btn_ClearHighlight
         '
-        Me.Btn_ClearHighlight.Location = New System.Drawing.Point(5, 35)
+        Me.Btn_ClearHighlight.Location = New System.Drawing.Point(3, 34)
         Me.Btn_ClearHighlight.Name = "Btn_ClearHighlight"
         Me.Btn_ClearHighlight.Size = New System.Drawing.Size(124, 28)
         Me.Btn_ClearHighlight.TabIndex = 12
@@ -245,7 +251,7 @@ Partial Class Form1
         Me.Rad_MedusaC2.AutoSize = True
         Me.Rad_MedusaC2.Enabled = False
         Me.Rad_MedusaC2.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Rad_MedusaC2.Location = New System.Drawing.Point(168, 110)
+        Me.Rad_MedusaC2.Location = New System.Drawing.Point(160, 96)
         Me.Rad_MedusaC2.Name = "Rad_MedusaC2"
         Me.Rad_MedusaC2.Size = New System.Drawing.Size(120, 19)
         Me.Rad_MedusaC2.TabIndex = 23
@@ -258,7 +264,7 @@ Partial Class Form1
         Me.Rad_MedusaC1.Checked = True
         Me.Rad_MedusaC1.Enabled = False
         Me.Rad_MedusaC1.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Rad_MedusaC1.Location = New System.Drawing.Point(168, 81)
+        Me.Rad_MedusaC1.Location = New System.Drawing.Point(160, 73)
         Me.Rad_MedusaC1.Name = "Rad_MedusaC1"
         Me.Rad_MedusaC1.Size = New System.Drawing.Size(120, 19)
         Me.Rad_MedusaC1.TabIndex = 22
@@ -322,9 +328,9 @@ Partial Class Form1
         Me.Check_Can_Removal.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Check_Can_Removal.Location = New System.Drawing.Point(171, 109)
         Me.Check_Can_Removal.Name = "Check_Can_Removal"
-        Me.Check_Can_Removal.Size = New System.Drawing.Size(178, 19)
+        Me.Check_Can_Removal.Size = New System.Drawing.Size(132, 19)
         Me.Check_Can_Removal.TabIndex = 22
-        Me.Check_Can_Removal.Text = "Removal and Conflict Altert"
+        Me.Check_Can_Removal.Text = "Highlight Mistakes"
         Me.Check_Can_Removal.UseVisualStyleBackColor = True
         '
         'Check_Options
@@ -590,6 +596,34 @@ Partial Class Form1
         Me.Group_ExtraOptions.Size = New System.Drawing.Size(258, 554)
         Me.Group_ExtraOptions.TabIndex = 5
         '
+        'Check_StrongLink
+        '
+        Me.Check_StrongLink.AutoSize = True
+        Me.Check_StrongLink.Location = New System.Drawing.Point(152, 120)
+        Me.Check_StrongLink.Name = "Check_StrongLink"
+        Me.Check_StrongLink.Size = New System.Drawing.Size(103, 22)
+        Me.Check_StrongLink.TabIndex = 26
+        Me.Check_StrongLink.Text = "Strong Link"
+        Me.Check_StrongLink.UseVisualStyleBackColor = True
+        '
+        'Btn_DelChosenLink
+        '
+        Me.Btn_DelChosenLink.Location = New System.Drawing.Point(152, 66)
+        Me.Btn_DelChosenLink.Name = "Btn_DelChosenLink"
+        Me.Btn_DelChosenLink.Size = New System.Drawing.Size(141, 28)
+        Me.Btn_DelChosenLink.TabIndex = 28
+        Me.Btn_DelChosenLink.Text = "Del Chosen Link"
+        Me.Btn_DelChosenLink.UseVisualStyleBackColor = True
+        '
+        'Lst_Links
+        '
+        Me.Lst_Links.FormattingEnabled = True
+        Me.Lst_Links.ItemHeight = 18
+        Me.Lst_Links.Location = New System.Drawing.Point(6, 66)
+        Me.Lst_Links.Name = "Lst_Links"
+        Me.Lst_Links.Size = New System.Drawing.Size(134, 94)
+        Me.Lst_Links.TabIndex = 29
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
@@ -665,4 +699,7 @@ Partial Class Form1
     Friend WithEvents Check_EnableHighlighting As CheckBox
     Friend WithEvents Check_Overlay2 As CheckBox
     Friend WithEvents Check_Overlay1 As CheckBox
+    Friend WithEvents Check_StrongLink As CheckBox
+    Friend WithEvents Btn_DelChosenLink As Button
+    Friend WithEvents Lst_Links As ListBox
 End Class
