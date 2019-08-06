@@ -308,48 +308,53 @@ Public Class Form1
 
 
         If Check_EnableHighlighting.Checked = False Then 'If highlighting is not selected then just clear the board without getting rid of info
+
+            If Not IsNothing(Game.LinkedCells) Then
+                Dim x As New List(Of Tuple(Of Label, Label, Boolean, Boolean))
+                For Each ele In Game.LinkedCells
+                    x.Add(Tuple.Create(ele.Item1, ele.Item2, ele.Item3, False))
+                Next
+                Game.LinkedCells = x
+            End If
             Game.RefreshHighlight(False)
             Game.UpdateKeypads()
-            If Not IsNothing(Game.LinkedCells) Then
-                Game.LinkedCells.Clear()
-                CalculatedInvalidate(True)
-            End If
+            CalculatedInvalidate(False)
 
         ElseIf Drop_HighlightSelect.SelectedIndex = 0 Then 'If highlighted candidates selected
-                Game.RefreshHighlight(True)
-                Game.UpdateKeypads()
-            ElseIf Drop_HighlightSelect.SelectedIndex = 1 Then 'If medusa selected
+            Game.RefreshHighlight(True)
+            Game.UpdateKeypads()
+        ElseIf Drop_HighlightSelect.SelectedIndex = 1 Then 'If medusa selected
 
-                If DropDown_Medusa.SelectedIndex = 0 Then
-                    If IsNothing(Game.Medusa0(0)) = False Then
-                        Game.Medusa0(0).Clear()
-                    End If
-                    If IsNothing(Game.Medusa0(1)) = False Then
-                        Game.Medusa0(1).Clear()
-                    End If
-                    Game.RefreshHighlight(False)
-
-                ElseIf DropDown_Medusa.SelectedIndex = 1 Then
-                    If IsNothing(Game.Medusa1(0)) = False Then
-                        Game.Medusa1(0).Clear()
-                    End If
-                    If IsNothing(Game.Medusa1(1)) = False Then
-                        Game.Medusa1(1).Clear()
-                    End If
-                    Game.RefreshHighlight(False)
-
-                Else
-                    If IsNothing(Game.Medusa2(0)) = False Then
-                        Game.Medusa2(0).Clear()
-                    End If
-                    If IsNothing(Game.Medusa2(1)) = False Then
-                        Game.Medusa2(1).Clear()
-                    End If
-                    Game.RefreshHighlight(False)
-
+            If DropDown_Medusa.SelectedIndex = 0 Then
+                If IsNothing(Game.Medusa0(0)) = False Then
+                    Game.Medusa0(0).Clear()
                 End If
+                If IsNothing(Game.Medusa0(1)) = False Then
+                    Game.Medusa0(1).Clear()
+                End If
+                Game.RefreshHighlight(False)
 
-            ElseIf Drop_HighlightSelect.SelectedIndex = 2 Then 'If Linking is selected
+            ElseIf DropDown_Medusa.SelectedIndex = 1 Then
+                If IsNothing(Game.Medusa1(0)) = False Then
+                    Game.Medusa1(0).Clear()
+                End If
+                If IsNothing(Game.Medusa1(1)) = False Then
+                    Game.Medusa1(1).Clear()
+                End If
+                Game.RefreshHighlight(False)
+
+            Else
+                If IsNothing(Game.Medusa2(0)) = False Then
+                    Game.Medusa2(0).Clear()
+                End If
+                If IsNothing(Game.Medusa2(1)) = False Then
+                    Game.Medusa2(1).Clear()
+                End If
+                Game.RefreshHighlight(False)
+
+            End If
+
+        ElseIf Drop_HighlightSelect.SelectedIndex = 2 Then 'If Linking is selected
             Game.LinkedCells.Clear()
             Game.UpdateLinkList()
             Game.LinkedCells = Nothing
@@ -412,12 +417,32 @@ Public Class Form1
                 DropDown_Medusa.Enabled = True
                 Rad_MedusaC1.Enabled = True
                 Rad_MedusaC1.Enabled = True
+            ElseIf Drop_HighlightSelect.SelectedIndex = 3 Then
+
+                If Not IsNothing(Game.LinkedCells) Then
+                    If Game.LinkedCells(0).Item4 = False Then
+                        Dim x As New List(Of Tuple(Of Label, Label, Boolean, Boolean))
+                        For Each ele In Game.LinkedCells
+                            x.Add(Tuple.Create(ele.Item1, ele.Item2, ele.Item3, True))
+                        Next
+                        Game.LinkedCells = x
+
+                    End If
+                End If
             End If
         Else
-                Drop_HighlightSelect.Enabled = False
+            Drop_HighlightSelect.Enabled = False
             DropDown_Medusa.Enabled = False
             Rad_MedusaC1.Enabled = False
             Rad_MedusaC1.Enabled = False
+            Lst_Links.Enabled = False
+            Lst_Links.Visible = False
+            Btn_DelChosenLink.Enabled = False
+            Btn_DelChosenLink.Visible = False
+            Check_StrongLink.Enabled = False
+            Check_StrongLink.Visible = False
+            Check_StrongLink.Checked = False
+
         End If
 
     End Sub
@@ -482,9 +507,6 @@ Public Class Form1
             Check_StrongLink.Visible = True
             Check_StrongLink.Checked = True
 
-        ElseIf sender.SelectedIndex = 3 Then 'Locked Sets
-
-
         End If
 
         Game.RefreshHighlight(False)
@@ -516,15 +538,16 @@ Public Class Form1
         Dim Points(4) As Point
         e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
         For Each ele In Game.LinkedCells
-
             If ele.Item4 = False Then 'if the linking is not enabled, then dont display it.
-                Exit Sub
+                Continue For
             End If
             'Test if the link is horizontal or veritcal. 
             If ele.Item3 = False Then
                 pen.DashStyle = Drawing2D.DashStyle.Solid
+                pen.Color = Color.Blue
             Else
                 pen.DashStyle = Drawing2D.DashStyle.Dash
+                pen.Color = Color.Red
             End If
 
             If ele.Item1.Location.X = ele.Item2.Location.X Or ele.Item1.Location.Y = ele.Item2.Location.Y Then
@@ -537,11 +560,18 @@ Public Class Form1
                 localQuartile1 = FindMidpoint(localpointstart, localMidPoint, 0, 0)
                 LocalQuartile3 = FindMidpoint(localMidPoint, localpointend, 0, 0)
 
-                'Raise the height of the midpoint, quarter 1 and 3
+                'move the midpoint, quarter 1 and 3 to avoid current candidates.
+                If ele.Item1.Location.Y = ele.Item2.Location.Y Then
+                    localQuartile1.Y += -9
+                    localMidPoint.Y += -9
+                    LocalQuartile3.Y += -9
+                Else
+                    localQuartile1.X += -9
+                    localMidPoint.X += -9
+                    LocalQuartile3.X += -9
+                End If
 
-                localQuartile1.Y += -7
-                localMidPoint.Y += -7
-                LocalQuartile3.Y += -7
+
 
                 Points(0) = localpointstart
                 Points(1) = localQuartile1
@@ -562,24 +592,94 @@ Public Class Form1
     'Strategically chooses which cells need to be invalidated so that painting is faster
     Public Sub CalculatedInvalidate(All As Boolean)
 
-        If All = False Then
+        If All = False Then 'Does a faster version then just going through every cell
 
-            For Rows = 0 To 8
-                For Cols = 0 To 8
-
-                    If Game.BoardHandler.MainBoard.Cells(Rows, Cols).HasValueFromImport = True Then
-                        Game.Cells(Rows, Cols).ValueLabel.Invalidate()
-                        Continue For
-                    Else
-                        For Each ele In Game.Cells(Rows, Cols).Labels_Array
-                            ele.Invalidate()
+            Dim PaintList As New List(Of DisplayCell)
+            'Make a list of every cell that needs to be invalidated by checking through the list of links
+            For Each ele In Game.LinkedCells
+                If ele.Item1.Location.X = ele.Item2.Location.X Then 'If the linked cells have the same x location
+                    If ele.Item1.Location.Y > ele.Item2.Location.Y Then 'Then add all the y cells between them to the list of cells that need to be invaidated.
+                        For i = ele.Item2.Tag.Item1.Location.Y To ele.Item1.Tag.Item1.Location.Y 'IF Y1 > Y2
+                            If PaintList.Contains(Game.Cells(i, ele.Item1.Tag.Item1.Location.X)) = False Then
+                                'If the item is not already in the list
+                                PaintList.Add(Game.Cells(i, ele.Item1.Tag.Item1.Location.X))
+                            End If
                         Next
-                        Game.Cells(Rows, Cols).BorderLabel.Invalidate()
-                        Game.Cells(Rows, Cols).ValueLabel.Invalidate()
+                    Else
+                        For i = ele.Item1.Tag.Item1.Location.Y To ele.Item2.Tag.Item1.Location.Y 'Else Y2 > Y1
+                            If PaintList.Contains(Game.Cells(i, ele.Item1.Tag.Item1.Location.X)) = False Then
+                                'If the item is not already in the list
+                                PaintList.Add(Game.Cells(i, ele.Item1.Tag.Item1.Location.X))
+                            End If
+                        Next
                     End If
 
+                ElseIf ele.Item1.Location.Y = ele.Item2.Location.Y Then 'If the linked cells are in the same row
+
+                    If ele.Item1.Location.X > ele.Item2.Location.X Then 'Then add all the x cells between them to the list of cells that need to be invaidated.
+                        For i = ele.Item2.Tag.Item1.Location.X To ele.Item1.Tag.Item1.Location.X 'IF X1 > X2
+                            If PaintList.Contains(Game.Cells(ele.Item1.Tag.Item1.Location.Y, i)) = False Then
+                                'If the item is not already in the list:
+                                PaintList.Add(Game.Cells(ele.Item1.Tag.Item1.Location.Y, i)) 'NB: Cells are refrenced by Cells(y,x)
+                            End If
+                        Next
+                    Else
+                        For i = ele.Item1.Tag.Item1.Location.Y To ele.Item2.Tag.Item1.Location.Y 'Else X2 > X1
+                            If PaintList.Contains(Game.Cells(ele.Item1.Tag.Item1.Location.Y, i)) = False Then
+                                'If the item is not already in the list
+                                PaintList.Add(Game.Cells(ele.Item1.Tag.Item1.Location.Y, i))
+                            End If
+                        Next
+                    End If
+
+                Else 'at this point we know that the two points are not in the same column or row.
+
+                    Dim x_start, x_end, y_start, y_end As Integer
+                    If ele.Item1.Location.X > ele.Item2.Location.X Then 'Create the start and end locations to iderate through
+
+                        x_start = ele.Item2.Tag.Item1.Location.X
+                        x_end = ele.Item1.Tag.Item1.Location.X
+                    Else
+                        x_start = ele.Item1.Tag.Item1.Location.X
+                        x_end = ele.Item2.Tag.Item1.Location.X
+
+                    End If
+
+                    If ele.Item1.Location.Y > ele.Item2.Location.Y Then
+
+                        y_start = ele.Item2.Tag.Item1.Location.Y
+                        y_end = ele.Item1.Tag.Item1.Location.Y
+                    Else
+                        y_start = ele.Item1.Tag.Item1.Location.Y
+                        y_end = ele.Item2.Tag.Item1.Location.Y
+
+                    End If
+
+                    For Y = y_start To y_end
+                        For X = x_start To x_end
+                            If PaintList.Contains(Game.Cells(Y, X)) = False Then 'Add all the items to the list
+                                PaintList.Add(Game.Cells(Y, X))
+                            End If
+                        Next
+                    Next
+
+                End If
+            Next
+
+            For Each ele In PaintList
+                ele.BorderLabel.Invalidate()
+                ele.ValueLabel.Invalidate()
+                For Each label As Label In ele.Labels_Array
+                    label.Invalidate()
                 Next
             Next
+
+            If PaintList.Count = 0 Then
+                For Each ele As Control In Group_Board.Controls
+                    ele.Invalidate()
+                Next
+            End If
+
             Group_Board.Invalidate()
         Else
             For Each ele As Control In Group_Board.Controls
@@ -606,7 +706,7 @@ Public Class Form1
         If Lst_Links.SelectedIndex <> -1 Then
             Game.LinkedCells.RemoveAt(Lst_Links.SelectedIndex)
         End If
-        CalculatedInvalidate(False)
+        CalculatedInvalidate(True)
         Game.UpdateLinkList()
     End Sub
 End Class

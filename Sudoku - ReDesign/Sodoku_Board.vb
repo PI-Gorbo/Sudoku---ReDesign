@@ -856,11 +856,6 @@ Skip:
     End Sub
 
     'TO DO
-    Public Sub SaveCurrentBoard(ByRef Successful)
-
-    End Sub
-
-    'TO DO
     Public Sub DebugCandidates()
 
     End Sub
