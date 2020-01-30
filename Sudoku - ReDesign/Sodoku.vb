@@ -31,11 +31,11 @@
         Keypads = New List(Of Button)
 
         Colours(1) = Color.FromArgb(255, 205, 91, 3)
-        Colours(2) = Color.FromArgb(255, 110, 29, 115)
+        Colours(2) = Color.FromArgb(255, Color.LightPink)
         Colours(3) = Color.FromArgb(255, 106, 139, 35)
-        Colours(4) = Color.FromArgb(210, 39, 51, 107)
+        Colours(4) = Color.FromArgb(210, Color.LightBlue)
         Colours(5) = Color.FromArgb(255, 0, 171, 113)
-        Colours(6) = Color.FromArgb(100, 58, 35, 104)
+        Colours(6) = Color.FromArgb(100, Color.LightGray)
         Colours(7) = Color.FromArgb(255, 2, 144, 148)
         Colours(8) = Color.FromArgb(255, 112, 199, 21)
         Colours(9) = Color.FromArgb(255, 190, 129, 11)
@@ -275,7 +275,6 @@
 
         ElseIf Form1.Drop_HighlightSelect.SelectedIndex = 2 And Form1.Check_EnableHighlighting.Checked = True Then
 
-            Form1.Lst_Debug.Items.Add("Got to here")
             HandleLinking(Cell_Val.Item1, Cell_Val.Item2)
 
         ElseIf Form1.Rad_Pen.Checked = True Then
@@ -295,7 +294,6 @@
         End If
 
     End Sub
-
 
     'Handles normal keypad input when any highlighting options are not checked 
     Public Sub HandleNormalKeypadInput(ClickedVal As Integer)
@@ -428,10 +426,6 @@
 
         RefreshHighlight(False) 'Redo the highlighting with the updated list
         UpdateKeypads()
-
-    End Sub
-
-    Public Sub OverlayMedusa()
 
     End Sub
 
@@ -651,14 +645,14 @@
 
     End Sub
 
-    'Called when medusa changed, in order to update for the current selection
+    'Called when medusa changed, in order to update for the current selection. Also handles Overlay
     Public Sub MedusaChanged()
 
         'If the medusa button is unchecked, then do nothing
         If Form1.Check_EnableHighlighting.Checked = False Then
             Exit Sub
 
-        ElseIf Form1.DropDown_Medusa.SelectedIndex = 0 Then 'If in state 0, then display the cells that have been previosuly shown in state 0
+        ElseIf Form1.DropDown_Medusa.SelectedIndex = 0 And Form1.Check_Overlay1.Checked = False And Form1.Check_Overlay2.Checked = False Then 'If in state 0, then display the cells that have been previosuly shown in state 0
             RefreshHighlight(True)
             If IsNothing(Medusa0(0)) = False Then
                 For Each ele In Medusa0(0)
