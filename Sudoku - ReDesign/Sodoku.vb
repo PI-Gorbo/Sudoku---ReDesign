@@ -369,7 +369,8 @@
             End If
 
             If IsNothing(LinkedCells) Then
-                LinkedCells = New List(Of Tuple(Of Label, Label, Boolean, Boolean)) 'Start Label, End Label, Dashed(T for dashed), Enabled(T for enabled)
+                'Start Label, End Label, Dashed(T for dashed), Enabled(T for enabled)
+                LinkedCells = New List(Of Tuple(Of Label, Label, Boolean, Boolean))
             End If
 
             'if the Link already exists, then remove it.
