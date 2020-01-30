@@ -379,7 +379,7 @@
                     LastCellClicked.Labels_Array(LastValClicked - 1).BackColor = Color.GhostWhite
                     LastCellClicked = Nothing
                     LastValClicked = -1
-                    Form1.CalculatedInvalidate(False)
+                    Form1.SmartPaint(False)
                     UpdateLinkList()
                     Exit Sub
                 End If
@@ -389,7 +389,7 @@
                     LastCellClicked.Labels_Array(LastValClicked - 1).BackColor = Color.GhostWhite
                     LastCellClicked = Nothing
                     LastValClicked = -1
-                    Form1.CalculatedInvalidate(False)
+                    Form1.SmartPaint(False)
                     UpdateLinkList()
                     Exit Sub
                 End If
@@ -410,7 +410,7 @@
             LastCellClicked.Labels_Array(LastValClicked - 1).BackColor = Color.GhostWhite
             LastCellClicked = Nothing
             LastValClicked = -1
-            Form1.CalculatedInvalidate(False)
+            Form1.SmartPaint(False)
             UpdateLinkList()
         End If
 

@@ -147,9 +147,9 @@ Partial Class Form1
         '
         'Btn_StagedSolving
         '
-        Me.Btn_StagedSolving.Location = New System.Drawing.Point(152, 9)
+        Me.Btn_StagedSolving.Location = New System.Drawing.Point(151, 9)
         Me.Btn_StagedSolving.Name = "Btn_StagedSolving"
-        Me.Btn_StagedSolving.Size = New System.Drawing.Size(140, 37)
+        Me.Btn_StagedSolving.Size = New System.Drawing.Size(141, 37)
         Me.Btn_StagedSolving.TabIndex = 10
         Me.Btn_StagedSolving.Text = "Find Candidates"
         Me.Btn_StagedSolving.UseVisualStyleBackColor = True
@@ -190,7 +190,7 @@ Partial Class Form1
         Me.Check_Overlay2.Font = New System.Drawing.Font("Roboto", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Check_Overlay2.Location = New System.Drawing.Point(2, 122)
         Me.Check_Overlay2.Name = "Check_Overlay2"
-        Me.Check_Overlay2.Size = New System.Drawing.Size(162, 18)
+        Me.Check_Overlay2.Size = New System.Drawing.Size(196, 22)
         Me.Check_Overlay2.TabIndex = 27
         Me.Check_Overlay2.Text = "Overlay Green and Purple"
         Me.Check_Overlay2.UseVisualStyleBackColor = True
@@ -198,10 +198,10 @@ Partial Class Form1
         'Lst_Links
         '
         Me.Lst_Links.FormattingEnabled = True
-        Me.Lst_Links.ItemHeight = 18
+        Me.Lst_Links.ItemHeight = 23
         Me.Lst_Links.Location = New System.Drawing.Point(6, 66)
         Me.Lst_Links.Name = "Lst_Links"
-        Me.Lst_Links.Size = New System.Drawing.Size(134, 94)
+        Me.Lst_Links.Size = New System.Drawing.Size(134, 73)
         Me.Lst_Links.TabIndex = 29
         '
         'Rad_MedusaC1
@@ -212,7 +212,7 @@ Partial Class Form1
         Me.Rad_MedusaC1.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Rad_MedusaC1.Location = New System.Drawing.Point(160, 73)
         Me.Rad_MedusaC1.Name = "Rad_MedusaC1"
-        Me.Rad_MedusaC1.Size = New System.Drawing.Size(120, 19)
+        Me.Rad_MedusaC1.Size = New System.Drawing.Size(159, 24)
         Me.Rad_MedusaC1.TabIndex = 22
         Me.Rad_MedusaC1.TabStop = True
         Me.Rad_MedusaC1.Text = "Medusa Colour 1"
@@ -234,7 +234,7 @@ Partial Class Form1
         Me.DropDown_Medusa.Items.AddRange(New Object() {"Red + Blue", "Green + Purple", "Yellow + Pink"})
         Me.DropDown_Medusa.Location = New System.Drawing.Point(3, 66)
         Me.DropDown_Medusa.Name = "DropDown_Medusa"
-        Me.DropDown_Medusa.Size = New System.Drawing.Size(141, 26)
+        Me.DropDown_Medusa.Size = New System.Drawing.Size(141, 31)
         Me.DropDown_Medusa.TabIndex = 0
         '
         'Check_Overlay1
@@ -243,7 +243,7 @@ Partial Class Form1
         Me.Check_Overlay1.Font = New System.Drawing.Font("Roboto", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Check_Overlay1.Location = New System.Drawing.Point(2, 98)
         Me.Check_Overlay1.Name = "Check_Overlay1"
-        Me.Check_Overlay1.Size = New System.Drawing.Size(139, 18)
+        Me.Check_Overlay1.Size = New System.Drawing.Size(169, 22)
         Me.Check_Overlay1.TabIndex = 26
         Me.Check_Overlay1.Text = "Overlay Red and Blue"
         Me.Check_Overlay1.UseVisualStyleBackColor = True
@@ -253,7 +253,7 @@ Partial Class Form1
         Me.Check_StrongLink.AutoSize = True
         Me.Check_StrongLink.Location = New System.Drawing.Point(152, 120)
         Me.Check_StrongLink.Name = "Check_StrongLink"
-        Me.Check_StrongLink.Size = New System.Drawing.Size(103, 22)
+        Me.Check_StrongLink.Size = New System.Drawing.Size(127, 27)
         Me.Check_StrongLink.TabIndex = 26
         Me.Check_StrongLink.Text = "Strong Link"
         Me.Check_StrongLink.UseVisualStyleBackColor = True
@@ -265,7 +265,7 @@ Partial Class Form1
         Me.Rad_MedusaC2.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Rad_MedusaC2.Location = New System.Drawing.Point(160, 96)
         Me.Rad_MedusaC2.Name = "Rad_MedusaC2"
-        Me.Rad_MedusaC2.Size = New System.Drawing.Size(120, 19)
+        Me.Rad_MedusaC2.Size = New System.Drawing.Size(159, 24)
         Me.Rad_MedusaC2.TabIndex = 23
         Me.Rad_MedusaC2.Text = "Medusa Colour 2"
         Me.Rad_MedusaC2.UseVisualStyleBackColor = True
@@ -276,7 +276,7 @@ Partial Class Form1
         Me.Check_EnableHighlighting.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Check_EnableHighlighting.Location = New System.Drawing.Point(6, 10)
         Me.Check_EnableHighlighting.Name = "Check_EnableHighlighting"
-        Me.Check_EnableHighlighting.Size = New System.Drawing.Size(134, 19)
+        Me.Check_EnableHighlighting.Size = New System.Drawing.Size(177, 24)
         Me.Check_EnableHighlighting.TabIndex = 25
         Me.Check_EnableHighlighting.Text = "Enable Highlighting"
         Me.Check_EnableHighlighting.UseVisualStyleBackColor = True
@@ -297,7 +297,7 @@ Partial Class Form1
         Me.Drop_HighlightSelect.Items.AddRange(New Object() {"Can Highlighting", "Medusa", "Linking"})
         Me.Drop_HighlightSelect.Location = New System.Drawing.Point(151, 6)
         Me.Drop_HighlightSelect.Name = "Drop_HighlightSelect"
-        Me.Drop_HighlightSelect.Size = New System.Drawing.Size(141, 26)
+        Me.Drop_HighlightSelect.Size = New System.Drawing.Size(141, 31)
         Me.Drop_HighlightSelect.TabIndex = 24
         '
         'SubGroup_Keypad
@@ -329,7 +329,7 @@ Partial Class Form1
         Me.Rad_Pencil.Font = New System.Drawing.Font("Roboto", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Rad_Pencil.Location = New System.Drawing.Point(171, 44)
         Me.Rad_Pencil.Name = "Rad_Pencil"
-        Me.Rad_Pencil.Size = New System.Drawing.Size(63, 21)
+        Me.Rad_Pencil.Size = New System.Drawing.Size(76, 24)
         Me.Rad_Pencil.TabIndex = 24
         Me.Rad_Pencil.TabStop = True
         Me.Rad_Pencil.Text = "Pencil"
@@ -342,7 +342,7 @@ Partial Class Form1
         Me.Rad_Pen.Font = New System.Drawing.Font("Roboto", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Rad_Pen.Location = New System.Drawing.Point(171, 11)
         Me.Rad_Pen.Name = "Rad_Pen"
-        Me.Rad_Pen.Size = New System.Drawing.Size(50, 21)
+        Me.Rad_Pen.Size = New System.Drawing.Size(59, 24)
         Me.Rad_Pen.TabIndex = 23
         Me.Rad_Pen.TabStop = True
         Me.Rad_Pen.Text = "Pen"
@@ -356,7 +356,7 @@ Partial Class Form1
         Me.Check_Can_Removal.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Check_Can_Removal.Location = New System.Drawing.Point(171, 109)
         Me.Check_Can_Removal.Name = "Check_Can_Removal"
-        Me.Check_Can_Removal.Size = New System.Drawing.Size(132, 19)
+        Me.Check_Can_Removal.Size = New System.Drawing.Size(173, 24)
         Me.Check_Can_Removal.TabIndex = 22
         Me.Check_Can_Removal.Text = "Highlight Mistakes"
         Me.Check_Can_Removal.UseVisualStyleBackColor = True
@@ -367,7 +367,7 @@ Partial Class Form1
         Me.Check_Options.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Check_Options.Location = New System.Drawing.Point(171, 139)
         Me.Check_Options.Name = "Check_Options"
-        Me.Check_Options.Size = New System.Drawing.Size(132, 19)
+        Me.Check_Options.Size = New System.Drawing.Size(174, 24)
         Me.Check_Options.TabIndex = 3
         Me.Check_Options.Text = "Show Exta Options"
         Me.Check_Options.UseVisualStyleBackColor = True
@@ -495,7 +495,7 @@ Partial Class Form1
         Me.lbl_ManualEntryAlert.ForeColor = System.Drawing.Color.Black
         Me.lbl_ManualEntryAlert.Location = New System.Drawing.Point(171, 46)
         Me.lbl_ManualEntryAlert.Name = "lbl_ManualEntryAlert"
-        Me.lbl_ManualEntryAlert.Size = New System.Drawing.Size(117, 17)
+        Me.lbl_ManualEntryAlert.Size = New System.Drawing.Size(157, 22)
         Me.lbl_ManualEntryAlert.TabIndex = 5
         Me.lbl_ManualEntryAlert.Text = "Manual Entry Mode"
         Me.lbl_ManualEntryAlert.Visible = False
@@ -515,7 +515,7 @@ Partial Class Form1
         Me.lbl_Difficulty.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_Difficulty.Location = New System.Drawing.Point(3, 48)
         Me.lbl_Difficulty.Name = "lbl_Difficulty"
-        Me.lbl_Difficulty.Size = New System.Drawing.Size(60, 15)
+        Me.lbl_Difficulty.Size = New System.Drawing.Size(79, 20)
         Me.lbl_Difficulty.TabIndex = 4
         Me.lbl_Difficulty.Text = "Difficulty:"
         '
@@ -527,7 +527,7 @@ Partial Class Form1
         Me.DropDown_Difficulty.Items.AddRange(New Object() {"Easy", "Medium", "Hard", "Expert", "Custom"})
         Me.DropDown_Difficulty.Location = New System.Drawing.Point(67, 42)
         Me.DropDown_Difficulty.Name = "DropDown_Difficulty"
-        Me.DropDown_Difficulty.Size = New System.Drawing.Size(88, 26)
+        Me.DropDown_Difficulty.Size = New System.Drawing.Size(88, 31)
         Me.DropDown_Difficulty.TabIndex = 3
         '
         'SubGroup_Misc
@@ -566,9 +566,10 @@ Partial Class Form1
         Me.Lst_Debug.BackColor = System.Drawing.Color.Silver
         Me.Lst_Debug.Font = New System.Drawing.Font("Roboto", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Lst_Debug.FormattingEnabled = True
+        Me.Lst_Debug.ItemHeight = 15
         Me.Lst_Debug.Location = New System.Drawing.Point(3, 117)
         Me.Lst_Debug.Name = "Lst_Debug"
-        Me.Lst_Debug.Size = New System.Drawing.Size(246, 420)
+        Me.Lst_Debug.Size = New System.Drawing.Size(246, 409)
         Me.Lst_Debug.TabIndex = 3
         '
         'lbl_boardname
@@ -578,7 +579,7 @@ Partial Class Form1
         Me.lbl_boardname.ForeColor = System.Drawing.Color.White
         Me.lbl_boardname.Location = New System.Drawing.Point(263, 4)
         Me.lbl_boardname.Name = "lbl_boardname"
-        Me.lbl_boardname.Size = New System.Drawing.Size(0, 17)
+        Me.lbl_boardname.Size = New System.Drawing.Size(0, 20)
         Me.lbl_boardname.TabIndex = 4
         Me.lbl_boardname.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
@@ -626,7 +627,7 @@ Partial Class Form1
         '
         'Form1
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 14.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 18.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(11, Byte), Integer), CType(CType(12, Byte), Integer), CType(CType(16, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(1344, 597)

@@ -318,7 +318,7 @@ Public Class Form1
             End If
             Game.RefreshHighlight(False)
             Game.UpdateKeypads()
-            CalculatedInvalidate(False)
+            SmartPaint(False)
 
         ElseIf Drop_HighlightSelect.SelectedIndex = 0 Then 'If highlighted candidates selected
             Game.RefreshHighlight(True)
@@ -358,7 +358,7 @@ Public Class Form1
             Game.LinkedCells.Clear()
             Game.UpdateLinkList()
             Game.LinkedCells = Nothing
-            CalculatedInvalidate(True)
+            SmartPaint(True)
         End If
 
 
@@ -471,7 +471,7 @@ Public Class Form1
         If Not IsNothing(Game.LinkedCells) Then
             Game.LinkedCells.Clear()
             Game.LinkedCells = Nothing
-            CalculatedInvalidate(True)
+            SmartPaint(True)
         End If
 
         If sender.SelectedIndex = 0 Then 'Highlighting
@@ -590,80 +590,44 @@ Public Class Form1
     End Sub
 
     'Strategically chooses which cells need to be invalidated so that painting is faster
-    Public Sub CalculatedInvalidate(All As Boolean)
+    Public Sub SmartPaint(All As Boolean)
 
         If All = False Then 'Does a faster version then just going through every cell
 
             Dim PaintList As New List(Of DisplayCell)
             'Make a list of every cell that needs to be invalidated by checking through the list of links
             For Each ele In Game.LinkedCells
-                If ele.Item1.Location.X = ele.Item2.Location.X Then 'If the linked cells have the same x location
-                    If ele.Item1.Location.Y > ele.Item2.Location.Y Then 'Then add all the y cells between them to the list of cells that need to be invaidated.
-                        For i = ele.Item2.Tag.Item1.Location.Y To ele.Item1.Tag.Item1.Location.Y 'IF Y1 > Y2
-                            If PaintList.Contains(Game.Cells(i, ele.Item1.Tag.Item1.Location.X)) = False Then
-                                'If the item is not already in the list
-                                PaintList.Add(Game.Cells(i, ele.Item1.Tag.Item1.Location.X))
-                            End If
-                        Next
-                    Else
-                        For i = ele.Item1.Tag.Item1.Location.Y To ele.Item2.Tag.Item1.Location.Y 'Else Y2 > Y1
-                            If PaintList.Contains(Game.Cells(i, ele.Item1.Tag.Item1.Location.X)) = False Then
-                                'If the item is not already in the list
-                                PaintList.Add(Game.Cells(i, ele.Item1.Tag.Item1.Location.X))
-                            End If
-                        Next
-                    End If
+                'at this point we know that the two points are not in the same column or row.
 
-                ElseIf ele.Item1.Location.Y = ele.Item2.Location.Y Then 'If the linked cells are in the same row
+                Dim x_start, x_end, y_start, y_end As Integer
+                If ele.Item1.Location.X > ele.Item2.Location.X Then 'Create the start and end locations to iderate through
 
-                    If ele.Item1.Location.X > ele.Item2.Location.X Then 'Then add all the x cells between them to the list of cells that need to be invaidated.
-                        For i = ele.Item2.Tag.Item1.Location.X To ele.Item1.Tag.Item1.Location.X 'IF X1 > X2
-                            If PaintList.Contains(Game.Cells(ele.Item1.Tag.Item1.Location.Y, i)) = False Then
-                                'If the item is not already in the list:
-                                PaintList.Add(Game.Cells(ele.Item1.Tag.Item1.Location.Y, i)) 'NB: Cells are refrenced by Cells(y,x)
-                            End If
-                        Next
-                    Else
-                        For i = ele.Item1.Tag.Item1.Location.Y To ele.Item2.Tag.Item1.Location.Y 'Else X2 > X1
-                            If PaintList.Contains(Game.Cells(ele.Item1.Tag.Item1.Location.Y, i)) = False Then
-                                'If the item is not already in the list
-                                PaintList.Add(Game.Cells(ele.Item1.Tag.Item1.Location.Y, i))
-                            End If
-                        Next
-                    End If
-
-                Else 'at this point we know that the two points are not in the same column or row.
-
-                    Dim x_start, x_end, y_start, y_end As Integer
-                    If ele.Item1.Location.X > ele.Item2.Location.X Then 'Create the start and end locations to iderate through
-
-                        x_start = ele.Item2.Tag.Item1.Location.X
-                        x_end = ele.Item1.Tag.Item1.Location.X
-                    Else
-                        x_start = ele.Item1.Tag.Item1.Location.X
-                        x_end = ele.Item2.Tag.Item1.Location.X
-
-                    End If
-
-                    If ele.Item1.Location.Y > ele.Item2.Location.Y Then
-
-                        y_start = ele.Item2.Tag.Item1.Location.Y
-                        y_end = ele.Item1.Tag.Item1.Location.Y
-                    Else
-                        y_start = ele.Item1.Tag.Item1.Location.Y
-                        y_end = ele.Item2.Tag.Item1.Location.Y
-
-                    End If
-
-                    For Y = y_start To y_end
-                        For X = x_start To x_end
-                            If PaintList.Contains(Game.Cells(Y, X)) = False Then 'Add all the items to the list
-                                PaintList.Add(Game.Cells(Y, X))
-                            End If
-                        Next
-                    Next
+                    x_start = ele.Item2.Tag.Item1.Location.X
+                    x_end = ele.Item1.Tag.Item1.Location.X
+                Else
+                    x_start = ele.Item1.Tag.Item1.Location.X
+                    x_end = ele.Item2.Tag.Item1.Location.X
 
                 End If
+
+                If ele.Item1.Location.Y > ele.Item2.Location.Y Then
+
+                    y_start = ele.Item2.Tag.Item1.Location.Y
+                    y_end = ele.Item1.Tag.Item1.Location.Y
+                Else
+                    y_start = ele.Item1.Tag.Item1.Location.Y
+                    y_end = ele.Item2.Tag.Item1.Location.Y
+
+                End If
+
+                For Y = y_start To y_end
+                    For X = x_start To x_end
+                        If PaintList.Contains(Game.Cells(Y, X)) = False Then 'Add all the items to the list
+                            PaintList.Add(Game.Cells(Y, X))
+                        End If
+                    Next
+                Next
+
             Next
 
             For Each ele In PaintList
@@ -706,7 +670,7 @@ Public Class Form1
         If Lst_Links.SelectedIndex <> -1 Then
             Game.LinkedCells.RemoveAt(Lst_Links.SelectedIndex)
         End If
-        CalculatedInvalidate(True)
+        SmartPaint(True)
         Game.UpdateLinkList()
     End Sub
 End Class
