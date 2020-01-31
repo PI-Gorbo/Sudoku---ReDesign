@@ -3,7 +3,7 @@
 Public Class Form1
 
     Dim Game As Sudoku
-    Public LastClicked As CheckBox
+    'Public LastClicked As CheckBox
 
     'Most functions below handle the events called by the controls on the form. 
     Private Sub Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -22,7 +22,7 @@ Public Class Form1
         For Each ele In Game.Keypads
             AddHandler ele.Click, AddressOf Game.KeypadButtonClick
         Next
-        LastClicked = Nothing
+        'LastClicked = Nothing
         Form_BeginningState()
         KeyPreview = True
         DropDown_Medusa.SelectedIndex = 0

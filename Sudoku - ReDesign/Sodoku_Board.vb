@@ -540,89 +540,22 @@ Public Class BoardHandler 'Functions related to the logic side of board handling
     'Finds isolated candidates
     Public Sub FindIsolatedValues(ByRef Board As Board, ByRef Error_Detected As Boolean, ByRef _Continue As Boolean)
 
+        Dim flag As Boolean = False
+
         For Rowcount = 0 To 8
 
             For Num = 1 To 9
-
+                flag = False
                 For Each ele In Board.Board_Rows(Rowcount)
                     If ele.Value = Num Then
-                        GoTo SkipNumLine_1
+                        flag = True
                     End If
                 Next
-
-                Dim tempcount As Integer = 0
-                Dim Tempcell As LogicCell
-
-                For Each ele In Board.Board_Rows(Rowcount)
-
-                    If tempcount > 1 Then
-                        Tempcell = Nothing
-                        Exit For
-                    ElseIf ele.Candidates.Contains(Num) Then
-                        Tempcell = ele
-                        tempcount += 1
-                    End If
-
-                Next
-
-                If tempcount = 1 Then
-                    Tempcell.Candidates.Clear()
-                    Tempcell.Candidates.Add(Num)
-                    _Continue = True
-                End If
-SkipNumLine_1:
-            Next
-        Next
-
-        For colcount = 0 To 8
-
-            For Num = 1 To 9
-
-                For Each ele In Board.Board_Columns(colcount)
-                    If ele.Value = Num Then
-                        GoTo SkipNumLine_2
-                    End If
-                Next
-
-                Dim tempcount As Integer = 0
-                Dim Tempcell As LogicCell
-
-                For Each ele In Board.Board_Columns(colcount)
-
-                    If tempcount > 1 Then
-                        Tempcell = Nothing
-                        Exit For
-                    ElseIf ele.Candidates.Contains(Num) Then
-                        Tempcell = ele
-                        tempcount += 1
-                    End If
-
-                Next
-
-                If tempcount = 1 And IsNothing(Tempcell) = False Then
-                    Tempcell.Candidates.Clear()
-                    Tempcell.Candidates.Add(Num)
-                    _Continue = True
-                End If
-SkipNumLine_2:
-            Next
-        Next
-
-        For BoxRows = 0 To 2
-            For BoxCols = 0 To 2
-
-                For Num = 1 To 9
-
-                    For Each ele In Board.Board_Boxes(BoxRows, BoxCols)
-                        If ele.Value = Num Then
-                            GoTo SkipNumLine_3
-                        End If
-                    Next
-
+                If flag = False Then
                     Dim tempcount As Integer = 0
                     Dim Tempcell As LogicCell
 
-                    For Each ele In Board.Board_Boxes(BoxRows, BoxCols)
+                    For Each ele In Board.Board_Rows(Rowcount)
 
                         If tempcount > 1 Then
                             Tempcell = Nothing
@@ -639,7 +572,78 @@ SkipNumLine_2:
                         Tempcell.Candidates.Add(Num)
                         _Continue = True
                     End If
-SkipNumLine_3:
+                End If
+            Next
+        Next
+
+        flag = False
+        For colcount = 0 To 8
+            For Num = 1 To 9
+                flag = False
+                For Each ele In Board.Board_Columns(colcount)
+                    If ele.Value = Num Then
+                        flag = True
+                    End If
+                Next
+                If flag = False Then
+                    Dim tempcount As Integer = 0
+                    Dim Tempcell As LogicCell
+
+                    For Each ele In Board.Board_Columns(colcount)
+
+                        If tempcount > 1 Then
+                            Tempcell = Nothing
+                            Exit For
+                        ElseIf ele.Candidates.Contains(Num) Then
+                            Tempcell = ele
+                            tempcount += 1
+                        End If
+
+                    Next
+
+                    If tempcount = 1 And IsNothing(Tempcell) = False Then
+                        Tempcell.Candidates.Clear()
+                        Tempcell.Candidates.Add(Num)
+                        _Continue = True
+                    End If
+                End If
+            Next
+        Next
+
+        flag = False
+        For BoxRows = 0 To 2
+            For BoxCols = 0 To 2
+                For Num = 1 To 9
+                    flag = False
+
+                    For Each ele In Board.Board_Boxes(BoxRows, BoxCols)
+                        If ele.Value = Num Then
+                            flag = True
+                        End If
+                    Next
+
+                    If flag = False Then
+                        Dim tempcount As Integer = 0
+                        Dim Tempcell As LogicCell
+
+                        For Each ele In Board.Board_Boxes(BoxRows, BoxCols)
+
+                            If tempcount > 1 Then
+                                Tempcell = Nothing
+                                Exit For
+                            ElseIf ele.Candidates.Contains(Num) Then
+                                Tempcell = ele
+                                tempcount += 1
+                            End If
+
+                        Next
+
+                        If tempcount = 1 Then
+                            Tempcell.Candidates.Clear()
+                            Tempcell.Candidates.Add(Num)
+                            _Continue = True
+                        End If
+                    End If
                 Next
             Next
         Next
@@ -792,18 +796,23 @@ SkipNumLine_3:
             Dim CurrentIndex As Integer = 0
 
             'Finds a no-value cell and works out how many candidates it has.
+            Dim exitbool As Boolean = False
             For Rows = 0 To 8
                 For Cols = 0 To 8
 
                     If OrigBoard.Cells(Rows, Cols).Value = -1 Then
                         SC.X = Cols
                         SC.Y = Rows
-                        GoTo Skip
+                        exitbool = True
                     End If
-
+                    If exitbool = True Then
+                        Exit For
+                    End If
                 Next
+                If exitbool = True Then
+                    Exit For
+                End If
             Next
-Skip:
             If SC.X = -1 Or SC.Y = -1 Then
                 Solved = False
                 _Error = True
@@ -852,11 +861,6 @@ Skip:
             End If
         End If
 
-
-    End Sub
-
-    'TO DO
-    Public Sub DebugCandidates()
 
     End Sub
 

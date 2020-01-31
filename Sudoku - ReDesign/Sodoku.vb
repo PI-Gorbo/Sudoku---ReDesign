@@ -76,7 +76,7 @@
             Medusa2(1).Clear()
         End If
 
-        Form1.LastClicked = Nothing
+        'Form1.LastClicked = Nothing
         Form1.Lst_Debug.Items.Clear()
         RefreshHighlight(True) 'Clear All Highlighting
         CurrentCell = Nothing 'Make the CurrentCell Nothing
@@ -94,7 +94,7 @@
     End Sub
 
     Public Sub InitiateManualEntry()
-        Form1.LastClicked = Nothing
+        'Form1.LastClicked = Nothing
         Form1.Btn_ManualEntry.Text = "Finish"
         BoardHandler.BoardChosen_Short = ""
         BoardHandler.NewGame(True)
@@ -965,9 +965,6 @@ Public Class DisplayCell
     Public Labels_Grid(2, 2) As Label
     Public Labels_Array As List(Of Label)
     Public ValueLabel, BorderLabel As Label
-    Public SelectedLabel As Label
     Public Candidates As List(Of Integer)
     Public HasValueLabel As Boolean
-
-
 End Class
