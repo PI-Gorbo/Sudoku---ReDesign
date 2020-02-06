@@ -7,6 +7,7 @@ Public Class Form1
 
     'Most functions below handle the events called by the controls on the form. 
     Private Sub Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
         Game = New Sudoku
 
         Game.Keypads.Add(KeyPad_1)
@@ -67,7 +68,7 @@ Public Class Form1
     'Next button click / Staged Solve
     Private Sub Btn_Next_Click(sender As Object, e As EventArgs) Handles Btn_StagedSolving.Click
 
-        If Btn_StagedSolving.Text = "Calc Candidates" Then
+        If Btn_StagedSolving.Text = "Find Candidates" Then
             'Stage 1 of solving a board
             Game.UpdateBoardFromDisplay(False)
             Game.BoardHandler.CalculateCandidates(Game.BoardHandler.MainBoard, vbNull, vbNull)
@@ -156,7 +157,7 @@ Public Class Form1
         Check_EnableHighlighting.Checked = False
         SubGroup_Solving.Enabled = True
         SubGroup_Misc.Enabled = True
-        Btn_StagedSolving.Text = "Calc Candidates"
+        Btn_StagedSolving.Text = "Find Candidates"
         Btn_LoadGame.Enabled = True
         Btn_SaveGame.Enabled = True
         Btn_PrelimSolve.Enabled = False
@@ -444,7 +445,10 @@ Public Class Form1
             Check_StrongLink.Checked = False
 
         End If
-
+        If Not IsNothing(Game.CurrentCell) Then
+            Game.CellBoarder(Game.CurrentCell, False)
+            Game.CurrentCell = Nothing
+        End If
     End Sub
 
     Private Sub Drop_HighlightSelect_SelectedIndexChanged(sender As ComboBox, e As EventArgs) Handles Drop_HighlightSelect.SelectedIndexChanged
@@ -592,6 +596,10 @@ Public Class Form1
     'Strategically chooses which cells need to be invalidated so that painting is faster
     Public Sub SmartPaint(All As Boolean)
 
+        If IsNothing(Game.LinkedCells) Then
+            Exit Sub
+        End If
+
         If All = False Then 'Does a faster version then just going through every cell
 
             Dim PaintList As New List(Of DisplayCell)
@@ -673,4 +681,6 @@ Public Class Form1
         SmartPaint(True)
         Game.UpdateLinkList()
     End Sub
+
+
 End Class

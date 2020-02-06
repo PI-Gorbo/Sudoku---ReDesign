@@ -169,75 +169,84 @@ Public Class BoardHandler 'Functions related to the logic side of board handling
 
             Dim Line As String
             Dim CurrentIndex As Integer
+            Try
 
-            For Rows = 0 To 8
-                Line = reader.ReadLine
-                CurrentIndex = 0
-                For Cols = 0 To 8
 
-                    If IsNothing(MainBoard.Cells(Rows, Cols)) Then
-                        MainBoard.Cells(Rows, Cols) = New LogicCell
-                    Else
-                        With MainBoard.Cells(Rows, Cols)
-                            .HasValueFromImport = False
-                            .Value = -1
-                            .Candidates.Clear()
-                        End With
-                    End If
+                For Rows = 0 To 8
+                    Line = reader.ReadLine
+                    CurrentIndex = 0
+                    For Cols = 0 To 8
 
-                    'Clues
-                    If Line(CurrentIndex) = "[" Then
-                        If Line(CurrentIndex + 1) = "0" Then
-                            For i = 1 To 9
-                                MainBoard.Cells(Rows, Cols).Candidates.Add(i)
-                            Next
+                        If IsNothing(MainBoard.Cells(Rows, Cols)) Then
+                            MainBoard.Cells(Rows, Cols) = New LogicCell
                         Else
-                            MainBoard.Cells(Rows, Cols).HasValueFromImport = True
-                            MainBoard.Cells(Rows, Cols).Value = Integer.Parse(Line(CurrentIndex + 1))
+                            With MainBoard.Cells(Rows, Cols)
+                                .HasValueFromImport = False
+                                .Value = -1
+                                .Candidates.Clear()
+                            End With
                         End If
 
-
-                        If Line.Length <= CurrentIndex + 3 Then
-                            Exit For
-                        Else
-                            CurrentIndex += 3
-                            Continue For
-                        End If
-                    End If
-
-                    'Solutions
-                    If Line(CurrentIndex) = "(" Then
-                        MainBoard.Cells(Rows, Cols).Value = Integer.Parse(Line(CurrentIndex + 1))
-
-                        If Line.Length <= CurrentIndex + 3 Then
-                            Exit For
-                        Else
-                            CurrentIndex += 3
-                            Continue For
-                        End If
-                    End If
-
-                    'Candidates
-                    If Line(CurrentIndex) = "{" Then
-                        For i = CurrentIndex + 1 To FindIndexOfNext(Line, "}", CurrentIndex) - 1
-                            If IsNumeric(Line(i)) Then
-                                MainBoard.Cells(Rows, Cols).Candidates.Add(Integer.Parse(Line(i)))
+                        'Clues
+                        If Line(CurrentIndex) = "[" Then
+                            If Line(CurrentIndex + 1) = "0" Then
+                                For i = 1 To 9
+                                    MainBoard.Cells(Rows, Cols).Candidates.Add(i)
+                                Next
+                            Else
+                                MainBoard.Cells(Rows, Cols).HasValueFromImport = True
+                                MainBoard.Cells(Rows, Cols).Value = Integer.Parse(Line(CurrentIndex + 1))
                             End If
-                        Next
 
-                        If Line.Length <= CurrentIndex = FindIndexOfNext(Line, "}", CurrentIndex) + 1 Then
-                            Exit For
-                        Else
-                            CurrentIndex = FindIndexOfNext(Line, "}", CurrentIndex) + 1
-                            Continue For
+
+                            If Line.Length <= CurrentIndex + 3 Then
+                                Exit For
+                            Else
+                                CurrentIndex += 3
+                                Continue For
+                            End If
                         End If
-                    End If
 
-                    _Error = True
-                    MsgBox("Error in Loading Board. If the board was written manually, then make sure the formatting is correct.")
-                    Exit Sub
+                        'Solutions
+                        If Line(CurrentIndex) = "(" Then
+                            MainBoard.Cells(Rows, Cols).Value = Integer.Parse(Line(CurrentIndex + 1))
+
+                            If Line.Length <= CurrentIndex + 3 Then
+                                Exit For
+                            Else
+                                CurrentIndex += 3
+                                Continue For
+                            End If
+                        End If
+
+                        'Candidates
+                        If Line(CurrentIndex) = "{" Then
+                            For i = CurrentIndex + 1 To FindIndexOfNext(Line, "}", CurrentIndex) - 1
+                                If IsNumeric(Line(i)) Then
+                                    MainBoard.Cells(Rows, Cols).Candidates.Add(Integer.Parse(Line(i)))
+                                End If
+                            Next
+
+                            If Line.Length <= CurrentIndex = FindIndexOfNext(Line, "}", CurrentIndex) + 1 Then
+                                Exit For
+                            Else
+                                CurrentIndex = FindIndexOfNext(Line, "}", CurrentIndex) + 1
+                                Continue For
+                            End If
+                        End If
+
+                        _Error = True
+                        MsgBox("Error in Loading Board. If the board was written manually, then make sure the formatting is correct.")
+                        Exit Sub
+                    Next
                 Next
-            Next
+
+            Catch ex As Exception
+
+                MsgBox("Error with loading board. Please select another.")
+                reader.Close()
+                Exit Sub
+            End Try
 
             Dim Solved, _TError As Boolean
             Solved = False
@@ -261,73 +270,82 @@ Public Class BoardHandler 'Functions related to the logic side of board handling
 
         Using reader As New StreamReader(Filepath)
 
-            Dim Line As String
-            Dim CurrentIndex As Integer
+            Try
 
-            For Rows = 0 To 8
-                Line = reader.ReadLine
-                CurrentIndex = 0
-                For Cols = 0 To 8
 
-                    If IsNothing(MainBoard.Cells(Rows, Cols)) Then
-                        MainBoard.Cells(Rows, Cols) = New LogicCell
-                    Else
-                        With MainBoard.Cells(Rows, Cols)
-                            .HasValueFromImport = False
-                            .Value = -1
-                            .Candidates.Clear()
-                        End With
-                    End If
+                Dim Line As String
+                Dim CurrentIndex As Integer
 
-                    'Clues
-                    If Line(CurrentIndex) = "[" Then
-                        If Line(CurrentIndex + 1) = "0" Then
-                            For i = 1 To 9
-                                MainBoard.Cells(Rows, Cols).Candidates.Add(i)
-                            Next
+                For Rows = 0 To 8
+                    Line = reader.ReadLine
+                    CurrentIndex = 0
+                    For Cols = 0 To 8
+
+                        If IsNothing(MainBoard.Cells(Rows, Cols)) Then
+                            MainBoard.Cells(Rows, Cols) = New LogicCell
                         Else
-                            MainBoard.Cells(Rows, Cols).HasValueFromImport = True
-                            MainBoard.Cells(Rows, Cols).Value = Integer.Parse(Line(CurrentIndex + 1))
+                            With MainBoard.Cells(Rows, Cols)
+                                .HasValueFromImport = False
+                                .Value = -1
+                                .Candidates.Clear()
+                            End With
                         End If
 
-
-                        If Line.Length <= CurrentIndex + 3 Then
-                            Exit For
-                        Else
-                            CurrentIndex += 3
-                            Continue For
-                        End If
-                    End If
-
-                    'Solutions
-                    If Line(CurrentIndex) = "(" Then
-                        MainBoard.Cells(Rows, Cols).Value = Integer.Parse(Line(CurrentIndex + 1))
-
-                        If Line.Length <= CurrentIndex + 3 Then
-                            Exit For
-                        Else
-                            CurrentIndex += 3
-                            Continue For
-                        End If
-                    End If
-
-                    'Candidates
-                    If Line(CurrentIndex) = "{" Then
-                        For i = CurrentIndex + 1 To FindIndexOfNext(Line, "}", CurrentIndex) - 1
-                            If IsNumeric(Line(i)) Then
-                                MainBoard.Cells(Rows, Cols).Candidates.Add(Integer.Parse(Line(i)))
+                        'Clues
+                        If Line(CurrentIndex) = "[" Then
+                            If Line(CurrentIndex + 1) = "0" Then
+                                For i = 1 To 9
+                                    MainBoard.Cells(Rows, Cols).Candidates.Add(i)
+                                Next
+                            Else
+                                MainBoard.Cells(Rows, Cols).HasValueFromImport = True
+                                MainBoard.Cells(Rows, Cols).Value = Integer.Parse(Line(CurrentIndex + 1))
                             End If
-                        Next
 
-                        If Line.Length <= CurrentIndex = FindIndexOfNext(Line, "}", CurrentIndex) + 1 Then
-                            Exit For
-                        Else
-                            CurrentIndex = FindIndexOfNext(Line, "}", CurrentIndex) + 1
-                            Continue For
+
+                            If Line.Length <= CurrentIndex + 3 Then
+                                Exit For
+                            Else
+                                CurrentIndex += 3
+                                Continue For
+                            End If
                         End If
-                    End If
+
+                        'Solutions
+                        If Line(CurrentIndex) = "(" Then
+                            MainBoard.Cells(Rows, Cols).Value = Integer.Parse(Line(CurrentIndex + 1))
+
+                            If Line.Length <= CurrentIndex + 3 Then
+                                Exit For
+                            Else
+                                CurrentIndex += 3
+                                Continue For
+                            End If
+                        End If
+
+                        'Candidates
+                        If Line(CurrentIndex) = "{" Then
+                            For i = CurrentIndex + 1 To FindIndexOfNext(Line, "}", CurrentIndex) - 1
+                                If IsNumeric(Line(i)) Then
+                                    MainBoard.Cells(Rows, Cols).Candidates.Add(Integer.Parse(Line(i)))
+                                End If
+                            Next
+
+                            If Line.Length <= CurrentIndex = FindIndexOfNext(Line, "}", CurrentIndex) + 1 Then
+                                Exit For
+                            Else
+                                CurrentIndex = FindIndexOfNext(Line, "}", CurrentIndex) + 1
+                                Continue For
+                            End If
+                        End If
+                    Next
                 Next
-            Next
+
+            Catch ex As Exception
+                MsgBox("Cannot reset board, make sure last board loaded is valid")
+                reader.Close()
+                Exit Sub
+            End Try
         End Using
 
     End Sub

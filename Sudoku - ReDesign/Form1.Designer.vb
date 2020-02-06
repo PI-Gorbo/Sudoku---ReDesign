@@ -356,9 +356,9 @@ Partial Class Form1
         Me.Check_Can_Removal.Font = New System.Drawing.Font("Roboto", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Check_Can_Removal.Location = New System.Drawing.Point(171, 109)
         Me.Check_Can_Removal.Name = "Check_Can_Removal"
-        Me.Check_Can_Removal.Size = New System.Drawing.Size(173, 24)
+        Me.Check_Can_Removal.Size = New System.Drawing.Size(160, 24)
         Me.Check_Can_Removal.TabIndex = 22
-        Me.Check_Can_Removal.Text = "Highlight Mistakes"
+        Me.Check_Can_Removal.Text = "Display Mistakes"
         Me.Check_Can_Removal.UseVisualStyleBackColor = True
         '
         'Check_Options
@@ -630,7 +630,7 @@ Partial Class Form1
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 18.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(11, Byte), Integer), CType(CType(12, Byte), Integer), CType(CType(16, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1344, 597)
+        Me.ClientSize = New System.Drawing.Size(1196, 595)
         Me.Controls.Add(Me.Group_ExtraOptions)
         Me.Controls.Add(Me.lbl_boardname)
         Me.Controls.Add(Me.Group_Controls)

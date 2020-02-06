@@ -72,6 +72,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Login_Form.Designer.vb">
+      <DependentUpon>Login_Form.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Login_Form.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Sodoku.vb" />
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
@@ -101,6 +107,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login_Form.resx">
+      <DependentUpon>Login_Form.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -159,6 +168,7 @@
     <Content Include="bin\Debug\Boards\Medium\Medium %283%29.txt" />
     <Content Include="bin\Debug\Boards\Medium\Medium %284%29.txt" />
     <Content Include="bin\Debug\Boards\Medium\Medium %286%29.txt" />
+    <Content Include="bin\Debug\Users.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

@@ -32,7 +32,7 @@ Namespace My
         
         <Global.System.Diagnostics.DebuggerStepThroughAttribute()>  _
         Protected Overrides Sub OnCreateMainForm()
-            Me.MainForm = Global.Sudoku___ReDesign.Form1
+            Me.MainForm = Global.Sudoku___ReDesign.Login_Form
         End Sub
     End Class
 End Namespace
