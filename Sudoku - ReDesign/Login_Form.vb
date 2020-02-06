@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 
+
 Public Class Login_Form
 
 
@@ -23,7 +24,7 @@ Public Class Login_Form
                             Form1.Activate()
                             Form1.Show()
                             MsgBox("Login Successful!")
-                            Me.Hide()
+                            Me.Close()
                             Exit Sub
                         End If
                     End If
@@ -50,8 +51,10 @@ Public Class Login_Form
             writer.WriteLine(pass)
             Form1.Activate()
             Form1.Show()
-            Me.Hide()
+            Me.Close()
         End Using
 
     End Sub
+
+
 End Class

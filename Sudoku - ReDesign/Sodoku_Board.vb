@@ -891,7 +891,8 @@ Public Class Board
     Public Board_Columns(8) As List(Of LogicCell)
     Public Board_Boxes(2, 2) As List(Of LogicCell)
 
-    Public Sub New()
+    Public Sub New() 'Constructor for a blank board
+        'Instanciates the logic cells and adds the logic cells to the correct boxes, rows and columns.
 
         Dim BoxLocRow As Integer = -1
         Dim BoxLocCol As Integer = -1
@@ -904,15 +905,16 @@ Public Class Board
                 If IsNothing(Board_Rows(_Rows)) Then
                     Board_Rows(_Rows) = New List(Of LogicCell)
                 End If
-                Board_Rows(_Rows).Add(Cells(_Rows, _Cols))
-                Cells(_Rows, _Cols).Row = Board_Rows(_Rows)
+                Board_Rows(_Rows).Add(Cells(_Rows, _Cols)) 'Addins the cells to the global row array
+                Cells(_Rows, _Cols).Row = Board_Rows(_Rows) 'Adding a local refrence to the cell to each other cell in the row.
 
                 If IsNothing(Board_Columns(_Cols)) Then
                     Board_Columns(_Cols) = New List(Of LogicCell)
                 End If
-                Board_Columns(_Cols).Add(Cells(_Rows, _Cols))
-                Cells(_Rows, _Cols).Column = Board_Columns(_Cols)
+                Board_Columns(_Cols).Add(Cells(_Rows, _Cols)) 'Adding cells to the global column array
+                Cells(_Rows, _Cols).Column = Board_Columns(_Cols) 'Adding a local refrence to the cell to each other cell in the column
 
+                'Code to work out which box the cell is in:
                 If _Rows <= 2 Then
 
                     BoxLocRow = 0
@@ -944,8 +946,8 @@ Public Class Board
                 If IsNothing(Board_Boxes(BoxLocRow, BoxLocCol)) Then
                     Board_Boxes(BoxLocRow, BoxLocCol) = New List(Of LogicCell)
                 End If
-                Board_Boxes(BoxLocRow, BoxLocCol).Add(Cells(_Rows, _Cols))
-                Cells(_Rows, _Cols).Box = Board_Boxes(BoxLocRow, BoxLocCol)
+                Board_Boxes(BoxLocRow, BoxLocCol).Add(Cells(_Rows, _Cols)) 'Adding cells to the global box(,) array
+                Cells(_Rows, _Cols).Box = Board_Boxes(BoxLocRow, BoxLocCol) 'Adding a local refrence to the cell to each other cell's box array
 
                 Cells(_Rows, _Cols).CellLocation = New Point(_Cols, _Rows)
 
@@ -954,6 +956,7 @@ Public Class Board
 
     End Sub
 
+    'Constructor that takes a board as an input, then makes a deep copy of that board. 
     Public Sub New(OrigBoard As Board)
 
         Dim BoxLocRow As Integer = -1
@@ -962,6 +965,7 @@ Public Class Board
         For _Rows = 0 To 8
             For _Cols = 0 To 8
 
+                'Copy the values from the original board
                 Cells(_Rows, _Cols) = New LogicCell
                 Cells(_Rows, _Cols).Value = OrigBoard.Cells(_Rows, _Cols).Value
                 Cells(_Rows, _Cols).HasValueFromImport = OrigBoard.Cells(_Rows, _Cols).HasValueFromImport
@@ -1032,6 +1036,7 @@ Public Class Board
 
     End Sub
 
+    'Clears every logic cell as part of the board and turns them back to the default values
     Public Sub Clear()
         For Rows = 0 To 8
             For Cols = 0 To 8
@@ -1042,6 +1047,7 @@ Public Class Board
         Next
     End Sub
 
+    'Makes a deep copy of an input board if the board is already instanciated. 
     Public Sub Clone(OrigBoard As Board)
         For Rows = 0 To 8
             For Cols = 0 To 8
@@ -1066,7 +1072,7 @@ Public Class LogicCell
     Public Box As List(Of LogicCell)
     Public CellLocation As Point
 
-    Public Sub New()
+    Public Sub New() 'Constructor for creating a new logic cell.
         Value = -1
         HasValueFromImport = False
 

@@ -948,6 +948,7 @@
         Dim CellLocation1 As String
         Dim CellLocation2 As String
 
+        SortList(LinkedCells)
         Form1.Lst_Links.Items.Clear()
         For Each ele In LinkedCells
             CellLocation1 = "(" + CStr(DirectCast(ele.Item1.Tag.Item1, DisplayCell).Location.X + 1) + "," + CStr(DirectCast(ele.Item1.Tag.Item1, DisplayCell).Location.Y + 1) + ")(" + CStr(ele.Item1.Tag.Item2) + ")"
@@ -956,6 +957,33 @@
 
         Next
     End Sub
+
+    Public Sub SortList(ByRef list As List(Of Tuple(Of Label, Label, Boolean, Boolean)))
+
+        Dim arr = list.ToArray()
+        Dim swapped = True
+        Dim end_index = arr.Length - 1
+
+        While swapped And end_index >= 1
+            swapped = False
+
+            For i = 0 To end_index - 1
+
+                If arr(i).Item1.Tag.Item1.Location.X > arr(i + 1).Item1.Tag.Item1.Location.X Then
+                    Dim temp = arr(i)
+                    arr(i) = arr(i + 1)
+                    arr(i + 1) = temp
+                    swapped = True
+                End If
+            Next
+            end_index -= 1
+
+        End While
+
+        list.Clear()
+        list.AddRange(arr)
+    End Sub
+
 
 End Class
 
