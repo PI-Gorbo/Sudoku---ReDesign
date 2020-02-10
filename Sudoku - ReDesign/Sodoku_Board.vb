@@ -244,6 +244,8 @@ Public Class BoardHandler 'Functions related to the logic side of board handling
             Catch ex As Exception
 
                 MsgBox("Error with loading board. Please select another.")
+                BoardChosen_Long = ""
+                BoardChosen_Short = ""
                 reader.Close()
                 Exit Sub
             End Try

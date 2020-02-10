@@ -292,7 +292,13 @@ Public Class Form1
         If _err = False And cancel = False Then
 
             Game.PrimeBoard(Game.BoardHandler.MainBoard)
-            Form_NormalPlayState()
+            If Game.BoardHandler.BoardChosen_Long <> "" Then
+
+                Form_NormalPlayState()
+            Else
+                Game.ClearDisplay()
+                Form_BeginningState()
+            End If
 
         End If
 
