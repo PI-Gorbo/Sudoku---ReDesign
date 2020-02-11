@@ -78,7 +78,7 @@
 
         'Form1.LastClicked = Nothing
         Form1.Lst_Debug.Items.Clear()
-        RefreshHighlight(True) 'Clear All Highlighting
+        RefreshHighlight(True, False) 'Clear All Highlighting
         CurrentCell = Nothing 'Make the CurrentCell Nothing
         BoardHandler.NewGame(False) 'Create a New Game with the selected difficulty
         PrimeBoard(BoardHandler.MainBoard) 'Load that new board
@@ -424,13 +424,17 @@
             HighlightedCandidates.Add(ClickedVal)
         End If
 
-        RefreshHighlight(False) 'Redo the highlighting with the updated list
+        RefreshHighlight(False, False) 'Redo the highlighting with the updated list
         UpdateKeypads()
 
     End Sub
 
     'handles the highlighting for medusas.
     Public Sub HandleMedusa(ClickedVal As Integer)
+
+        If IsNothing(CurrentCell) Then
+            Exit Sub
+        End If
 
         'If somehow there is no selected index, then set it to 1
         If Form1.DropDown_Medusa.SelectedIndex = -1 Then
@@ -652,12 +656,14 @@
         If Form1.Check_EnableHighlighting.Checked = False Then
             Exit Sub
 
-        ElseIf Form1.DropDown_Medusa.SelectedIndex = 0 And Form1.Check_Overlay1.Checked = False And Form1.Check_Overlay2.Checked = False Then 'If in state 0, then display the cells that have been previosuly shown in state 0
-            RefreshHighlight(True)
+        ElseIf Form1.DropDown_Medusa.SelectedIndex = 0 Then 'If in state 0, then display the cells that have been previosuly shown in state 0
+            RefreshHighlight(False, True)
             If IsNothing(Medusa0(0)) = False Then
                 For Each ele In Medusa0(0)
                     If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
-                        ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(10)
+                        If ele.Item1.Candidates.Contains(ele.Item2) Then
+                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(10)
+                        End If
                     End If
                 Next
             End If
@@ -665,18 +671,22 @@
             If IsNothing(Medusa0(1)) = False Then
                 For Each ele In Medusa0(1)
                     If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
-                        ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(11)
+                        If ele.Item1.Candidates.Contains(ele.Item2) Then
+                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(11)
+                        End If
                     End If
                 Next
             End If
 
         ElseIf Form1.DropDown_Medusa.SelectedIndex = 1 Then 'if in state 1, then display all cells that are highlighted in State 1
-            RefreshHighlight(True)
+            RefreshHighlight(False, True)
 
             If IsNothing(Medusa1(0)) = False Then
                 For Each ele In Medusa1(0)
                     If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
-                        ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(12)
+                        If ele.Item1.Candidates.Contains(ele.Item2) Then
+                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(12)
+                        End If
                     End If
                 Next
             End If
@@ -684,18 +694,22 @@
             If IsNothing(Medusa1(1)) = False Then
                 For Each ele In Medusa1(1)
                     If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
-                        ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(13)
+                        If ele.Item1.Candidates.Contains(ele.Item2) Then
+                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(13)
+                        End If
                     End If
                 Next
             End If
 
         Else Form1.DropDown_Medusa.SelectedIndex = 2  'if in state 2, then display all cells that are highlighted in State 2
-            RefreshHighlight(True)
+            RefreshHighlight(False, True)
 
             If IsNothing(Medusa2(0)) = False Then
                 For Each ele In Medusa2(0)
                     If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
-                        ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(14)
+                        If ele.Item1.Candidates.Contains(ele.Item2) Then
+                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(14)
+                        End If
                     End If
                 Next
             End If
@@ -704,7 +718,9 @@
 
                 For Each ele In Medusa2(1)
                     If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
-                        ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(15)
+                        If ele.Item1.Candidates.Contains(ele.Item2) Then
+                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(15)
+                        End If
                     End If
                 Next
             End If
@@ -718,7 +734,9 @@
                 If IsNothing(Medusa0(0)) = False Then
                     For Each ele In Medusa0(0)
                         If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
-                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(10)
+                            If ele.Item1.Candidates.Contains(ele.Item2) Then
+                                ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(10)
+                            End If
                         End If
                     Next
                 End If
@@ -726,7 +744,9 @@
                 If IsNothing(Medusa0(1)) = False Then
                     For Each ele In Medusa0(1)
                         If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
-                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(11)
+                            If ele.Item1.Candidates.Contains(ele.Item2) Then
+                                ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(11)
+                            End If
                         End If
                     Next
                 End If
@@ -735,7 +755,9 @@
                 If IsNothing(Medusa1(0)) = False Then
                     For Each ele In Medusa1(0)
                         If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
-                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(12)
+                            If ele.Item1.Candidates.Contains(ele.Item2) Then
+                                ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(12)
+                            End If
                         End If
                     Next
                 End If
@@ -743,7 +765,9 @@
                 If IsNothing(Medusa1(1)) = False Then
                     For Each ele In Medusa1(1)
                         If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
-                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(13)
+                            If ele.Item1.Candidates.Contains(ele.Item2) Then
+                                ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(13)
+                            End If
                         End If
                     Next
                 End If
@@ -757,7 +781,9 @@
                 If IsNothing(Medusa2(0)) = False Then
                     For Each ele In Medusa2(0)
                         If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
-                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(14)
+                            If ele.Item1.Candidates.Contains(ele.Item2) Then
+                                ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(14)
+                            End If
                         End If
                     Next
                 End If
@@ -766,7 +792,9 @@
 
                     For Each ele In Medusa2(1)
                         If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
-                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(15)
+                            If ele.Item1.Candidates.Contains(ele.Item2) Then
+                                ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(15)
+                            End If
                         End If
                     Next
                 End If
@@ -784,16 +812,14 @@
                 If IsNothing(Medusa1(1)) = False Then
                     For Each ele In Medusa1(1)
                         If ele.Item1.HasValueLabel = False Then 'If the Cell does not have a value, 
-                            ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(13)
+                            If ele.Item1.Candidates.Contains(ele.Item2) Then
+                                ele.Item1.Labels_Array(ele.Item2 - 1).BackColor = Colours(13)
+                            End If
                         End If
                     Next
                 End If
 
             End If
-
-        End If
-
-        If Form1.Check_Overlay2.Checked = True Then
 
         End If
 
@@ -804,7 +830,7 @@
     Public Sub UpdateKeypads()
 
         If Form1.Drop_HighlightSelect.SelectedIndex = 0 And Form1.Check_EnableHighlighting.Checked = True Then
-            'Do Something
+            'If highlight candidates is selected and highlighting is enabled. 
 
             For Each ele In Keypads
                 ele.BackColor = Color.GhostWhite
@@ -815,10 +841,15 @@
 
             Exit Sub
         ElseIf Form1.Drop_HighlightSelect.SelectedIndex = 1 And Form1.Check_EnableHighlighting.Checked = True = True Then
-            'Do Something
+            'If medusa is selected and highlighting is enabled.
 
-            If Not IsNothing(CurrentCell) Then
+            For Each ele In Keypads 'Reset the colour of the keypads.
+                ele.BackColor = Color.GhostWhite
+            Next
+
+            If Not IsNothing(CurrentCell) Then 'Change the keypads to reflect the colours of the candidates that are highlighted.
                 Dim count = 1
+
                 For Each ele In CurrentCell.Labels_Array
                     Keypads(count - 1).BackColor = ele.BackColor
                     count += 1
@@ -827,7 +858,7 @@
             End If
 
             Exit Sub
-        Else
+        Else 'Linking
 
             For Each ele In Keypads
                 ele.BackColor = Color.GhostWhite
@@ -882,8 +913,9 @@
 
     End Sub
 
-    'Iderates through each cell and highlights which cells needs to be highlighted
-    Public Sub RefreshHighlight(ClearHighlighting As Boolean)
+    'NB: Only for highlighting candidates option.
+    'Iderates through each cell and highlights which cells needs to be highlighted according to which state the board is in
+    Public Sub RefreshHighlight(ClearHighlighting As Boolean, HideCandidateHighlighting As Boolean)
 
         If ClearHighlighting = True Then
             HighlightedCandidates.Clear()
@@ -897,7 +929,7 @@
                 count = 1
                 For Each ele In Cells(Rows, Cols).Labels_Array
                     ele.BackColor = Color.GhostWhite
-                    If HighlightedCandidates.Contains(count) And Cells(Rows, Cols).Candidates.Contains(count) Then
+                    If HighlightedCandidates.Contains(count) And Cells(Rows, Cols).Candidates.Contains(count) And HideCandidateHighlighting = False Then
                         ele.BackColor = Colours(count)
                     End If
                     count += 1
@@ -958,6 +990,7 @@
         Next
     End Sub
 
+    'Sorts the list of links by the start locations's X co-ordinate
     Public Sub SortList(ByRef list As List(Of Tuple(Of Label, Label, Boolean, Boolean)))
 
         Dim arr = list.ToArray()
@@ -984,6 +1017,35 @@
         list.AddRange(arr)
     End Sub
 
+    'Enables or Disables all items in the list of links
+    Public Sub ToggleVisibilityOfLinks(Visible As Boolean)
+
+        If IsNothing(LinkedCells) Then
+            Exit Sub
+        End If
+
+        For i = 0 To LinkedCells.Count - 1
+            If Visible = False Then
+                LinkedCells(i) = Tuple.Create(Of Label, Label, Boolean, Boolean)(LinkedCells(i).Item1, LinkedCells(i).Item2, LinkedCells(i).Item3, False)
+            Else
+                LinkedCells(i) = Tuple.Create(Of Label, Label, Boolean, Boolean)(LinkedCells(i).Item1, LinkedCells(i).Item2, LinkedCells(i).Item3, True)
+            End If
+
+        Next
+
+        Dim CellLocation1 As String
+        Dim CellLocation2 As String
+
+        SortList(LinkedCells)
+        Form1.Lst_Links.Items.Clear()
+        For Each ele In LinkedCells
+            CellLocation1 = "(" + CStr(DirectCast(ele.Item1.Tag.Item1, DisplayCell).Location.X + 1) + "," + CStr(DirectCast(ele.Item1.Tag.Item1, DisplayCell).Location.Y + 1) + ")(" + CStr(ele.Item4) + ")"
+            CellLocation2 = "(" + CStr(DirectCast(ele.Item2.Tag.Item1, DisplayCell).Location.X + 1) + ", " + CStr(DirectCast(ele.Item2.Tag.Item1, DisplayCell).Location.Y + 1) + ")(" + CStr(ele.Item4) + ")"
+            Form1.Lst_Debug.Items.Add(CellLocation1 + " - " + CellLocation2)
+
+        Next
+
+    End Sub
 
 End Class
 

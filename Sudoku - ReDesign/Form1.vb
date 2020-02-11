@@ -86,7 +86,11 @@ Public Class Form1
 
         End If
         Game.UpdateKeypads()
-        Game.RefreshHighlight(False)
+        If Not IsNothing(Game.LinkedCells) Then
+            Game.LinkedCells.Clear()
+            SmartPaint(True)
+        End If
+        Game.RefreshHighlight(False, False)
 
     End Sub
 
@@ -317,20 +321,17 @@ Public Class Form1
         If Check_EnableHighlighting.Checked = False Then 'If highlighting is not selected then just clear the board without getting rid of info
 
             If Not IsNothing(Game.LinkedCells) Then
-                Dim x As New List(Of Tuple(Of Label, Label, Boolean, Boolean))
-                For Each ele In Game.LinkedCells
-                    x.Add(Tuple.Create(ele.Item1, ele.Item2, ele.Item3, False))
-                Next
-                Game.LinkedCells = x
+                Game.ToggleVisibilityOfLinks(False)
             End If
-            Game.RefreshHighlight(False)
+            Game.RefreshHighlight(False, True)
             Game.UpdateKeypads()
-            SmartPaint(False)
+            SmartPaint(True)
 
         ElseIf Drop_HighlightSelect.SelectedIndex = 0 Then 'If highlighted candidates selected
-            Game.RefreshHighlight(True)
+            Game.RefreshHighlight(True, False)
             Game.UpdateKeypads()
         ElseIf Drop_HighlightSelect.SelectedIndex = 1 Then 'If medusa selected
+
 
             If DropDown_Medusa.SelectedIndex = 0 Then
                 If IsNothing(Game.Medusa0(0)) = False Then
@@ -339,7 +340,7 @@ Public Class Form1
                 If IsNothing(Game.Medusa0(1)) = False Then
                     Game.Medusa0(1).Clear()
                 End If
-                Game.RefreshHighlight(False)
+
 
             ElseIf DropDown_Medusa.SelectedIndex = 1 Then
                 If IsNothing(Game.Medusa1(0)) = False Then
@@ -348,7 +349,6 @@ Public Class Form1
                 If IsNothing(Game.Medusa1(1)) = False Then
                     Game.Medusa1(1).Clear()
                 End If
-                Game.RefreshHighlight(False)
 
             Else
                 If IsNothing(Game.Medusa2(0)) = False Then
@@ -357,16 +357,19 @@ Public Class Form1
                 If IsNothing(Game.Medusa2(1)) = False Then
                     Game.Medusa2(1).Clear()
                 End If
-                Game.RefreshHighlight(False)
 
             End If
 
+            Game.RefreshHighlight(False, True)
+
         ElseIf Drop_HighlightSelect.SelectedIndex = 2 Then 'If Linking is selected
-            Game.LinkedCells.Clear()
+            If Not IsNothing(Game.LinkedCells) Then
+                Game.LinkedCells.Clear()
+            End If
             Game.UpdateLinkList()
-            Game.LinkedCells = Nothing
-            SmartPaint(True)
-        End If
+                Game.LinkedCells = Nothing
+                SmartPaint(True)
+            End If
 
 
 
@@ -424,17 +427,17 @@ Public Class Form1
                 DropDown_Medusa.Enabled = True
                 Rad_MedusaC1.Enabled = True
                 Rad_MedusaC1.Enabled = True
-            ElseIf Drop_HighlightSelect.SelectedIndex = 3 Then
+                Game.MedusaChanged()
+                Game.UpdateKeypads()
+
+            ElseIf Drop_HighlightSelect.SelectedIndex = 0 Then
+                Game.RefreshHighlight(False, False)
+                Game.UpdateKeypads()
+            ElseIf Drop_HighlightSelect.SelectedIndex = 2 Then
 
                 If Not IsNothing(Game.LinkedCells) Then
-                    If Game.LinkedCells(0).Item4 = False Then
-                        Dim x As New List(Of Tuple(Of Label, Label, Boolean, Boolean))
-                        For Each ele In Game.LinkedCells
-                            x.Add(Tuple.Create(ele.Item1, ele.Item2, ele.Item3, True))
-                        Next
-                        Game.LinkedCells = x
-
-                    End If
+                    Game.ToggleVisibilityOfLinks(True)
+                    SmartPaint(False)
                 End If
             End If
         Else
@@ -449,6 +452,10 @@ Public Class Form1
             Check_StrongLink.Enabled = False
             Check_StrongLink.Visible = False
             Check_StrongLink.Checked = False
+            If Not IsNothing(Game.LinkedCells) Then
+                Game.ToggleVisibilityOfLinks(False)
+                SmartPaint(False)
+            End If
 
         End If
         If Not IsNothing(Game.CurrentCell) Then
@@ -478,11 +485,6 @@ Public Class Form1
         Check_StrongLink.Visible = False
         Check_StrongLink.Checked = True
 
-        If Not IsNothing(Game.LinkedCells) Then
-            Game.LinkedCells.Clear()
-            Game.LinkedCells = Nothing
-            SmartPaint(True)
-        End If
 
         If sender.SelectedIndex = 0 Then 'Highlighting
 
@@ -491,6 +493,10 @@ Public Class Form1
                 Game.CurrentCell.ValueLabel.BackColor = Color.GhostWhite
                 Game.CurrentCell = Nothing
             End If
+            If Not IsNothing(Game.LinkedCells) Then
+                Game.ToggleVisibilityOfLinks(False)
+            End If
+            Game.RefreshHighlight(False, False)
 
         ElseIf sender.SelectedIndex = 1 Then 'Medusa
 
@@ -505,6 +511,10 @@ Public Class Form1
             Check_Overlay1.Visible = True
             Check_Overlay2.Enabled = True
             Check_Overlay2.Visible = True
+            Game.RefreshHighlight(False, True)
+            If Not IsNothing(Game.LinkedCells) Then
+                Game.ToggleVisibilityOfLinks(False)
+            End If
             Game.MedusaChanged()
 
         ElseIf sender.SelectedIndex = 2 Then 'Linking
@@ -516,10 +526,13 @@ Public Class Form1
             Check_StrongLink.Enabled = True
             Check_StrongLink.Visible = True
             Check_StrongLink.Checked = True
-
+            Game.RefreshHighlight(False, True)
+            If Not IsNothing(Game.LinkedCells) Then
+                Game.ToggleVisibilityOfLinks(True)
+            End If
+            Game.UpdateLinkList()
         End If
-
-        Game.RefreshHighlight(False)
+        SmartPaint(False)
         Game.UpdateKeypads()
 
     End Sub
@@ -536,7 +549,7 @@ Public Class Form1
     Public Sub PaintLinks(sender As Object, e As PaintEventArgs) Handles Group_Board.Paint
 
         'If the list is empty or does not exit, do nothing
-        If IsNothing(Game.LinkedCells) Then
+        If IsNothing(Game.LinkedCells) Or Drop_HighlightSelect.SelectedIndex <> 2 Then
             Exit Sub
         End If
 
